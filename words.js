@@ -91,7 +91,49 @@ window.NS_WORDS = [
   {w:"FUJI",       cat:"Sound", d:1, hint:"Percussion-heavy style, Barrister and Kwam 1", ex:"___ dey wake the whole street on Sunday", alt:[]},
   {w:"APALA",      cat:"Sound", d:2, hint:"Older Yoruba drum-and-vocal style", ex:"___ come before fuji", alt:[]},
   {w:"HIGHLIFE",   cat:"Sound", d:3, hint:"Horns and guitar dance music, big in the east", ex:"Osadebe ___ still dey sweet", alt:[]},
-  {w:"AFROBEATS",  cat:"Sound", d:3, hint:"The modern Naija pop sound taking over the world", ex:"___ dey every chart now", alt:["AFROBEAT"]}
+  {w:"AFROBEATS",  cat:"Sound", d:3, hint:"The modern Naija pop sound taking over the world", ex:"___ dey every chart now", alt:["AFROBEAT"]},
+
+  /* ===== batch 2 ===== */
+
+  /* ---- Easy (d:1) ---- */
+  {w:"DODO",   cat:"Chop",    d:1, hint:"Fried ripe plantain", ex:"Rice without ___ no complete", alt:[]},
+  {w:"OKRO",   cat:"Chop",    d:1, hint:"The slimy 'draw' soup", ex:"___ soup with plenty seafood", alt:["OKRA"]},
+  {w:"PURE",   cat:"Streets", d:1, hint:"Sachet water sold in traffic", ex:"Buy ___ water, my throat dry", alt:[]},
+  {w:"JARE",   cat:"Pidgin",  d:1, hint:"Softens a statement, 'please now'", ex:"Leave me ___", alt:[]},
+  {w:"KOLO",   cat:"Gist",    d:1, hint:"Crazy, gone in the head", ex:"This heat go make person ___", alt:[]},
+  {w:"GENG",   cat:"Gist",    d:1, hint:"'Agreed', or your crew", ex:"We dey together, ___!", alt:[]},
+  {w:"WAKA",   cat:"Gist",    d:1, hint:"To walk, or 'get lost'", ex:"___! I no send you", alt:[]},
+  {w:"GBESE",  cat:"Gist",    d:1, hint:"Debt, money wahala", ex:"Him don enter ___ with that deal", alt:[]},
+  {w:"TUALE",  cat:"Owambe",  d:1, hint:"A shout of hail and respect", ex:"___! The big man don enter", alt:[]},
+
+  /* ---- Difficult (d:2) ---- */
+  {w:"OYINBO",   cat:"Gist",    d:2, hint:"A white person or foreigner", ex:"The ___ dey learn how to dance", alt:["OYIBO"]},
+  {w:"ALAYE",    cat:"Gist",    d:2, hint:"Street-smart guy, a boss", ex:"Big ___, how far now?", alt:[]},
+  {w:"MAGA",     cat:"Gist",    d:2, hint:"A scam victim", ex:"The ___ don pay the money", alt:["MUGU"]},
+  {w:"YAHOO",    cat:"Gist",    d:2, hint:"Internet fraud", ex:"Him dey do ___ since school", alt:[]},
+  {w:"SHAYO",    cat:"Owambe",  d:2, hint:"Heavy drinking", ex:"After the wedding na pure ___", alt:[]},
+  {w:"KABASH",   cat:"Naija",   d:2, hint:"To pray hard, in tongues", ex:"Choir dey ___ for the corner", alt:[]},
+  {w:"BRODA",    cat:"Pidgin",  d:2, hint:"Brother, a term of address", ex:"___, abeg help me hold this", alt:[]},
+  {w:"KOBOKO",   cat:"Streets", d:2, hint:"The horsewhip", ex:"Soldier flog am with ___", alt:[]},
+  {w:"CHINCHIN", cat:"Chop",    d:2, hint:"Crunchy fried pastry cubes", ex:"Pack ___ for the party bag", alt:["CHINCHIN"]},
+  {w:"KILISHI",  cat:"Chop",    d:2, hint:"Dried spiced meat, northern jerky", ex:"Buy ___ from the mallam", alt:[]},
+  {w:"AGIDI",    cat:"Chop",    d:2, hint:"Cornmeal jelly for stew", ex:"___ and moin moin dey go together", alt:["EKO"]},
+  {w:"EWEDU",    cat:"Chop",    d:2, hint:"The jute-leaf 'draw' soup", ex:"Amala and ___ na Ibadan special", alt:[]},
+  {w:"KUNU",     cat:"Chop",    d:2, hint:"Millet or tigernut drink", ex:"Cold ___ for the afternoon heat", alt:["KUNUN"]},
+  {w:"UGBA",     cat:"Chop",    d:2, hint:"Oil-bean slivers in the salad", ex:"Add plenty ___ for the abacha", alt:[]},
+
+  /* ---- Hard (d:3) ---- */
+  {w:"BOLEKAJA",   cat:"Streets", d:3, hint:"The old 'jump down and fight' wooden bus", ex:"___ don disappear from the roads", alt:[]},
+  {w:"ORISIRISI",  cat:"Owambe",  d:3, hint:"Assorted, a spread of varieties", ex:"The buffet get ___", alt:[]},
+  {w:"GBAGAUN",    cat:"Gist",    d:3, hint:"A grammar blunder", ex:"Him tweet full of ___", alt:[]},
+  {w:"AGBALUMO",   cat:"Chop",    d:3, hint:"African star apple, sweet and sour", ex:"___ season don start", alt:["UDARA"]},
+  {w:"OFADA",      cat:"Chop",    d:3, hint:"Local unpolished rice with green stew", ex:"___ rice and designer stew", alt:[]},
+  {w:"AYAMASE",    cat:"Chop",    d:3, hint:"The fiery green-pepper stew", ex:"___ go clear your sinus", alt:[]},
+  {w:"OGOGORO",    cat:"Naija",   d:3, hint:"Local gin, very strong", ex:"One shot of ___ go warm you", alt:["KAIKAI"]},
+  {w:"PALMWINE",   cat:"Naija",   d:3, hint:"Fresh sap tapped from the palm", ex:"Cold ___ straight from the bush", alt:[]},
+  {w:"ISIEWU",     cat:"Chop",    d:3, hint:"Goat-head pepper delicacy", ex:"Order ___ for the bar", alt:[]},
+  {w:"OKPA",       cat:"Chop",    d:3, hint:"Steamed Bambara-nut pudding, Enugu staple", ex:"Morning ___ from the woman for junction", alt:[]},
+  {w:"SUFFERHEAD", cat:"Gist",    d:3, hint:"Chronic, grinding hardship (Fela's word)", ex:"Him dey sing about ___", alt:[]}
 ];
 
 /* ------------------------------------------------------------

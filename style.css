@@ -216,8 +216,9 @@ footer nav a{color:var(--ink-soft);text-decoration:none}
 footer nav a:hover{color:var(--ink)}
 
 /* ---- mode menu (play) ---- */
-.modes{display:grid;gap:14px;margin-top:8px}
-@media (min-width:640px){.modes{grid-template-columns:repeat(3,1fr)}}
+.modes{display:grid;gap:14px;margin-top:8px;grid-template-columns:1fr}
+@media (min-width:560px){.modes{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:940px){.modes{grid-template-columns:repeat(4,1fr)}}
 .mode-card{text-align:left;border:1px solid var(--line);border-radius:12px;padding:20px 18px 22px;background:var(--paper-2);transition:transform .12s ease,border-color .12s ease;display:flex;flex-direction:column;gap:8px}
 .mode-card:hover{transform:translateY(-3px);border-color:var(--ink-soft)}
 .mode-card .tag{font-family:"IBM Plex Mono",monospace;font-size:.66rem;text-transform:uppercase;letter-spacing:.16em;color:var(--clay)}
@@ -228,6 +229,21 @@ footer nav a:hover{color:var(--ink)}
 .catlist button:hover{border-color:var(--ink-soft)}
 .backlink{margin-top:22px;display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-soft);text-decoration:none}
 .backlink:hover{color:var(--ink)}
+
+/* ---- stages campaign (play) ---- */
+.stagerow{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.stage-item{display:flex;align-items:center;gap:12px 16px;flex-wrap:wrap;text-align:left;border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--paper-2);transition:transform .12s ease,border-color .12s ease}
+.stage-item:not(.locked):hover{transform:translateY(-2px);border-color:var(--ink-soft)}
+.stage-item.locked{opacity:.5}
+.stage-item:disabled{cursor:default}
+.stage-item .stage-meta{font-family:"IBM Plex Mono",monospace;font-size:.75rem;color:var(--ink-soft);letter-spacing:.03em}
+.stage-item .stage-mark{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.16em;color:var(--ink-soft)}
+.stage-item.cleared .stage-mark{color:var(--green)}
+.stage-best{margin-top:14px;font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--ink-soft);letter-spacing:.04em}
+.badge{font-family:"IBM Plex Mono",monospace;font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;padding:4px 11px;border-radius:99px;border:1px solid currentColor}
+.badge.easy{color:var(--green)}
+.badge.diff{color:var(--clay)}
+.badge.hard{color:var(--paper);background:var(--clay);border-color:var(--clay)}
 
 /* ---- gamebar extras ---- */
 .gamebar .streak{justify-self:start;font-weight:600;color:var(--clay);background:color-mix(in srgb,var(--clay) 16%,transparent);padding:2px 9px;border-radius:99px;letter-spacing:.08em}

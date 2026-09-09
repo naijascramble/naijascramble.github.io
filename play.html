@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Naija Scramble — Play</title>
-<meta name="description" content="Nigerian word-scramble in three modes: Daily, Marathon, and Category runs.">
+<meta name="description" content="Nigerian word-scramble: a Stages campaign plus Daily, Marathon and Category modes.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
@@ -33,9 +33,14 @@
     <section id="menu">
       <div class="play-intro">
         <span class="label">Pick a mode</span>
-        <h1>Three ways to play.</h1>
+        <h1>Four ways to play.</h1>
       </div>
       <div class="modes">
+        <button class="mode-card" type="button" data-mode="stages">
+          <span class="tag">Campaign</span>
+          <h3>Stages</h3>
+          <p>Easy, then Difficult, then Hard. Clear a stage to unlock the next. Progress is saved.</p>
+        </button>
         <button class="mode-card" type="button" data-mode="daily">
           <span class="tag">One a day</span>
           <h3>Daily</h3>
@@ -56,6 +61,7 @@
         <p class="label" style="display:block;margin-top:26px;color:var(--clay)">Choose a category</p>
         <div class="catlist" id="catlist"></div>
       </div>
+      <div id="stageselect" hidden></div>
     </section>
 
     <!-- ============ GAME ============ -->
@@ -147,17 +153,25 @@
   var $ = function(id){ return document.getElementById(id); };
   var el = {
     menu:$('menu'), game:$('game'), over:$('over'), catpick:$('catpick'), catlist:$('catlist'),
+    stageselect:$('stageselect'),
     board:$('board'), slots:$('slots'), pool:$('pool'), hint:$('hint'), cat:$('cat'), ex:$('ex'),
     feedback:$('feedback'), tally:$('tally'), roundnext:$('roundnext'), nextBtn:$('nextBtn'),
     gbLeft:$('gbLeft'), gbStreak:$('gbStreak'), gbProg:$('gbProg'), gbFill:$('gbFill'),
     gbTimer:$('gbTimer'), gbScore:$('gbScore')
   };
 
+  var STAGES = [
+    { key:'easy', name:'Easy',      d:1, time:45, count:6, need:4, ex:true,  bonus:25 },
+    { key:'diff', name:'Difficult', d:2, time:32, count:7, need:5, ex:true,  bonus:45 },
+    { key:'hard', name:'Hard',      d:3, time:24, count:7, need:5, ex:false, bonus:80 }
+  ];
+
   var S = {
     screen:'menu', mode:null, cat:null,
     queue:[], qi:0, round:null,
     score:0, combo:0, results:[],
-    ticker:null, timeLeft:0, locked:false, endedRun:false
+    ticker:null, timeLeft:0, locked:false, endedRun:false,
+    stageIdx:0, roundTime:30, stageEx:true, stageStartScore:0
   };
 
   /* ---------- helpers ---------- */
@@ -286,11 +300,12 @@
     if(!entry){ finish(); return; }
     S.round = makeRound(entry, rnd);
     S.locked = false;
-    S.timeLeft = ROUND_TIME;
+    S.timeLeft = S.roundTime || ROUND_TIME;
 
     el.hint.textContent = S.round.hint;
     el.cat.textContent = S.round.cat;
-    el.ex.innerHTML = S.round.ex
+    var showEx = S.round.ex && !(S.mode === 'stages' && !S.stageEx);
+    el.ex.innerHTML = showEx
       ? '&ldquo;' + S.round.ex.replace('___', '<b>' + '&nbsp;'.repeat(S.round.word.length) + '</b>') + '&rdquo;'
       : '';
     el.tally.textContent = '';
@@ -319,6 +334,10 @@
     } else if(m === 'marathon'){
       el.gbLeft.textContent = 'Marathon · ' + (S.qi + 1);
       el.gbProg.hidden = true; el.gbTimer.hidden = false;
+    } else if(m === 'stages'){
+      el.gbLeft.textContent = STAGES[S.stageIdx].name + ' · ' + (S.qi + 1) + '/' + S.queue.length;
+      el.gbProg.hidden = false; el.gbTimer.hidden = false;
+      el.gbFill.style.width = (S.qi / S.queue.length * 100) + '%';
     } else {
       el.gbLeft.textContent = S.cat + ' · ' + (S.qi + 1) + '/' + S.queue.length;
       el.gbProg.hidden = false; el.gbTimer.hidden = false;
@@ -438,16 +457,19 @@
   }
 
   function queueNext(){
-    var last = S.mode === 'marathon' && S.endedRun;
-    var atEnd = S.mode === 'category' && S.qi + 1 >= S.queue.length;
     if(S.mode === 'daily'){ finish(); return; }
-    el.nextBtn.textContent = (last || atEnd) ? 'See score' : 'Next word';
+    var last = S.mode === 'marathon' && S.endedRun;
+    var atEnd = (S.mode === 'category' || S.mode === 'stages') && S.qi + 1 >= S.queue.length;
+    el.nextBtn.textContent = (last || atEnd)
+      ? (S.mode === 'stages' ? 'Stage result' : 'See score')
+      : 'Next word';
     el.roundnext.classList.add('show');
   }
 
   function nextRound(){
     if(S.mode === 'marathon' && S.endedRun){ finish(); return; }
     S.qi++;
+    if(S.mode === 'stages' && S.qi >= S.queue.length){ finishStage(); return; }
     if(S.mode === 'category' && S.qi >= S.queue.length){ finish(); return; }
     if(S.mode === 'marathon' && S.qi >= S.queue.length){ extendMarathon(); }
     startRound();
@@ -457,6 +479,7 @@
   function chooseMode(mode){
     S.mode = mode;
     S.score = 0; S.combo = 0; S.qi = 0; S.results = []; S.endedRun = false;
+    S.roundTime = 30;
 
     if(mode === 'daily'){
       var key = dayKey();
@@ -470,6 +493,9 @@
     else if(mode === 'marathon'){
       buildMarathon();
       startRound();
+    }
+    else if(mode === 'stages'){
+      renderStageSelect();
     }
     else {
       var cats = [];
@@ -510,6 +536,129 @@
     S.queue = pool.slice(0, 10);
     el.catpick.hidden = true;
     startRound();
+  }
+
+  /* ---------- stages campaign ---------- */
+  function stageState(){
+    var s = load('ns.stages');
+    if(!s || typeof s.unlocked !== 'number') s = { unlocked:0, cleared:[false, false, false], best:0 };
+    if(!Array.isArray(s.cleared)) s.cleared = [false, false, false];
+    return s;
+  }
+
+  function renderStageSelect(){
+    show('menu');
+    el.catpick.hidden = true;
+    var st = stageState();
+    var html = '<p class="label" style="display:block;margin-top:26px;color:var(--clay)">Clear a stage to open the next</p>' +
+               '<div class="stagerow">';
+    STAGES.forEach(function(sd, i){
+      var open = st.unlocked >= i;
+      var done = !!st.cleared[i];
+      html += '<button class="stage-item ' + sd.key + (open ? '' : ' locked') + (done ? ' cleared' : '') + '" type="button" ' +
+                'data-stage="' + i + '"' + (open ? '' : ' disabled') + '>' +
+                '<span class="badge ' + sd.key + '">' + sd.name + '</span>' +
+                '<span class="stage-meta">' + sd.count + ' words &middot; ' + sd.time + 's each &middot; pass ' + sd.need + '</span>' +
+                '<span class="stage-mark">' + (done ? 'CLEARED' : (open ? 'PLAY' : 'LOCKED')) + '</span>' +
+              '</button>';
+    });
+    html += '</div>';
+    if(st.best) html += '<p class="stage-best">Campaign best: ' + st.best + ' pts</p>';
+    el.stageselect.innerHTML = html;
+    Array.prototype.forEach.call(el.stageselect.querySelectorAll('.stage-item'), function(btn){
+      if(btn.disabled) return;
+      btn.addEventListener('click', function(){ startStage(+btn.getAttribute('data-stage')); });
+    });
+    el.stageselect.hidden = false;
+    el.stageselect.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+
+  function startStage(i, cumulative){
+    var sd = STAGES[i];
+    S.mode = 'stages';
+    S.stageIdx = i;
+    if(!cumulative) S.score = 0;
+    S.stageStartScore = S.score;
+    S.combo = 0; S.qi = 0; S.results = []; S.endedRun = false;
+    S.roundTime = sd.time;
+    S.stageEx = sd.ex;
+    var pool = WORDS.filter(function(x){ return x.d === sd.d; });
+    shuffle(pool);
+    S.queue = pool.slice(0, sd.count);
+    if(S.queue.length < 3){
+      var extra = WORDS.slice(); shuffle(extra);
+      S.queue = S.queue.concat(extra).slice(0, sd.count);
+    }
+    el.stageselect.hidden = true;
+    startRound();
+  }
+
+  function finishStage(){
+    stopTimer();
+    var sd = STAGES[S.stageIdx];
+    var solved = S.results.filter(function(x){ return x.got; }).length;
+    var cleared = solved >= sd.need;
+    var champion = cleared && S.stageIdx === STAGES.length - 1;
+    var st = stageState();
+
+    if(cleared){
+      S.score += sd.bonus;
+      st.cleared[S.stageIdx] = true;
+      if(st.unlocked < S.stageIdx + 1) st.unlocked = Math.min(STAGES.length, S.stageIdx + 1);
+    } else {
+      S.score = S.stageStartScore;
+    }
+    if(champion && S.score > (st.best || 0)) st.best = S.score;
+    store('ns.stages', st);
+
+    var grid = S.results.map(function(x){ return '<i class="' + (x.got ? 'got' : '') + '"></i>'; }).join('');
+    var rows = S.results.map(function(x){
+      return '<li><span>' + x.w + '</span><span class="' + (x.got ? 'pts' : 'miss') + '">' +
+             (x.got ? '+' + x.pts : 'missed') + '</span></li>';
+    }).join('');
+    var squares = S.results.map(function(x){ return x.got ? '#' : '.'; }).join('');
+
+    var head, sub;
+    if(champion){
+      head = 'Champion';
+      sub = 'all three stages cleared';
+    } else if(cleared){
+      head = sd.name + ' cleared';
+      sub = solved + ' of ' + sd.count + ' · +' + sd.bonus + ' stage bonus';
+    } else {
+      head = sd.name + ' — not yet';
+      sub = solved + ' of ' + sd.count + ' · need ' + sd.need + ' to clear';
+    }
+
+    var share = champion
+      ? 'NAIJA SCRAMBLE — Stages\nAll 3 cleared · ' + S.score + ' pts\n' + squares
+      : 'NAIJA SCRAMBLE — ' + sd.name + ' stage\n' + solved + '/' + sd.count + (cleared ? ' · cleared' : ' · missed') + '\n' + squares;
+
+    var actions = '';
+    if(cleared && !champion){
+      actions += '<button class="cta" id="nextStageBtn" type="button">Next stage: ' + STAGES[S.stageIdx + 1].name + '</button>';
+    } else if(!cleared){
+      actions += '<button class="cta" id="retryStageBtn" type="button">Retry ' + sd.name + '</button>';
+    } else {
+      actions += '<button class="cta" id="copyBtn" type="button">Copy result</button>';
+    }
+    actions += '<button class="ghost" id="stagesBtn" type="button">All stages</button>';
+
+    el.over.innerHTML =
+      '<div class="endscreen">' +
+        '<span class="label">' + head + '</span>' +
+        '<div class="bigscore">' + S.score + '<small>' + sub + '</small></div>' +
+        '<div class="result-grid" aria-hidden="true">' + grid + '</div>' +
+        '<ul class="scorelist">' + rows + '</ul>' +
+        (champion ? '<pre class="share-card" id="shareText">' + share + '</pre>' : '') +
+        '<div class="endactions">' + actions + '</div>' +
+      '</div>';
+
+    if(champion) wireCopy(share);
+    var nb = $('nextStageBtn'); if(nb) nb.addEventListener('click', function(){ startStage(S.stageIdx + 1, true); });
+    var rb = $('retryStageBtn'); if(rb) rb.addEventListener('click', function(){ startStage(S.stageIdx, true); });
+    $('stagesBtn').addEventListener('click', function(){ S.combo = 0; chooseMode('stages'); });
+    show('over');
   }
 
   /* ---------- reveal ---------- */
@@ -626,14 +775,10 @@
     show('over');
   }
 
-  function wireEnd(shareText){
-    $('menuBtn').addEventListener('click', function(){
-      el.catpick.hidden = true;
-      S.combo = 0;
-      show('menu');
-    });
-    $('copyBtn').addEventListener('click', function(){
-      var btn = this;
+  function wireCopy(shareText){
+    var btn = $('copyBtn');
+    if(!btn) return;
+    btn.addEventListener('click', function(){
       var text = shareText + '\nplay: ' + location.href.split('#')[0];
       if(navigator.clipboard && navigator.clipboard.writeText){
         navigator.clipboard.writeText(text).then(
@@ -645,6 +790,16 @@
         btn.textContent = 'Selected — copy now';
       }
     });
+  }
+  function wireEnd(shareText){
+    var mb = $('menuBtn');
+    if(mb) mb.addEventListener('click', function(){
+      el.catpick.hidden = true;
+      el.stageselect.hidden = true;
+      S.combo = 0;
+      show('menu');
+    });
+    wireCopy(shareText);
   }
   function selectEl(node){
     if(!node) return;
