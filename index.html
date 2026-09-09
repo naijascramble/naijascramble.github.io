@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Naija Scramble</title>
+<meta name="description" content="A Nigerian word-scramble game. Jollof, danfo, owambe — the words you already use, shuffled against the clock.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <a class="mark" href="index.html" aria-label="Naija Scramble — home">
+      <span>N</span><span>A</span><span>I</span><span>J</span><span>A</span>
+      <span class="a2" style="width:.6ch"></span>
+      <span>S</span><span>C</span><span>R</span><span>A</span><span>M</span><span>B</span><span>L</span><span>E</span>
+    </a>
+    <nav class="nav">
+      <a href="#how">How to play</a>
+      <a href="#daily">Daily</a>
+      <a href="#">Leaderboard</a>
+      <a class="play" href="play.html">Play</a>
+    </nav>
+  </div>
+</header>
+
+<main>
+  <section class="hero">
+    <div class="wrap">
+      <div class="hero-copy">
+        <p class="eyebrow label">Word game &middot; Nigerian edition</p>
+        <h1>Six letters land scrambled. One of them is worth <em>8</em>. Spell your way out.</h1>
+        <p class="lede">Jollof, danfo, owambe, wahala &mdash; the words you already use, shuffled against the clock.</p>
+        <div class="hero-cta">
+          <a class="cta" href="play.html">Play 10 rounds</a>
+          <span class="note">free &middot; no sign-up</span>
+        </div>
+      </div>
+
+      <div class="board" id="board" aria-label="Try one round">
+        <div class="board-top">
+          <p class="hint"><b>Hint</b> The rice that starts arguments.</p>
+          <p class="cat label">Chop</p>
+        </div>
+        <div class="slots" id="slots" aria-label="Your word"></div>
+        <div class="pool" id="pool" aria-label="Letter pool"></div>
+        <div class="controls">
+          <button class="ghost" id="shuffle" type="button">Shuffle</button>
+          <button class="ghost" id="clear" type="button">Clear</button>
+          <span class="tally" id="tally">0 pts</span>
+        </div>
+        <p class="feedback" id="feedback" role="status">Tap the letters in order to build the word.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <span class="label">Word categories</span>
+      <h2>Every round is drawn from a bank of Nigerian words &mdash; not a dictionary you have to fight.</h2>
+      <div class="cats">
+        <div class="cat-card"><h3>Chop</h3><p>JOLLOF &middot; SUYA &middot; EGUSI<br>GARRI &middot; AKARA &middot; PUFF&nbsp;PUFF</p></div>
+        <div class="cat-card"><h3>Gist</h3><p>WAHALA &middot; JAPA &middot; CRUISE<br>VIBES &middot; GIST &middot; PALAVA</p></div>
+        <div class="cat-card"><h3>Streets</h3><p>DANFO &middot; OKADA &middot; KEKE<br>LAGOS &middot; ABUJA &middot; MOLUE</p></div>
+        <div class="cat-card"><h3>Owambe</h3><p>ASOEBI &middot; GELE &middot; SPRAY<br>ALAGA &middot; SMALL&nbsp;CHOPS</p></div>
+        <div class="cat-card"><h3>Pidgin</h3><p>ABEG &middot; OYA &middot; WETIN<br>SHA &middot; NABI &middot; FASETI</p></div>
+      </div>
+    </div>
+  </section>
+
+  <section class="how" id="how">
+    <div class="wrap">
+      <span class="label">How a round plays</span>
+      <h2>Thirty seconds. One word. Rare letters carry the score.</h2>
+      <div class="steps">
+        <div class="step">
+          <div class="n">01</div>
+          <h3>Letters drop</h3>
+          <p>Four to six tiles land scrambled, tagged with a category and a one-line hint in plain Naija.</p>
+        </div>
+        <div class="step">
+          <div class="n">02</div>
+          <h3>Build before the buzzer</h3>
+          <p>Tap tiles into the rack to spell the word. Wrong guess? Clear a tile and keep going &mdash; the clock does not stop.</p>
+        </div>
+        <div class="step">
+          <div class="n">03</div>
+          <h3>Score the letters</h3>
+          <p>Each tile carries its Scrabble value. J, Q and Z are worth 8&ndash;10, so the hard words pay the most. Time left is a bonus.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="daily" id="daily">
+    <div class="wrap">
+      <div class="daily-card">
+        <div>
+          <span class="label">Today&rsquo;s word</span>
+          <h2>One shared puzzle a day. Everybody gets the same tiles.</h2>
+          <p>Seven letters, category <b>Owambe</b>. Solve it in one go for the streak. Miss a day and the streak resets to zero &mdash; no mercy.</p>
+          <p class="daily-meta">09 SEP 2026 &middot; 4,112 solved &middot; avg 41s</p>
+        </div>
+        <a class="cta" href="play.html">Play the daily</a>
+      </div>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>New words drop every Friday. No dulling.</p>
+    <nav>
+      <a href="#how">How to play</a>
+      <a href="#daily">Daily</a>
+      <a href="#">Leaderboard</a>
+      <a href="#">Suggest a word</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  var WORD = "JOLLOF";
+  var VAL = {A:1,B:3,C:3,D:2,E:1,F:4,G:2,H:4,I:1,J:8,K:5,L:1,M:3,N:1,O:1,P:3,Q:10,R:1,S:1,T:1,U:1,V:4,W:4,X:8,Y:4,Z:10};
+  var slotsEl = document.getElementById('slots');
+  var poolEl  = document.getElementById('pool');
+  var feedback = document.getElementById('feedback');
+  var tallyEl = document.getElementById('tally');
+  var solved = false;
+
+  var tiles = WORD.split('').map(function(ch,i){ return {id:i, ch:ch, placed:false}; });
+  var order = tiles.map(function(t){return t.id;});
+  var answer = new Array(WORD.length).fill(null);
+
+  function shuffle(arr){
+    for(var i=arr.length-1;i>0;i--){ var j=Math.floor(Math.random()*(i+1)); var t=arr[i];arr[i]=arr[j];arr[j]=t; }
+    return arr;
+  }
+  function scramble(){
+    do { shuffle(order); } while(order.map(function(id){return tiles[id].ch;}).join('') === WORD);
+  }
+  function tileById(id){ return tiles.filter(function(t){return t.id===id;})[0]; }
+
+  function makeTile(t, delay){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'tile';
+    b.setAttribute('aria-label', t.ch + ', ' + VAL[t.ch] + ' points');
+    if(delay != null) b.style.animationDelay = delay + 'ms';
+    b.innerHTML = '<span class="face">' + t.ch + '</span><span class="val">' + VAL[t.ch] + '</span>';
+    return b;
+  }
+
+  function render(){
+    poolEl.innerHTML = '';
+    order.forEach(function(id, idx){
+      var t = tileById(id);
+      if(t.placed) return;
+      var b = makeTile(t, idx * 55);
+      b.addEventListener('click', function(){ place(id); });
+      poolEl.appendChild(b);
+    });
+
+    slotsEl.innerHTML = '';
+    for(var i=0;i<WORD.length;i++){
+      var s = document.createElement('div');
+      s.className = 'slot';
+      var id = answer[i];
+      if(id !== null){
+        var tt = tileById(id);
+        var bb = makeTile(tt, null);
+        (function(slotIndex){ bb.addEventListener('click', function(){ pull(slotIndex); }); })(i);
+        s.appendChild(bb);
+      }
+      slotsEl.appendChild(s);
+    }
+  }
+
+  function place(id){
+    if(solved) return;
+    var free = answer.indexOf(null);
+    if(free === -1) return;
+    answer[free] = id;
+    tileById(id).placed = true;
+    render();
+    check();
+  }
+  function pull(slotIndex){
+    if(solved) return;
+    var id = answer[slotIndex];
+    if(id === null) return;
+    answer[slotIndex] = null;
+    tileById(id).placed = false;
+    feedback.textContent = 'Keep going.';
+    feedback.className = 'feedback';
+    render();
+  }
+
+  function check(){
+    if(answer.indexOf(null) !== -1) return;
+    var guess = answer.map(function(id){return tileById(id).ch;}).join('');
+    if(guess === WORD){
+      solved = true;
+      document.getElementById('board').classList.add('solved');
+      feedback.textContent = 'Correct. Dinner is served. That is the game — play the full 10.';
+      feedback.className = 'feedback good';
+      countUp(WORD.split('').reduce(function(a,c){return a+VAL[c];},0));
+    } else {
+      feedback.textContent = 'Not it. Clear a tile and try again.';
+      feedback.className = 'feedback bad';
+      slotsEl.classList.remove('wrong');
+      void slotsEl.offsetWidth;
+      slotsEl.classList.add('wrong');
+    }
+  }
+
+  function countUp(target){
+    var n = 0;
+    var step = Math.max(1, Math.round(target/18));
+    var iv = setInterval(function(){
+      n += step;
+      if(n >= target){ n = target; clearInterval(iv); }
+      tallyEl.textContent = n + ' pts';
+    }, 28);
+  }
+
+  document.getElementById('shuffle').addEventListener('click', function(){
+    if(solved) return;
+    scramble();
+    render();
+    feedback.textContent = 'Shuffled.';
+    feedback.className = 'feedback';
+  });
+  document.getElementById('clear').addEventListener('click', function(){
+    solved = false;
+    document.getElementById('board').classList.remove('solved');
+    answer = new Array(WORD.length).fill(null);
+    tiles.forEach(function(t){ t.placed = false; });
+    tallyEl.textContent = '0 pts';
+    feedback.textContent = 'Tap the letters in order to build the word.';
+    feedback.className = 'feedback';
+    scramble();
+    render();
+  });
+
+  scramble();
+  render();
+})();
+</script>
+</body>
+</html>

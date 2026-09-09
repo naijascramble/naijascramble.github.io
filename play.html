@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Naija Scramble — Play</title>
+<meta name="description" content="Nigerian word-scramble in three modes: Daily, Marathon, and Category runs.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <a class="mark" href="index.html" aria-label="Naija Scramble — home">
+      <span>N</span><span>A</span><span>I</span><span>J</span><span>A</span>
+      <span class="a2" style="width:.6ch"></span>
+      <span>S</span><span>C</span><span>R</span><span>A</span><span>M</span><span>B</span><span>L</span><span>E</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html#how">How to play</a>
+      <a href="index.html">Home</a>
+    </nav>
+  </div>
+</header>
+
+<main class="play-main">
+  <div class="wrap narrow">
+
+    <!-- ============ MENU ============ -->
+    <section id="menu">
+      <div class="play-intro">
+        <span class="label">Pick a mode</span>
+        <h1>Three ways to play.</h1>
+      </div>
+      <div class="modes">
+        <button class="mode-card" type="button" data-mode="daily">
+          <span class="tag">One a day</span>
+          <h3>Daily</h3>
+          <p>One word, same for everyone. No timer. Fewer reveals, better score. Build a day streak.</p>
+        </button>
+        <button class="mode-card" type="button" data-mode="marathon">
+          <span class="tag">Survival</span>
+          <h3>Marathon</h3>
+          <p>Keep solving. 30 seconds a word, and it gets harder. One miss ends the run.</p>
+        </button>
+        <button class="mode-card" type="button" data-mode="category">
+          <span class="tag">Ten rounds</span>
+          <h3>Category</h3>
+          <p>Pick Chop, Pidgin, Owambe&hellip; ten words from that world, timed, misses just score zero.</p>
+        </button>
+      </div>
+      <div id="catpick" hidden>
+        <p class="label" style="display:block;margin-top:26px;color:var(--clay)">Choose a category</p>
+        <div class="catlist" id="catlist"></div>
+      </div>
+    </section>
+
+    <!-- ============ GAME ============ -->
+    <section id="game" hidden>
+      <div class="gamebar">
+        <span class="rnd" id="gbLeft">&mdash;</span>
+        <span class="streak" id="gbStreak" hidden>&times;2</span>
+        <span class="progress" id="gbProg"><i id="gbFill"></i></span>
+        <span class="timer" id="gbTimer" hidden>0:30</span>
+        <span class="score" id="gbScore">0 pts</span>
+      </div>
+
+      <div class="board" id="board" aria-label="Current round">
+        <div class="board-top">
+          <p class="hint"><b>Hint</b> <span id="hint">&hellip;</span></p>
+          <p class="cat label" id="cat">&mdash;</p>
+        </div>
+        <p class="ex" id="ex"></p>
+        <div class="slots" id="slots" aria-label="Your word"></div>
+        <div class="pool" id="pool" aria-label="Letter pool"></div>
+        <div class="controls">
+          <button class="ghost" id="shuffle" type="button">Shuffle</button>
+          <button class="ghost" id="clear" type="button">Clear</button>
+          <button class="ghost reveal" id="reveal" type="button">Reveal &minus;4</button>
+          <button class="ghost" id="skip" type="button">Give up</button>
+          <span class="tally" id="tally"></span>
+        </div>
+        <p class="feedback" id="feedback" role="status">Tap a tile or use your keyboard.</p>
+        <div class="roundnext" id="roundnext">
+          <button class="cta" id="nextBtn" type="button">Next word</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ OVER ============ -->
+    <section id="over" hidden></section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>New words drop every Friday. No dulling.</p>
+    <nav>
+      <a href="index.html#how">How to play</a>
+      <a href="index.html#daily">Daily</a>
+      <a href="index.html">Home</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="words.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  /* ============================================================
+     WORD SOURCE
+     ------------------------------------------------------------
+     Paste your Google Apps Script web-app URL between the quotes
+     (Deploy > New deployment > Web app > Execute as "Me",
+      Access "Anyone"). Leave it "" to use the bundled words.js.
+
+     The script's doGet() must return JSON — either a bare array
+     or { "words": [ ... ] } — of rows shaped like:
+       { "w":"JOLLOF", "cat":"Chop", "d":1,
+         "hint":"...", "ex":"... ___ ...", "alt":"GARI|GARRI" }
+     "alt" may be a "|"- or ","-separated string or a real array.
+
+     Minimal Apps Script (bound to your sheet):
+       function doGet(){
+         var sh = SpreadsheetApp.getActive().getSheetByName('Words');
+         var rows = sh.getDataRange().getValues();
+         var head = rows.shift();
+         var out = rows
+           .map(function(r){ var o={}; head.forEach(function(h,i){ o[h]=r[i]; }); return o; })
+           .filter(function(o){ return String(o.status).toLowerCase() === 'live'; });
+         return ContentService.createTextOutput(JSON.stringify(out))
+           .setMimeType(ContentService.MimeType.JSON);
+       }
+     ============================================================ */
+  var SHEET_URL = "";
+  var SHEET_TIMEOUT = 4500;   // ms before we give up and use words.js
+  var MIN_LIVE_WORDS = 10;    // ignore a sheet that returns fewer than this
+
+  var VAL = {A:1,B:3,C:3,D:2,E:1,F:4,G:2,H:4,I:1,J:8,K:5,L:1,M:3,N:1,O:1,P:3,Q:10,R:1,S:1,T:1,U:1,V:4,W:4,X:8,Y:4,Z:10};
+  var ROUND_TIME = 30, REVEAL_COST = 4, COMBO = [1,1.2,1.5,2,2.5];
+
+  var $ = function(id){ return document.getElementById(id); };
+  var el = {
+    menu:$('menu'), game:$('game'), over:$('over'), catpick:$('catpick'), catlist:$('catlist'),
+    board:$('board'), slots:$('slots'), pool:$('pool'), hint:$('hint'), cat:$('cat'), ex:$('ex'),
+    feedback:$('feedback'), tally:$('tally'), roundnext:$('roundnext'), nextBtn:$('nextBtn'),
+    gbLeft:$('gbLeft'), gbStreak:$('gbStreak'), gbProg:$('gbProg'), gbFill:$('gbFill'),
+    gbTimer:$('gbTimer'), gbScore:$('gbScore')
+  };
+
+  var S = {
+    screen:'menu', mode:null, cat:null,
+    queue:[], qi:0, round:null,
+    score:0, combo:0, results:[],
+    ticker:null, timeLeft:0, locked:false, endedRun:false
+  };
+
+  /* ---------- helpers ---------- */
+  function mulberry32(a){
+    return function(){
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      var t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  function shuffle(arr, rnd){
+    rnd = rnd || Math.random;
+    for(var i = arr.length - 1; i > 0; i--){
+      var j = Math.floor(rnd() * (i + 1));
+      var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+    }
+    return arr;
+  }
+  function wordValue(w){ return w.split('').reduce(function(a,c){ return a + (VAL[c] || 0); }, 0); }
+  function dayKey(d){ d = d || new Date(); return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate(); }
+  function comboMult(c){ return COMBO[Math.min(c, COMBO.length - 1)]; }
+  function store(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+  function load(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
+
+  /* ---------- word source ---------- */
+  function cleanWord(s){ return String(s == null ? '' : s).toUpperCase().replace(/[^A-Z]/g, ''); }
+  function normalize(rows){
+    var arr = Array.isArray(rows) ? rows : (rows && (rows.words || rows.data)) || [];
+    return arr.map(function(r){
+      var alt = Array.isArray(r.alt) ? r.alt : String(r.alt == null ? '' : r.alt).split(/[|,]/);
+      return {
+        w: cleanWord(r.w),
+        cat: String(r.cat == null || r.cat === '' ? 'Naija' : r.cat).trim(),
+        d: Math.max(1, Math.min(3, parseInt(r.d, 10) || 2)),
+        hint: String(r.hint == null ? '' : r.hint).trim(),
+        ex: String(r.ex == null ? '' : r.ex).trim(),
+        alt: alt.map(cleanWord).filter(Boolean)
+      };
+    }).filter(function(x){ return /^[A-Z]{4,10}$/.test(x.w) && x.hint; });
+  }
+  function loadWords(){
+    var local = normalize(window.NS_WORDS || []);
+    if(!SHEET_URL) return Promise.resolve(local);
+    var url = SHEET_URL + (SHEET_URL.indexOf('?') < 0 ? '?' : '&') + 'v=' + Date.now();
+    var ctrl = ('AbortController' in window) ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, SHEET_TIMEOUT) : null;
+    return fetch(url, ctrl ? { signal: ctrl.signal } : undefined)
+      .then(function(res){ return res.ok ? res.json() : null; })
+      .then(function(rows){
+        if(timer) clearTimeout(timer);
+        var live = normalize(rows);
+        return live.length >= MIN_LIVE_WORDS ? live : local;
+      })
+      .catch(function(){ if(timer) clearTimeout(timer); return local; });
+  }
+
+  var WORDS = normalize(window.NS_WORDS || []);
+
+  function show(section){
+    el.menu.hidden = section !== 'menu';
+    el.game.hidden = section !== 'game';
+    el.over.hidden = section !== 'over';
+    S.screen = section;
+  }
+
+  /* ---------- tiles ---------- */
+  function makeTile(t, delay){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'tile';
+    b.setAttribute('aria-label', t.ch + ', ' + VAL[t.ch] + ' points');
+    if(delay != null) b.style.animationDelay = delay + 'ms';
+    b.innerHTML = '<span class="face">' + t.ch + '</span><span class="val">' + VAL[t.ch] + '</span>';
+    return b;
+  }
+  function tileById(id){
+    var r = S.round;
+    for(var i = 0; i < r.tiles.length; i++){ if(r.tiles[i].id === id) return r.tiles[i]; }
+    return null;
+  }
+  function render(){
+    var r = S.round;
+    el.pool.innerHTML = '';
+    r.order.forEach(function(id, i){
+      var t = tileById(id);
+      if(t.placed) return;
+      var b = makeTile(t, i * 40);
+      b.addEventListener('click', function(){ place(id); });
+      el.pool.appendChild(b);
+    });
+    el.slots.innerHTML = '';
+    for(var s = 0; s < r.word.length; s++){
+      var cell = document.createElement('div');
+      cell.className = 'slot';
+      var id = r.answer[s];
+      if(id !== null && id !== undefined){
+        var bb = makeTile(tileById(id), null);
+        (function(si){ bb.addEventListener('click', function(){ pull(si); }); })(s);
+        cell.appendChild(bb);
+      }
+      el.slots.appendChild(cell);
+    }
+  }
+
+  /* ---------- round lifecycle ---------- */
+  function makeRound(entry, rnd){
+    var word = entry.w;
+    var tiles = word.split('').map(function(ch, i){ return { id:i, ch:ch, placed:false }; });
+    var order = tiles.map(function(t){ return t.id; });
+    do { shuffle(order, rnd); }
+    while(order.map(function(id){ return tiles[id].ch; }).join('') === word && word.length > 1);
+    return {
+      word:word,
+      accept:[word].concat(entry.alt || []),
+      hint:entry.hint, ex:entry.ex || '', cat:entry.cat,
+      base:wordValue(word),
+      tiles:tiles, order:order,
+      answer:new Array(word.length).fill(null),
+      reveals:0, timed:(S.mode !== 'daily')
+    };
+  }
+
+  function startRound(rnd){
+    var entry = S.queue[S.qi];
+    if(!entry){ finish(); return; }
+    S.round = makeRound(entry, rnd);
+    S.locked = false;
+    S.timeLeft = ROUND_TIME;
+
+    el.hint.textContent = S.round.hint;
+    el.cat.textContent = S.round.cat;
+    el.ex.innerHTML = S.round.ex
+      ? '&ldquo;' + S.round.ex.replace('___', '<b>' + '&nbsp;'.repeat(S.round.word.length) + '</b>') + '&rdquo;'
+      : '';
+    el.tally.textContent = '';
+    el.feedback.textContent = 'Tap a tile or use your keyboard.';
+    el.feedback.className = 'feedback';
+    el.board.classList.remove('solved');
+    el.roundnext.classList.remove('show');
+    $('reveal').disabled = false;
+
+    updateBar();
+    render();
+    stopTimer();
+    if(S.round.timed) startTimer();
+    show('game');
+  }
+
+  function updateBar(){
+    var m = S.mode;
+    el.gbScore.textContent = S.score + ' pts';
+    el.gbStreak.hidden = S.combo < 2;
+    el.gbStreak.innerHTML = '&times;' + comboMult(S.combo);
+
+    if(m === 'daily'){
+      el.gbLeft.innerHTML = 'Daily &middot; <span class="reveals">' + S.round.reveals + ' reveal' + (S.round.reveals === 1 ? '' : 's') + '</span>';
+      el.gbProg.hidden = true; el.gbTimer.hidden = true;
+    } else if(m === 'marathon'){
+      el.gbLeft.textContent = 'Marathon · ' + (S.qi + 1);
+      el.gbProg.hidden = true; el.gbTimer.hidden = false;
+    } else {
+      el.gbLeft.textContent = S.cat + ' · ' + (S.qi + 1) + '/' + S.queue.length;
+      el.gbProg.hidden = false; el.gbTimer.hidden = false;
+      el.gbFill.style.width = (S.qi / S.queue.length * 100) + '%';
+    }
+  }
+
+  function fmt(s){ return '0:' + (s < 10 ? '0' : '') + Math.max(0, s); }
+  function stopTimer(){ clearInterval(S.ticker); S.ticker = null; el.gbTimer.classList.remove('low'); }
+  function startTimer(){
+    stopTimer();
+    el.gbTimer.textContent = fmt(S.timeLeft);
+    S.ticker = setInterval(function(){
+      S.timeLeft--;
+      el.gbTimer.textContent = fmt(S.timeLeft);
+      if(S.timeLeft <= 8) el.gbTimer.classList.add('low');
+      if(S.timeLeft <= 0){ stopTimer(); failRound('time'); }
+    }, 1000);
+  }
+
+  /* ---------- input ---------- */
+  function place(id){
+    if(S.locked) return;
+    var free = S.round.answer.indexOf(null);
+    if(free === -1) return;
+    S.round.answer[free] = id;
+    tileById(id).placed = true;
+    render();
+    check();
+  }
+  function pull(si){
+    if(S.locked) return;
+    var id = S.round.answer[si];
+    if(id === null || id === undefined) return;
+    S.round.answer[si] = null;
+    tileById(id).placed = false;
+    el.feedback.textContent = 'Keep going.';
+    el.feedback.className = 'feedback';
+    render();
+  }
+  function typeLetter(ch){
+    if(S.locked) return;
+    var r = S.round;
+    for(var i = 0; i < r.order.length; i++){
+      var t = tileById(r.order[i]);
+      if(!t.placed && t.ch === ch){ place(t.id); return; }
+    }
+  }
+  function backspace(){
+    if(S.locked) return;
+    var a = S.round.answer;
+    for(var i = a.length - 1; i >= 0; i--){ if(a[i] !== null){ pull(i); return; } }
+  }
+  document.addEventListener('keydown', function(e){
+    if(S.screen !== 'game') return;
+    if(e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key;
+    if(/^[a-zA-Z]$/.test(k)){ typeLetter(k.toUpperCase()); e.preventDefault(); }
+    else if(k === 'Backspace'){ backspace(); e.preventDefault(); }
+    else if(k === 'Enter' && el.roundnext.classList.contains('show')){ nextRound(); e.preventDefault(); }
+  });
+
+  function check(){
+    var r = S.round;
+    if(r.answer.indexOf(null) !== -1) return;
+    var guess = r.answer.map(function(id){ return tileById(id).ch; }).join('');
+    if(r.accept.indexOf(guess) !== -1){ solveRound(); }
+    else {
+      el.feedback.textContent = 'Not it. Pull a tile and try again.';
+      el.feedback.className = 'feedback bad';
+      el.slots.classList.remove('wrong');
+      void el.slots.offsetWidth;
+      el.slots.classList.add('wrong');
+    }
+  }
+
+  /* ---------- scoring ---------- */
+  function solveRound(){
+    stopTimer();
+    S.locked = true;
+    var r = S.round;
+    var mult = comboMult(S.combo);
+    var timeBonus = r.timed ? Math.max(0, S.timeLeft) : 0;
+    var pts = Math.max(1, Math.round((r.base - r.reveals * REVEAL_COST) * mult) + timeBonus);
+    S.score += pts;
+    S.combo++;
+    S.results.push({ w:r.word, got:true, pts:pts });
+
+    el.board.classList.add('solved');
+    el.tally.textContent = '+' + pts + (mult > 1 ? '  (×' + mult + ')' : '');
+    el.feedback.textContent = r.timed
+      ? 'Correct. ' + r.base + ' for letters, ' + timeBonus + ' for the clock.'
+      : 'Correct.';
+    el.feedback.className = 'feedback good';
+    updateBar();
+    queueNext();
+  }
+
+  function failRound(reason){
+    if(S.locked) return;
+    stopTimer();
+    S.locked = true;
+    var r = S.round;
+    var open = r.tiles.filter(function(t){ return !t.placed; });
+    for(var s = 0; s < r.answer.length; s++){
+      if(r.answer[s] === null){ var t = open.shift(); if(t){ r.answer[s] = t.id; t.placed = true; } }
+    }
+    render();
+    S.combo = 0;
+    S.results.push({ w:r.word, got:false, pts:0 });
+    el.feedback.textContent = (reason === 'time' ? 'Time. ' : 'Gave up. ') + 'The word was ' + r.word + '.';
+    el.feedback.className = 'feedback bad';
+    updateBar();
+
+    if(S.mode === 'marathon'){ S.endedRun = true; }
+    queueNext();
+  }
+
+  function queueNext(){
+    var last = S.mode === 'marathon' && S.endedRun;
+    var atEnd = S.mode === 'category' && S.qi + 1 >= S.queue.length;
+    if(S.mode === 'daily'){ finish(); return; }
+    el.nextBtn.textContent = (last || atEnd) ? 'See score' : 'Next word';
+    el.roundnext.classList.add('show');
+  }
+
+  function nextRound(){
+    if(S.mode === 'marathon' && S.endedRun){ finish(); return; }
+    S.qi++;
+    if(S.mode === 'category' && S.qi >= S.queue.length){ finish(); return; }
+    if(S.mode === 'marathon' && S.qi >= S.queue.length){ extendMarathon(); }
+    startRound();
+  }
+
+  /* ---------- modes ---------- */
+  function chooseMode(mode){
+    S.mode = mode;
+    S.score = 0; S.combo = 0; S.qi = 0; S.results = []; S.endedRun = false;
+
+    if(mode === 'daily'){
+      var key = dayKey();
+      var done = load('ns.daily');
+      if(done && done.date === key){ finishDaily(done, true); return; }
+      var rnd = mulberry32(key);
+      var pick = WORDS[Math.floor(rnd() * WORDS.length)];
+      S.queue = [pick];
+      startRound(mulberry32(key + 1));
+    }
+    else if(mode === 'marathon'){
+      buildMarathon();
+      startRound();
+    }
+    else {
+      var cats = [];
+      WORDS.forEach(function(x){ if(cats.indexOf(x.cat) === -1) cats.push(x.cat); });
+      el.catlist.innerHTML = '';
+      cats.forEach(function(c){
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = c;
+        b.addEventListener('click', function(){ startCategory(c); });
+        el.catlist.appendChild(b);
+      });
+      el.catpick.hidden = false;
+      el.catpick.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    }
+  }
+
+  function buckets(){
+    var b = { 1:[], 2:[], 3:[] };
+    WORDS.forEach(function(x){ (b[x.d] || b[2]).push(x); });
+    shuffle(b[1]); shuffle(b[2]); shuffle(b[3]);
+    return b;
+  }
+  function buildMarathon(){
+    var b = buckets();
+    S.queue = b[1].slice(0, 4).concat(b[2].slice(0, 6)).concat(b[3]);
+    if(S.queue.length < 6) S.queue = WORDS.slice();
+  }
+  function extendMarathon(){
+    var b = buckets();
+    S.queue = S.queue.concat(b[3], b[2], b[1]);
+  }
+  function startCategory(c){
+    S.cat = c;
+    var pool = WORDS.filter(function(x){ return x.cat === c; });
+    shuffle(pool);
+    pool.sort(function(a, b){ return a.d - b.d; });
+    S.queue = pool.slice(0, 10);
+    el.catpick.hidden = true;
+    startRound();
+  }
+
+  /* ---------- reveal ---------- */
+  $('reveal').addEventListener('click', function(){
+    if(S.locked) return;
+    var r = S.round;
+    var free = r.answer.indexOf(null);
+    if(free === -1) return;
+    var want = r.word[free];
+    for(var i = 0; i < r.order.length; i++){
+      var t = tileById(r.order[i]);
+      if(!t.placed && t.ch === want){
+        r.reveals++;
+        place(t.id);
+        if(S.mode === 'daily') updateBar();
+        el.feedback.textContent = 'Revealed one. That is ' + (r.reveals * REVEAL_COST) + ' off this word.';
+        el.feedback.className = 'feedback';
+        return;
+      }
+    }
+  });
+
+  $('shuffle').addEventListener('click', function(){
+    if(S.locked) return;
+    shuffle(S.round.order);
+    render();
+    el.feedback.textContent = 'Shuffled.';
+    el.feedback.className = 'feedback';
+  });
+  $('clear').addEventListener('click', function(){
+    if(S.locked) return;
+    S.round.answer = new Array(S.round.word.length).fill(null);
+    S.round.tiles.forEach(function(t){ t.placed = false; });
+    render();
+    el.feedback.textContent = 'Cleared.';
+    el.feedback.className = 'feedback';
+  });
+  $('skip').addEventListener('click', function(){ failRound('skip'); });
+  el.nextBtn.addEventListener('click', nextRound);
+
+  /* ---------- end screens ---------- */
+  function finish(){
+    if(S.mode === 'daily'){
+      var r = S.round, key = dayKey();
+      var rec = { date:key, score:S.score, reveals:r.reveals, solved:S.results[0] && S.results[0].got };
+      store('ns.daily', rec);
+
+      var st = load('ns.streak') || { last:0, n:0 };
+      if(rec.solved){
+        if(st.last === key - 1 || st.last === key) st.n = (st.last === key ? st.n : st.n + 1);
+        else st.n = 1;
+        st.last = key;
+        store('ns.streak', st);
+      }
+      finishDaily(rec, false);
+      return;
+    }
+
+    var solved = S.results.filter(function(x){ return x.got; }).length;
+    var head, sub;
+    if(S.mode === 'marathon'){
+      var best = load('ns.best.marathon') || 0;
+      if(S.score > best){ best = S.score; store('ns.best.marathon', best); }
+      head = 'Run over';
+      sub = solved + ' solved · best ' + best;
+    } else {
+      head = S.cat + ' run';
+      sub = solved + ' of ' + S.queue.length + ' solved';
+    }
+
+    var grid = S.results.map(function(x){ return '<i class="' + (x.got ? 'got' : '') + '"></i>'; }).join('');
+    var rows = S.results.map(function(x){
+      return '<li><span>' + x.w + '</span><span class="' + (x.got ? 'pts' : 'miss') + '">' +
+             (x.got ? '+' + x.pts : 'missed') + '</span></li>';
+    }).join('');
+    var squares = S.results.map(function(x){ return x.got ? '#' : '.'; }).join('');
+    var share = 'NAIJA SCRAMBLE — ' + (S.mode === 'marathon' ? 'Marathon' : S.cat) + '\n' +
+                S.score + ' pts · ' + solved + (S.mode === 'marathon' ? ' solved' : '/' + S.queue.length) + '\n' + squares;
+
+    el.over.innerHTML =
+      '<div class="endscreen">' +
+        '<span class="label">' + head + '</span>' +
+        '<div class="bigscore">' + S.score + '<small>' + sub + '</small></div>' +
+        '<div class="result-grid" aria-hidden="true">' + grid + '</div>' +
+        '<ul class="scorelist">' + rows + '</ul>' +
+        '<pre class="share-card" id="shareText">' + share + '</pre>' +
+        '<div class="endactions">' +
+          '<button class="cta" id="copyBtn" type="button">Copy result</button>' +
+          '<button class="ghost" id="menuBtn" type="button">Back to modes</button>' +
+        '</div>' +
+      '</div>';
+    wireEnd(share);
+    show('over');
+  }
+
+  function finishDaily(rec, already){
+    var st = load('ns.streak') || { n:0 };
+    var share = 'NAIJA SCRAMBLE — Daily\n' + rec.score + ' pts · ' +
+                rec.reveals + ' reveal' + (rec.reveals === 1 ? '' : 's') +
+                (rec.solved ? '' : ' · missed');
+    el.over.innerHTML =
+      '<div class="endscreen">' +
+        '<span class="label">' + (already ? 'Already played today' : 'Daily done') + '</span>' +
+        '<div class="bigscore">' + rec.score + '<small>' + (rec.reveals) + ' reveal' + (rec.reveals === 1 ? '' : 's') +
+          ' · ' + (st.n || 1) + '-day streak</small></div>' +
+        '<pre class="share-card" id="shareText">' + share + '</pre>' +
+        '<div class="endactions">' +
+          '<button class="cta" id="copyBtn" type="button">Copy result</button>' +
+          '<button class="ghost" id="menuBtn" type="button">Back to modes</button>' +
+        '</div>' +
+        '<p class="ex" style="text-align:center;margin-top:20px">Come back tomorrow for a new word.</p>' +
+      '</div>';
+    wireEnd(share);
+    show('over');
+  }
+
+  function wireEnd(shareText){
+    $('menuBtn').addEventListener('click', function(){
+      el.catpick.hidden = true;
+      S.combo = 0;
+      show('menu');
+    });
+    $('copyBtn').addEventListener('click', function(){
+      var btn = this;
+      var text = shareText + '\nplay: ' + location.href.split('#')[0];
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(text).then(
+          function(){ btn.textContent = 'Copied'; },
+          function(){ btn.textContent = 'Press to select, then copy'; selectEl($('shareText')); }
+        );
+      } else {
+        selectEl($('shareText'));
+        btn.textContent = 'Selected — copy now';
+      }
+    });
+  }
+  function selectEl(node){
+    if(!node) return;
+    var range = document.createRange();
+    range.selectNodeContents(node);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+
+  /* ---------- boot ---------- */
+  Array.prototype.forEach.call(document.querySelectorAll('.mode-card'), function(card){
+    card.addEventListener('click', function(){
+      if(WORDS.length) chooseMode(card.getAttribute('data-mode'));
+    });
+  });
+
+  // Playable straight away with the bundled bank; the Sheet (if set)
+  // swaps in the live list as soon as it arrives.
+  loadWords().then(function(list){
+    if(list && list.length) WORDS = list;
+    if(!WORDS.length){
+      el.menu.innerHTML = '<p class="ex">No words loaded. Put <b>words.js</b> next to this page' +
+        (SHEET_URL ? ', or check that your Sheet URL is reachable' : '') + '.</p>';
+    }
+  });
+})();
+</script>
+</body>
+</html>
