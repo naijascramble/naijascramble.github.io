@@ -259,6 +259,23 @@ footer nav a:hover{color:var(--ink)}
 /* ---- share card (play, end) ---- */
 .share-card{font-family:"IBM Plex Mono",monospace;font-size:.8rem;line-height:1.7;background:var(--paper-2);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:22px auto 0;max-width:340px;text-align:left;white-space:pre-wrap;letter-spacing:.06em}
 
+/* ---- suggest-a-word form ---- */
+.suggest{display:flex;flex-direction:column;gap:18px;margin-top:28px;max-width:440px}
+.suggest label{display:flex;flex-direction:column;gap:6px;font-family:"IBM Plex Mono",monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-soft)}
+.suggest .req{color:var(--clay)}
+.suggest .opt{opacity:.65}
+.suggest input,.suggest select{font-family:"Newsreader",Georgia,serif;font-size:1rem;text-transform:none;letter-spacing:0;color:var(--ink);background:var(--paper-2);border:1px solid var(--line);border-radius:8px;padding:11px 13px;width:100%}
+.suggest select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--ink-soft) 50%),linear-gradient(135deg,var(--ink-soft) 50%,transparent 50%);background-position:calc(100% - 18px) calc(1em + 2px),calc(100% - 13px) calc(1em + 2px);background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:38px}
+.suggest input:focus,.suggest select:focus{outline:2px solid var(--green);outline-offset:1px;border-color:var(--green)}
+.suggest input[name="word"]{text-transform:uppercase;letter-spacing:.08em;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:1.15rem}
+.suggest .cta{align-self:flex-start;border:0;cursor:pointer}
+.suggest .cta:disabled{opacity:.55;cursor:default}
+.form-note{min-height:1.3em;font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--ink-soft);letter-spacing:.03em}
+.form-note.bad{color:var(--clay)}
+.thanks{margin-top:28px;max-width:440px}
+.thanks h2{font-size:clamp(1.5rem,3.4vw,1.9rem)}
+.thanks p{color:var(--ink-soft);margin:12px 0 22px}
+
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
 }

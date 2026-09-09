@@ -1,0 +1,174 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Suggest a Word — Naija Scramble</title>
+<meta name="description" content="Know a Naija word we're missing? Send it in. Every entry is checked before it goes into the game.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <a class="mark" href="index.html" aria-label="Naija Scramble — home">
+      <span>N</span><span>A</span><span>I</span><span>J</span><span>A</span>
+      <span class="a2" style="width:.6ch"></span>
+      <span>S</span><span>C</span><span>R</span><span>A</span><span>M</span><span>B</span><span>L</span><span>E</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html#how">How to play</a>
+      <a href="index.html">Home</a>
+      <a class="play" href="play.html">Play</a>
+    </nav>
+  </div>
+</header>
+
+<main class="play-main">
+  <div class="wrap narrow">
+    <div class="play-intro">
+      <span class="label">Help build the bank</span>
+      <h1>Suggest a Naija word.</h1>
+      <p class="lede">Know a word we&rsquo;re missing? Send it. We check every entry before it goes in the game.</p>
+    </div>
+
+    <form id="suggestForm" class="suggest" novalidate>
+      <label>Word <span class="req">required</span>
+        <input name="word" maxlength="16" autocomplete="off" spellcheck="false" placeholder="e.g. OWAMBE">
+      </label>
+      <label>Category <span class="req">required</span>
+        <select name="cat">
+          <option value="" disabled selected>Pick one</option>
+          <option>Chop</option>
+          <option>Gist</option>
+          <option>Pidgin</option>
+          <option>Streets</option>
+          <option>Owambe</option>
+          <option>Naija</option>
+          <option>Market</option>
+          <option>Sound</option>
+          <option>Screen</option>
+          <option>Faith</option>
+          <option>People</option>
+          <option>School</option>
+          <option>Animal</option>
+          <option>Home</option>
+          <option>Not sure</option>
+        </select>
+      </label>
+      <label>Hint <span class="req">required</span>
+        <input name="hint" maxlength="120" autocomplete="off" placeholder="One short line, plain Naija">
+      </label>
+      <label>Example sentence <span class="opt">optional</span>
+        <input name="ex" maxlength="140" autocomplete="off" placeholder="Put ___ where the word goes">
+      </label>
+      <label>Your name or handle <span class="opt">optional</span>
+        <input name="who" maxlength="60" autocomplete="off" placeholder="So we fit credit you">
+      </label>
+      <button class="cta" type="submit">Send it</button>
+      <p class="form-note" id="formNote" role="status">4&ndash;10 letters works best. No spaces or punctuation in the word.</p>
+    </form>
+
+    <div id="thanks" class="thanks" hidden>
+      <h2>Got it. Thank you.</h2>
+      <p>We check every word before it enters the game. No dulling.</p>
+      <button class="ghost" id="again" type="button">Suggest another</button>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>New words drop every Friday. No dulling.</p>
+    <nav>
+      <a href="index.html#how">How to play</a>
+      <a href="play.html">Play</a>
+      <a href="index.html">Home</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var ENDPOINT = "https://docs.google.com/forms/d/e/1FAIpQLSfWmGgir8OTOg12gtJ5RCrvX5qYhSZ7coSBTnO2g66c8y3Gzw/formResponse";
+  var F = {
+    word: "entry.1972388879",
+    cat:  "entry.1373245733",
+    hint: "entry.1116881915",
+    ex:   "entry.35193210",
+    who:  "entry.943930356"
+  };
+
+  var form   = document.getElementById('suggestForm');
+  var note   = document.getElementById('formNote');
+  var thanks = document.getElementById('thanks');
+  var submit = form.querySelector('button[type="submit"]');
+
+  function setNote(msg, bad){
+    note.textContent = msg;
+    note.className = 'form-note' + (bad ? ' bad' : '');
+  }
+
+  form.addEventListener('submit', function(e){
+    e.preventDefault();
+    var word = form.word.value.toUpperCase().replace(/[^A-Z]/g, '');
+    form.word.value = word;
+
+    if(word.length < 3 || word.length > 14){
+      setNote('The word should be 3–14 letters, no spaces or punctuation.', true);
+      form.word.focus();
+      return;
+    }
+    if(!form.cat.value){
+      setNote('Pick a category.', true);
+      form.cat.focus();
+      return;
+    }
+    if(form.hint.value.trim().length < 3){
+      setNote('Add a short hint so players have a clue.', true);
+      form.hint.focus();
+      return;
+    }
+
+    var body = new URLSearchParams();
+    body.append(F.word, word);
+    body.append(F.cat, form.cat.value);
+    body.append(F.hint, form.hint.value.trim());
+    if(form.ex.value.trim())  body.append(F.ex, form.ex.value.trim());
+    if(form.who.value.trim()) body.append(F.who, form.who.value.trim());
+
+    submit.disabled = true;
+    submit.textContent = 'Sending…';
+    setNote('');
+
+    fetch(ENDPOINT, { method: 'POST', mode: 'no-cors', body: body })
+      .then(done, done);
+
+    // no-cors gives an opaque response either way; the row still lands.
+    var settled = false;
+    function done(){
+      if(settled) return;
+      settled = true;
+      form.hidden = true;
+      thanks.hidden = false;
+    }
+    setTimeout(done, 2500);
+  });
+
+  document.getElementById('again').addEventListener('click', function(){
+    form.reset();
+    form.hidden = false;
+    thanks.hidden = true;
+    submit.disabled = false;
+    submit.textContent = 'Send it';
+    setNote('4–10 letters works best. No spaces or punctuation in the word.');
+    form.word.focus();
+  });
+})();
+</script>
+</body>
+</html>
