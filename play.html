@@ -231,6 +231,22 @@
 
   var WORDS = normalize(window.NS_WORDS || []);
 
+  /* ---------- freshness: don't repeat a word until its pool is used up ---------- */
+  function seenSet(){ var a = load('ns.seen'); return Array.isArray(a) ? a : []; }
+  function markSeen(w){
+    if(S.mode === 'daily') return;
+    var a = seenSet();
+    if(a.indexOf(w) === -1) a.push(w);
+    if(a.length >= WORDS.length) a = [];   // whole bank cycled — start fresh
+    store('ns.seen', a);
+  }
+  function freshFirst(pool){
+    var seen = seenSet(), unseen = [], old = [];
+    pool.forEach(function(x){ (seen.indexOf(x.w) === -1 ? unseen : old).push(x); });
+    shuffle(unseen); shuffle(old);
+    return unseen.concat(old);
+  }
+
   function show(section){
     el.menu.hidden = section !== 'menu';
     el.game.hidden = section !== 'game';
@@ -424,6 +440,7 @@
     var pts = Math.max(1, Math.round((r.base - r.reveals * REVEAL_COST) * mult) + timeBonus);
     S.score += pts;
     S.combo++;
+    markSeen(r.word);
     S.results.push({ w:r.word, got:true, pts:pts });
 
     el.board.classList.add('solved');
@@ -447,6 +464,7 @@
     }
     render();
     S.combo = 0;
+    markSeen(r.word);
     S.results.push({ w:r.word, got:false, pts:0 });
     el.feedback.textContent = (reason === 'time' ? 'Time. ' : 'Gave up. ') + 'The word was ' + r.word + '.';
     el.feedback.className = 'feedback bad';
@@ -516,7 +534,7 @@
   function buckets(){
     var b = { 1:[], 2:[], 3:[] };
     WORDS.forEach(function(x){ (b[x.d] || b[2]).push(x); });
-    shuffle(b[1]); shuffle(b[2]); shuffle(b[3]);
+    b[1] = freshFirst(b[1]); b[2] = freshFirst(b[2]); b[3] = freshFirst(b[3]);
     return b;
   }
   function buildMarathon(){
@@ -530,9 +548,7 @@
   }
   function startCategory(c){
     S.cat = c;
-    var pool = WORDS.filter(function(x){ return x.cat === c; });
-    shuffle(pool);
-    pool.sort(function(a, b){ return a.d - b.d; });
+    var pool = freshFirst(WORDS.filter(function(x){ return x.cat === c; }));
     S.queue = pool.slice(0, 10);
     el.catpick.hidden = true;
     startRound();
@@ -582,11 +598,10 @@
     S.combo = 0; S.qi = 0; S.results = []; S.endedRun = false;
     S.roundTime = sd.time;
     S.stageEx = sd.ex;
-    var pool = WORDS.filter(function(x){ return x.d === sd.d; });
-    shuffle(pool);
+    var pool = freshFirst(WORDS.filter(function(x){ return x.d === sd.d; }));
     S.queue = pool.slice(0, sd.count);
     if(S.queue.length < 3){
-      var extra = WORDS.slice(); shuffle(extra);
+      var extra = freshFirst(WORDS.slice());
       S.queue = S.queue.concat(extra).slice(0, sd.count);
     }
     el.stageselect.hidden = true;
