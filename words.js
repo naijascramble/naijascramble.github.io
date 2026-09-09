@@ -493,22 +493,19 @@ window.NS_WORDS = [
 ];
 
 /* ------------------------------------------------------------
-   GROWING THE BANK WITHOUT TOUCHING CODE
+   GROWING THE BANK
    ------------------------------------------------------------
-   This file is the offline fallback. To load words from a
-   Google Sheet instead:
-
-   1. Sheet with a "Words" tab, columns:
+   This file is the offline fallback. The live bank is a Google
+   Sheet: "Naija Scramble Words", tab "Words", columns
         w | cat | d | hint | ex | alt | status
-      ("alt" = other accepted spellings, "|"-separated;
-       only rows with status = live are served.)
-   2. Add an Apps Script doGet() that returns those rows as
-      JSON, then Deploy > Web app (Access: Anyone).
-   3. Paste the /exec URL into  SHEET_URL  near the top of the
-      <script> in play.html. That's it — play.html fetches the
-      Sheet on load and falls back to this file if it can't.
+   ("alt" = other accepted spellings, "|"-separated; only rows
+   with status = live are used).
 
-   A second "Submissions" tab can receive the site's
-   "Suggest a word" form; approve rows there and paste the
-   good ones into "Words" with status = live.
+   play.html reads it as CSV via SHEET_URL (a gviz "out:csv"
+   link on the shared sheet). Add a row in the sheet -> it shows
+   up in the game within a few minutes. No code change, no
+   redeploy. If the sheet is unreachable the game uses this file.
+
+   To keep this file roughly in sync, re-export the sheet to CSV
+   now and then, or just let it be the safety net.
    ------------------------------------------------------------ */

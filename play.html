@@ -121,31 +121,23 @@
   /* ============================================================
      WORD SOURCE
      ------------------------------------------------------------
-     Paste your Google Apps Script web-app URL between the quotes
-     (Deploy > New deployment > Web app > Execute as "Me",
-      Access "Anyone"). Leave it "" to use the bundled words.js.
+     SHEET_URL points at a published Google Sheet, read as CSV.
+     The sheet is "Naija Scramble Words" — tab "Words", columns:
+       w | cat | d | hint | ex | alt | status
+     Only rows with status = live are used. "alt" is other
+     accepted spellings, "|"-separated.
 
-     The script's doGet() must return JSON — either a bare array
-     or { "words": [ ... ] } — of rows shaped like:
-       { "w":"JOLLOF", "cat":"Chop", "d":1,
-         "hint":"...", "ex":"... ___ ...", "alt":"GARI|GARRI" }
-     "alt" may be a "|"- or ","-separated string or a real array.
-
-     Minimal Apps Script (bound to your sheet):
-       function doGet(){
-         var sh = SpreadsheetApp.getActive().getSheetByName('Words');
-         var rows = sh.getDataRange().getValues();
-         var head = rows.shift();
-         var out = rows
-           .map(function(r){ var o={}; head.forEach(function(h,i){ o[h]=r[i]; }); return o; })
-           .filter(function(o){ return String(o.status).toLowerCase() === 'live'; });
-         return ContentService.createTextOutput(JSON.stringify(out))
-           .setMimeType(ContentService.MimeType.JSON);
-       }
+     To use a different sheet: share it "Anyone with the link
+     (Viewer)", then set SHEET_URL to
+       https://docs.google.com/spreadsheets/d/<ID>/gviz/tq?tqx=out:csv&gid=<TAB_GID>
+     Set it to "" to run purely off the bundled words.js.
+     Edits in the sheet show up in the game within a few minutes.
+     If the sheet is unreachable or returns junk, the game falls
+     back to words.js automatically.
      ============================================================ */
-  var SHEET_URL = "";
-  var SHEET_TIMEOUT = 4500;   // ms before we give up and use words.js
-  var MIN_LIVE_WORDS = 10;    // ignore a sheet that returns fewer than this
+  var SHEET_URL = "https://docs.google.com/spreadsheets/d/1fFDew_yrq99BmdX82gqcoK-an5onREF7wHw5O2qUSyY/gviz/tq?tqx=out:csv&gid=0";
+  var SHEET_TIMEOUT = 5000;   // ms before we give up and use words.js
+  var MIN_LIVE_WORDS = 20;    // ignore a sheet that returns fewer than this
 
   var VAL = {A:1,B:3,C:3,D:2,E:1,F:4,G:2,H:4,I:1,J:8,K:5,L:1,M:3,N:1,O:1,P:3,Q:10,R:1,S:1,T:1,U:1,V:4,W:4,X:8,Y:4,Z:10};
   var ROUND_TIME = 30, REVEAL_COST = 4, COMBO = [1,1.2,1.5,2,2.5];
@@ -213,6 +205,32 @@
       };
     }).filter(function(x){ return /^[A-Z]{4,10}$/.test(x.w) && x.hint; });
   }
+  function parseDelimited(text){
+    var rows = [], row = [], field = '', i = 0, q = false, c;
+    for(; i < text.length; i++){
+      c = text[i];
+      if(q){
+        if(c === '"'){ if(text[i + 1] === '"'){ field += '"'; i++; } else q = false; }
+        else field += c;
+      }
+      else if(c === '"'){ q = true; }
+      else if(c === ',' || c === '\t'){ row.push(field); field = ''; }
+      else if(c === '\n'){ row.push(field); rows.push(row); row = []; field = ''; }
+      else if(c !== '\r'){ field += c; }
+    }
+    if(field.length || row.length){ row.push(field); rows.push(row); }
+    return rows;
+  }
+  function rowsToObjects(text){
+    var rows = parseDelimited(text);
+    if(rows.length < 2) return [];
+    var head = rows.shift().map(function(h){ return String(h).trim().toLowerCase(); });
+    return rows.filter(function(r){ return r.join('').trim(); }).map(function(r){
+      var o = {};
+      head.forEach(function(h, i){ o[h] = r[i] != null ? r[i] : ''; });
+      return o;
+    });
+  }
   function loadWords(){
     var local = normalize(window.NS_WORDS || []);
     if(!SHEET_URL) return Promise.resolve(local);
@@ -220,9 +238,19 @@
     var ctrl = ('AbortController' in window) ? new AbortController() : null;
     var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, SHEET_TIMEOUT) : null;
     return fetch(url, ctrl ? { signal: ctrl.signal } : undefined)
-      .then(function(res){ return res.ok ? res.json() : null; })
-      .then(function(rows){
+      .then(function(res){ return res.ok ? res.text() : null; })
+      .then(function(text){
         if(timer) clearTimeout(timer);
+        if(!text) return local;
+        var rows;
+        try { rows = JSON.parse(text); }
+        catch(e){ rows = rowsToObjects(text); }
+        if(Array.isArray(rows)){
+          rows = rows.filter(function(r){
+            var s = String(r.status == null ? 'live' : r.status).trim().toLowerCase();
+            return s === '' || s === 'live';
+          });
+        }
         var live = normalize(rows);
         return live.length >= MIN_LIVE_WORDS ? live : local;
       })
