@@ -1,0 +1,45 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>og image source</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=IBM+Plex+Mono:wght@500;600&family=Newsreader:opsz,wght@6..72,400&display=swap">
+<style>
+  *{margin:0;box-sizing:border-box}
+  html,body{width:1200px;height:630px;overflow:hidden}
+  body{background:#FBF6EA;color:#18140C;font-family:"Newsreader",Georgia,serif;
+    display:flex;flex-direction:column;justify-content:center;gap:32px;padding:74px 84px;position:relative}
+  .band{position:absolute;top:0;right:0;width:16px;height:100%;background:#20304F}
+  .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:20px;letter-spacing:.24em;text-transform:uppercase;color:#BE3A11}
+  .mark{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:100px;line-height:.94;letter-spacing:-.01em;display:flex;gap:.12ch}
+  .mark span:nth-child(3n){transform:translateY(-6px)}
+  .mark span:nth-child(4n){transform:translateY(6px);color:#0B7A3B}
+  .tag{font-size:31px;color:#5E543F;max-width:24ch}
+  .tiles{display:flex;gap:12px;margin-top:4px}
+  .t{width:80px;height:94px;border-radius:8px;background:#EFE3C4;border:1px solid #D6C499;
+     box-shadow:0 4px 0 #D6C499;display:grid;place-items:center;position:relative;
+     font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:46px;color:#18140C}
+  .t small{position:absolute;right:8px;bottom:6px;font-family:"IBM Plex Mono",monospace;font-size:14px;font-weight:600;color:#BE3A11}
+  .url{position:absolute;bottom:46px;left:84px;font-family:"IBM Plex Mono",monospace;font-size:19px;letter-spacing:.14em;color:#5E543F}
+</style>
+</head>
+<body>
+  <div class="band"></div>
+  <span class="eyebrow">Word game &middot; Nigerian edition</span>
+  <div class="mark">
+    <span>N</span><span>A</span><span>I</span><span>J</span><span>A</span>
+    <span style="width:.5ch"></span>
+    <span>S</span><span>C</span><span>R</span><span>A</span><span>M</span><span>B</span><span>L</span><span>E</span>
+  </div>
+  <div class="tag">Unscramble the words you already use, against the clock.</div>
+  <div class="tiles">
+    <div class="t">J<small>8</small></div>
+    <div class="t">O<small>1</small></div>
+    <div class="t">L<small>1</small></div>
+    <div class="t">L<small>1</small></div>
+    <div class="t">O<small>1</small></div>
+    <div class="t">F<small>4</small></div>
+  </div>
+  <span class="url">naijascramble.github.io</span>
+</body>
+</html>

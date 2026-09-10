@@ -83,6 +83,11 @@ a{color:inherit}
 .nav .play:hover{background:var(--green-deep);color:var(--paper)}
 @media (max-width:620px){.nav a:not(.play){display:none}}
 
+.soundbtn{display:inline-flex;align-items:center;justify-content:center;width:33px;height:33px;flex-shrink:0;border:1px solid var(--line);border-radius:8px;color:var(--ink-soft);background:transparent;cursor:pointer;padding:0}
+.soundbtn:hover{color:var(--ink);border-color:var(--ink-soft)}
+.soundbtn.off{color:var(--clay);border-color:color-mix(in srgb,var(--clay) 35%,var(--line))}
+.soundbtn svg{display:block}
+
 /* ---- shared buttons ---- */
 .cta{background:var(--ink);color:var(--paper);font-family:"IBM Plex Mono",monospace;font-size:.82rem;text-transform:uppercase;letter-spacing:.12em;padding:13px 22px;border-radius:5px;text-decoration:none;display:inline-block}
 .cta:hover{background:var(--green);color:var(--paper)}
