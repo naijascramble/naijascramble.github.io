@@ -747,8 +747,6 @@
       return '<li><span>' + x.w + '</span><span class="' + (x.got ? 'pts' : 'miss') + '">' +
              (x.got ? '+' + x.pts : 'missed') + '</span></li>';
     }).join('');
-    var squares = S.results.map(function(x){ return x.got ? '#' : '.'; }).join('');
-
     var head, sub;
     if(champion){
       head = 'Champion';
@@ -762,8 +760,8 @@
     }
 
     var share = champion
-      ? 'NAIJA SCRAMBLE — Stages\nAll 3 cleared · ' + S.score + ' pts\n' + squares
-      : 'NAIJA SCRAMBLE — ' + sd.name + ' stage\n' + solved + '/' + sd.count + (cleared ? ' · cleared' : ' · missed') + '\n' + squares;
+      ? 'Naija Scramble ' + FLAG + ' Stages\nAll 3 stages cleared · ' + fmtScore(S.score) + ' pts\n' + SHARE_URL
+      : 'Naija Scramble ' + FLAG + ' ' + sd.name + ' stage\n' + solved + '/' + sd.count + (cleared ? ' · cleared' : ' · missed') + '\n' + gridText(S.results) + '\n' + SHARE_URL;
 
     var actions = '';
     if(cleared && !champion){
@@ -781,11 +779,11 @@
         '<div class="bigscore">' + S.score + '<small>' + sub + '</small></div>' +
         '<div class="result-grid" aria-hidden="true">' + grid + '</div>' +
         '<ul class="scorelist">' + rows + '</ul>' +
-        (champion ? '<pre class="share-card" id="shareText">' + share + '</pre>' : '') +
+        (cleared ? '<pre class="share-card" id="shareText">' + share + '</pre>' : '') +
         '<div class="endactions">' + actions + '</div>' +
       '</div>';
 
-    if(champion) wireCopy(share);
+    if(cleared) wireCopy(share);
     var nb = $('nextStageBtn'); if(nb) nb.addEventListener('click', function(){ startStage(S.stageIdx + 1, true); });
     var rb = $('retryStageBtn'); if(rb) rb.addEventListener('click', function(){ startStage(S.stageIdx, true); });
     $('stagesBtn').addEventListener('click', function(){ S.combo = 0; chooseMode('stages'); });
@@ -830,6 +828,17 @@
   $('skip').addEventListener('click', function(){ failRound('skip'); });
   el.nextBtn.addEventListener('click', nextRound);
 
+  /* ---------- share helpers ---------- */
+  var SHARE_URL = 'naijascramble.github.io';
+  var FLAG = '🇳🇬';
+  function fmtScore(n){ return Number(n).toLocaleString('en-US'); }
+  function gridText(results){
+    var sq = results.map(function(x){ return x.got ? '🟩' : '⬜'; });
+    var out = [];
+    for(var i = 0; i < sq.length; i += 10) out.push(sq.slice(i, i + 10).join(''));
+    return out.join('\n');
+  }
+
   /* ---------- end screens ---------- */
   function finish(){
     if(S.mode === 'daily'){
@@ -865,9 +874,9 @@
       return '<li><span>' + x.w + '</span><span class="' + (x.got ? 'pts' : 'miss') + '">' +
              (x.got ? '+' + x.pts : 'missed') + '</span></li>';
     }).join('');
-    var squares = S.results.map(function(x){ return x.got ? '#' : '.'; }).join('');
-    var share = 'NAIJA SCRAMBLE — ' + (S.mode === 'marathon' ? 'Marathon' : S.cat) + '\n' +
-                S.score + ' pts · ' + solved + (S.mode === 'marathon' ? ' solved' : '/' + S.queue.length) + '\n' + squares;
+    var share = 'Naija Scramble ' + FLAG + ' ' + (S.mode === 'marathon' ? 'Marathon' : S.cat) + '\n' +
+                fmtScore(S.score) + ' pts · ' + solved + (S.mode === 'marathon' ? ' words' : '/' + S.queue.length) + '\n' +
+                gridText(S.results) + '\n' + SHARE_URL;
 
     var lbBlock = '';
     if(S.mode === 'marathon' && S.score > 0 && S.score <= SCORE_CAP){
@@ -928,9 +937,12 @@
 
   function finishDaily(rec, already){
     var st = load('ns.streak') || { n:0 };
-    var share = 'NAIJA SCRAMBLE — Daily\n' + rec.score + ' pts · ' +
-                rec.reveals + ' reveal' + (rec.reveals === 1 ? '' : 's') +
-                (rec.solved ? '' : ' · missed');
+    var share = 'Naija Scramble ' + FLAG + ' Daily\n' +
+                fmtScore(rec.score) + ' pts · ' +
+                (rec.solved
+                  ? (rec.reveals ? rec.reveals + ' reveal' + (rec.reveals === 1 ? '' : 's') : 'no reveals')
+                  : 'missed') +
+                (st.n ? ' · ' + st.n + '-day streak' : '') + '\n' + SHARE_URL;
     el.over.innerHTML =
       '<div class="endscreen">' +
         '<span class="label">' + (already ? 'Already played today' : 'Daily done') + '</span>' +
@@ -950,10 +962,12 @@
   function wireCopy(shareText){
     var btn = $('copyBtn');
     if(!btn) return;
-    btn.addEventListener('click', function(){
-      var text = shareText + '\nplay: ' + location.href.split('#')[0];
+    var canShare = typeof navigator.share === 'function';
+    btn.textContent = canShare ? 'Share result' : 'Copy result';
+
+    function copyFallback(){
       if(navigator.clipboard && navigator.clipboard.writeText){
-        navigator.clipboard.writeText(text).then(
+        navigator.clipboard.writeText(shareText).then(
           function(){ btn.textContent = 'Copied'; },
           function(){ btn.textContent = 'Press to select, then copy'; selectEl($('shareText')); }
         );
@@ -961,6 +975,17 @@
         selectEl($('shareText'));
         btn.textContent = 'Selected — copy now';
       }
+    }
+
+    btn.addEventListener('click', function(){
+      if(canShare){
+        navigator.share({ title: 'Naija Scramble', text: shareText }).catch(function(err){
+          if(err && err.name === 'AbortError') return;   // user closed the share sheet
+          copyFallback();                                  // no share target — copy instead
+        });
+        return;
+      }
+      copyFallback();
     });
   }
   function wireEnd(shareText){
@@ -998,6 +1023,19 @@
         (SHEET_URL ? ', or check that your Sheet URL is reachable' : '') + '.</p>';
     }
   });
+})();
+</script>
+<script>
+/* pageview ping -> "Naija Scramble - Traffic" Google Form -> linked sheet */
+(function(){
+  try{
+    var r = document.referrer, ref = 'direct';
+    if(r){ try{ var h = new URL(r).hostname; ref = h ? (h.indexOf('naijascramble') > -1 ? 'internal' : h) : 'direct'; }catch(e){} }
+    var pwa = ((window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone) ? 'pwa' : 'web';
+    var b = new URLSearchParams();
+    b.append('entry.1993350770', location.pathname + ' | ' + ref + ' | ' + pwa + ' | ' + (window.innerWidth || 0));
+    fetch('https://docs.google.com/forms/d/e/1FAIpQLSe9BkaRhteedIggqd-wz5INQ8XGNVgiDG2wSappw1GyS-TIbQ/formResponse', { method:'POST', mode:'no-cors', body:b });
+  }catch(e){}
 })();
 </script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){});});}</script>

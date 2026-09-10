@@ -270,6 +270,19 @@
   render();
 })();
 </script>
+<script>
+/* pageview ping -> "Naija Scramble - Traffic" Google Form -> linked sheet */
+(function(){
+  try{
+    var r = document.referrer, ref = 'direct';
+    if(r){ try{ var h = new URL(r).hostname; ref = h ? (h.indexOf('naijascramble') > -1 ? 'internal' : h) : 'direct'; }catch(e){} }
+    var pwa = ((window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone) ? 'pwa' : 'web';
+    var b = new URLSearchParams();
+    b.append('entry.1993350770', location.pathname + ' | ' + ref + ' | ' + pwa + ' | ' + (window.innerWidth || 0));
+    fetch('https://docs.google.com/forms/d/e/1FAIpQLSe9BkaRhteedIggqd-wz5INQ8XGNVgiDG2wSappw1GyS-TIbQ/formResponse', { method:'POST', mode:'no-cors', body:b });
+  }catch(e){}
+})();
+</script>
 <script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){});});}</script>
 </body>
 </html>
