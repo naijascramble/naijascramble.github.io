@@ -271,8 +271,9 @@
 
   var dm = document.getElementById('dailyMeta');
   if(dm){
-    dm.textContent = new Date().toLocaleDateString('en-GB',
-      { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+    var d = new Date();
+    var mon = ['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'][d.getMonth()];
+    dm.textContent = ('0' + d.getDate()).slice(-2) + ' ' + mon + ' ' + d.getFullYear();
   }
 })();
 </script>
