@@ -14,15 +14,15 @@
 
 <header class="masthead">
   <div class="wrap">
-    <a class="mark" href="index.html" aria-label="Naija Scramble — home">
+    <a class="mark" href="/" aria-label="Naija Scramble — home">
       <span>N</span><span>A</span><span>I</span><span>J</span><span>A</span>
       <span class="a2" style="width:.6ch"></span>
       <span>S</span><span>C</span><span>R</span><span>A</span><span>M</span><span>B</span><span>L</span><span>E</span>
     </a>
     <nav class="nav">
-      <a href="index.html#how">How to play</a>
-      <a href="suggest.html">Suggest a word</a>
-      <a class="play" href="play.html">Play</a>
+      <a href="/#how">How to play</a>
+      <a href="/suggest">Suggest a word</a>
+      <a class="play" href="/play">Play</a>
     </nav>
   </div>
 </header>
@@ -46,9 +46,9 @@
   <div class="wrap">
     <p>New words drop every Friday. No dulling.</p>
     <nav>
-      <a href="index.html#how">How to play</a>
-      <a href="play.html">Play</a>
-      <a href="index.html">Home</a>
+      <a href="/#how">How to play</a>
+      <a href="/play">Play</a>
+      <a href="/">Home</a>
     </nav>
   </div>
 </footer>
@@ -101,7 +101,7 @@
   function render(list){
     var mine = myName();
     if(!list.length){
-      board.innerHTML = '<li class="lb-empty">No scores yet. Be the first &mdash; <a href="play.html">play Marathon</a>.</li>';
+      board.innerHTML = '<li class="lb-empty">No scores yet. Be the first &mdash; <a href="/play">play Marathon</a>.</li>';
       return;
     }
     board.innerHTML = list.map(function(e, i){

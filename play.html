@@ -14,16 +14,16 @@
 
 <header class="masthead">
   <div class="wrap">
-    <a class="mark" href="index.html" aria-label="Naija Scramble — home">
+    <a class="mark" href="/" aria-label="Naija Scramble — home">
       <span>N</span><span>A</span><span>I</span><span>J</span><span>A</span>
       <span class="a2" style="width:.6ch"></span>
       <span>S</span><span>C</span><span>R</span><span>A</span><span>M</span><span>B</span><span>L</span><span>E</span>
     </a>
     <nav class="nav">
-      <a href="index.html#how">How to play</a>
-      <a href="leaderboard.html">Leaderboard</a>
-      <a href="suggest.html">Suggest a word</a>
-      <a href="index.html">Home</a>
+      <a href="/#how">How to play</a>
+      <a href="/leaderboard">Leaderboard</a>
+      <a href="/suggest">Suggest a word</a>
+      <a href="/">Home</a>
     </nav>
   </div>
 </header>
@@ -108,9 +108,9 @@
   <div class="wrap">
     <p>New words drop every Friday. No dulling.</p>
     <nav>
-      <a href="leaderboard.html">Leaderboard</a>
-      <a href="suggest.html">Suggest a word</a>
-      <a href="index.html">Home</a>
+      <a href="/leaderboard">Leaderboard</a>
+      <a href="/suggest">Suggest a word</a>
+      <a href="/">Home</a>
     </nav>
   </div>
 </footer>
@@ -838,7 +838,7 @@
       function posted(){
         if(done) return;
         done = true;
-        lbForm.innerHTML = '<span class="lb-note good">Posted. <a href="leaderboard.html">See the board &rarr;</a></span>';
+        lbForm.innerHTML = '<span class="lb-note good">Posted. <a href="/leaderboard">See the board &rarr;</a></span>';
       }
       fetch(LB_ENDPOINT, { method: 'POST', mode: 'no-cors', body: body }).then(posted, posted);
       setTimeout(posted, 2500);
