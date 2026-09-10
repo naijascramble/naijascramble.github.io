@@ -1,9 +1,9 @@
 /* ============================================================
-   Naija Scramble — word bank
+   Naija Scramble - word bank
    ------------------------------------------------------------
    This is the file that keeps the game alive. Add rows here,
    OR (recommended) replace this with a feed from a Google Sheet
-   that outputs the same shape — see the note at the bottom.
+   that outputs the same shape - see the note at the bottom.
 
    Fields:
      w    letters only, A-Z, 4-10 chars   (the answer)
@@ -174,13 +174,13 @@ window.NS_WORDS = [
   {w:"YEYE",       cat:"Gist", d:1, hint:"Useless, nonsense", ex:"", alt:[]},
   {w:"PADDY",      cat:"Gist", d:1, hint:"A close friend", ex:"", alt:["PADI"]},
   {w:"KOLOMENTAL", cat:"Gist", d:3, hint:"Completely mad, unhinged", ex:"", alt:[]},
-  {w:"SCATTER",    cat:"Gist", d:2, hint:"To wreck it — or dance hard", ex:"", alt:[]},
+  {w:"SCATTER",    cat:"Gist", d:2, hint:"To wreck it - or dance hard", ex:"", alt:[]},
   {w:"HAMMER",     cat:"Gist", d:2, hint:"To hit it big, make serious money", ex:"", alt:[]},
 
   /* ---- Pidgin ---- */
   {w:"NAWA",       cat:"Pidgin", d:1, hint:"Expression of wonder; 'nawa o'", ex:"", alt:[]},
   {w:"YANSH",      cat:"Pidgin", d:2, hint:"Backside", ex:"", alt:[]},
-  {w:"BELLE",      cat:"Pidgin", d:2, hint:"Stomach — or a pregnancy", ex:"", alt:[]},
+  {w:"BELLE",      cat:"Pidgin", d:2, hint:"Stomach - or a pregnancy", ex:"", alt:[]},
   {w:"FLOG",       cat:"Pidgin", d:1, hint:"To beat thoroughly", ex:"", alt:[]},
   {w:"TAYA",       cat:"Pidgin", d:1, hint:"To be tired, fed up", ex:"", alt:[]},
   {w:"WELLA",      cat:"Pidgin", d:1, hint:"Well done, nicely", ex:"", alt:[]},
@@ -246,7 +246,7 @@ window.NS_WORDS = [
   {w:"NYLON",     cat:"Market", d:1, hint:"The thin plastic bag for your goods", ex:"", alt:[]},
   {w:"HAWKER",    cat:"Market", d:2, hint:"Sells through the car window in traffic", ex:"", alt:[]},
   {w:"UMBRELLA",  cat:"Market", d:2, hint:"Shades the roadside stall", ex:"", alt:[]},
-  {w:"DISCOUNT",  cat:"Market", d:2, hint:"'Add something' — what you beg for", ex:"", alt:[]},
+  {w:"DISCOUNT",  cat:"Market", d:2, hint:"'Add something' - what you beg for", ex:"", alt:[]},
   {w:"TOPUP",     cat:"Market", d:1, hint:"To add airtime, or a bit more of anything", ex:"", alt:["RECHARGE"]},
 
   /* ---- Sound (music) ---- */
@@ -265,7 +265,7 @@ window.NS_WORDS = [
   {w:"SKIT",      cat:"Screen", d:1, hint:"Short comedy clip for the internet", ex:"", alt:[]},
   {w:"COMEDIAN",  cat:"Screen", d:2, hint:"Fills the space between owambe performances", ex:"", alt:[]},
   {w:"PREMIERE",  cat:"Screen", d:2, hint:"Red-carpet first screening", ex:"", alt:[]},
-  {w:"SEQUEL",    cat:"Screen", d:2, hint:"Part 2 — Nollywood loves them", ex:"", alt:[]},
+  {w:"SEQUEL",    cat:"Screen", d:2, hint:"Part 2 - Nollywood loves them", ex:"", alt:[]},
   {w:"BABALAWO",  cat:"Screen", d:3, hint:"The diviner every village film has", ex:"", alt:[]},
   {w:"DIBIA",     cat:"Screen", d:2, hint:"Igbo medicine man of the movies", ex:"", alt:[]},
   {w:"OGBANJE",   cat:"Screen", d:3, hint:"A child spirit that keeps dying and returning", ex:"", alt:["ABIKU"]},
@@ -328,10 +328,10 @@ window.NS_WORDS = [
   {w:"VULTURE",   cat:"Animal", d:2, hint:"Circles the abattoir", ex:"", alt:[]},
   {w:"COCKROACH", cat:"Animal", d:3, hint:"Runs when the light comes on", ex:"", alt:[]},
   {w:"MOSQUITO",  cat:"Animal", d:2, hint:"The reason for the net and the coil", ex:"", alt:[]},
-  {w:"TERMITE",   cat:"Animal", d:2, hint:"'Aku' — swarms after the first rain", ex:"", alt:["AKU"]},
+  {w:"TERMITE",   cat:"Animal", d:2, hint:"'Aku' - swarms after the first rain", ex:"", alt:["AKU"]},
   {w:"CRICKET",   cat:"Animal", d:2, hint:"Chirps all night in the grass", ex:"", alt:[]},
   {w:"CROCODILE",  cat:"Animal", d:3, hint:"Lurks still in the muddy river", ex:"", alt:[]},
-  {w:"ANTELOPE",  cat:"Animal", d:2, hint:"'Nchi' — the swift one of the forest", ex:"", alt:[]},
+  {w:"ANTELOPE",  cat:"Animal", d:2, hint:"'Nchi' - the swift one of the forest", ex:"", alt:[]},
 
   /* ---- Home ---- */
   {w:"BUCKET",    cat:"Home", d:1, hint:"How you bathe when there's no running water", ex:"", alt:[]},
@@ -469,7 +469,7 @@ window.NS_WORDS = [
   {w:"WHOLESALE", cat:"Market", d:3, hint:"Buying by the carton to resell", ex:"", alt:[]},
   {w:"RETAIL",    cat:"Market", d:2, hint:"Selling one or two at a time", ex:"", alt:[]},
   {w:"CARTON",    cat:"Market", d:2, hint:"The box things come packed in", ex:"", alt:[]},
-  {w:"DOZEN",     cat:"Market", d:1, hint:"Twelve — or 'give me half'", ex:"", alt:[]},
+  {w:"DOZEN",     cat:"Market", d:1, hint:"Twelve - or 'give me half'", ex:"", alt:[]},
   {w:"BALE",      cat:"Market", d:1, hint:"A pressed bundle of okrika clothes", ex:"", alt:[]},
 
   /* ---- Sound ---- */
@@ -488,11 +488,11 @@ window.NS_WORDS = [
   {w:"CARETAKER", cat:"People", d:3, hint:"Manages the compound for an absent owner", ex:"", alt:[]},
   {w:"MECHANIC",  cat:"People", d:2, hint:"Works under the car at the roadside", ex:"", alt:["MEKANIK"]},
   {w:"VULCANIZER", cat:"People", d:3, hint:"Patches and pumps your flat tyre", ex:"", alt:[]},
-  {w:"TAILOR",    cat:"People", d:1, hint:"Sews your aso ebi — 'come tomorrow'", ex:"", alt:[]},
+  {w:"TAILOR",    cat:"People", d:1, hint:"Sews your aso ebi - 'come tomorrow'", ex:"", alt:[]},
   {w:"KINSMAN",   cat:"People", d:2, hint:"A man of your extended family or town", ex:"", alt:[]},
 
   /* ============================================================
-     BATCH 5 — toward 600
+     BATCH 5 - toward 600
      ============================================================ */
 
   /* ---- Chop ---- */
@@ -533,7 +533,7 @@ window.NS_WORDS = [
   {w:"NNEWI",      cat:"Streets", d:2, hint:"Anambra's auto-parts manufacturing town", ex:"", alt:[]},
   {w:"OJUELEGBA",  cat:"Streets", d:2, hint:"Lagos junction Fela made famous", ex:"", alt:[]},
   {w:"OBALENDE",   cat:"Streets", d:2, hint:"Lagos Island motor park and buka strip", ex:"", alt:[]},
-  {w:"NYANYA",     cat:"Streets", d:2, hint:"Satellite town on the Abuja–Keffi road", ex:"", alt:[]},
+  {w:"NYANYA",     cat:"Streets", d:2, hint:"Satellite town on the Abuja-Keffi road", ex:"", alt:[]},
   {w:"KUBWA",      cat:"Streets", d:2, hint:"Big Abuja suburb on the Kaduna road", ex:"", alt:[]},
   {w:"WUSE",       cat:"Streets", d:2, hint:"Abuja district with the big market", ex:"", alt:[]},
   {w:"MAITAMA",    cat:"Streets", d:2, hint:"Abuja's embassy and old-money district", ex:"", alt:[]},
@@ -544,55 +544,55 @@ window.NS_WORDS = [
   {w:"PASSENGER",  cat:"Streets", d:1, hint:"You, squeezed four-to-a-row in the danfo", ex:"", alt:[]},
 
   /* ---- Gist (slang) ---- */
-  {w:"CHOP",       cat:"Gist", d:1, hint:"To eat — or to enjoy money that isn't yours", ex:"", alt:[]},
-  {w:"CHOKE",      cat:"Gist", d:1, hint:"So good it almost hurts — 'this jollof choke'", ex:"", alt:[]},
-  {w:"CRASE",      cat:"Gist", d:2, hint:"Your head don crase — you've lost it", ex:"", alt:[]},
-  {w:"WEREY",      cat:"Gist", d:2, hint:"Madman — said with fondness or fury", ex:"", alt:["WERE"]},
+  {w:"CHOP",       cat:"Gist", d:1, hint:"To eat - or to enjoy money that isn't yours", ex:"", alt:[]},
+  {w:"CHOKE",      cat:"Gist", d:1, hint:"So good it almost hurts - 'this jollof choke'", ex:"", alt:[]},
+  {w:"CRASE",      cat:"Gist", d:2, hint:"Your head don crase - you've lost it", ex:"", alt:[]},
+  {w:"WEREY",      cat:"Gist", d:2, hint:"Madman - said with fondness or fury", ex:"", alt:["WERE"]},
   {w:"MUGU",       cat:"Gist", d:2, hint:"A fool lined up to be scammed", ex:"", alt:[]},
-  {w:"GASKIYA",    cat:"Gist", d:2, hint:"Hausa for 'truth' — 'gaskiya, I'm tired'", ex:"", alt:[]},
+  {w:"GASKIYA",    cat:"Gist", d:2, hint:"Hausa for 'truth' - 'gaskiya, I'm tired'", ex:"", alt:[]},
   {w:"GBEBORUN",   cat:"Gist", d:3, hint:"A gossip who runs to spread the news", ex:"", alt:[]},
   {w:"FAAJI",      cat:"Gist", d:2, hint:"Enjoyment, the whole vibe of a good time", ex:"", alt:[]},
   {w:"OLOFOFO",    cat:"Gist", d:2, hint:"The compound informant, always watching", ex:"", alt:[]},
   {w:"MADAM",      cat:"Gist", d:1, hint:"The woman in charge, of the house or the shop", ex:"", alt:[]},
   {w:"OGBENYE",    cat:"Gist", d:3, hint:"A wretch, someone with nothing", ex:"", alt:[]},
   {w:"OSHEY",      cat:"Gist", d:2, hint:"Thank-you shout, also mock praise", ex:"", alt:["OSHE"]},
-  {w:"CHAIRMAN",   cat:"Gist", d:1, hint:"Respect title for any big man — 'chairman!'", ex:"", alt:[]},
+  {w:"CHAIRMAN",   cat:"Gist", d:1, hint:"Respect title for any big man - 'chairman!'", ex:"", alt:[]},
   {w:"BIGMAN",     cat:"Gist", d:1, hint:"Somebody with money and the urge to show it", ex:"", alt:[]},
-  {w:"PEPPER",     cat:"Gist", d:2, hint:"To spray cash and stunt — 'pepper dem'", ex:"", alt:[]},
-  {w:"CARRYGO",    cat:"Gist", d:2, hint:"Keep going, forget it — 'no wahala, carry go'", ex:"", alt:[]},
+  {w:"PEPPER",     cat:"Gist", d:2, hint:"To spray cash and stunt - 'pepper dem'", ex:"", alt:[]},
+  {w:"CARRYGO",    cat:"Gist", d:2, hint:"Keep going, forget it - 'no wahala, carry go'", ex:"", alt:[]},
   {w:"LONGTHROAT", cat:"Gist", d:2, hint:"Greed, wanting every good thing at once", ex:"", alt:[]},
-  {w:"SIDDON",     cat:"Gist", d:2, hint:"Sit down — 'siddon look' means mind your business", ex:"", alt:[]},
-  {w:"CONFAM",     cat:"Gist", d:2, hint:"Confirmed, for sure — stronger than 'sure'", ex:"", alt:[]},
+  {w:"SIDDON",     cat:"Gist", d:2, hint:"Sit down - 'siddon look' means mind your business", ex:"", alt:[]},
+  {w:"CONFAM",     cat:"Gist", d:2, hint:"Confirmed, for sure - stronger than 'sure'", ex:"", alt:[]},
   {w:"TURNUP",     cat:"Gist", d:1, hint:"When the party finally catches fire", ex:"", alt:[]},
   {w:"VAWULENCE",  cat:"Gist", d:2, hint:"Playful online trouble-making, mock violence", ex:"", alt:[]},
-  {w:"PALLIATIVE", cat:"Gist", d:2, hint:"Government relief food — the word turned bitter", ex:"", alt:[]},
+  {w:"PALLIATIVE", cat:"Gist", d:2, hint:"Government relief food - the word turned bitter", ex:"", alt:[]},
 
   /* ---- Pidgin ---- */
-  {w:"HOWFAR",     cat:"Pidgin", d:1, hint:"The standard hello — 'how far?'", ex:"", alt:[]},
-  {w:"WALAHI",     cat:"Pidgin", d:2, hint:"I swear — borrowed through Hausa", ex:"", alt:["WALLAHI"]},
-  {w:"SEBI",       cat:"Pidgin", d:2, hint:"Isn't it so? — 'sebi I told you'", ex:"", alt:["SHEBI"]},
-  {w:"GHENGHEN",   cat:"Pidgin", d:2, hint:"Sound-effect for drama — 'and then, ghen ghen'", ex:"", alt:[]},
-  {w:"YAKATA",     cat:"Pidgin", d:2, hint:"Flat on the ground — 'he fall yakata'", ex:"", alt:[]},
-  {w:"TORI",       cat:"Pidgin", d:1, hint:"Story, news — 'wetin be the tori?'", ex:"", alt:[]},
+  {w:"HOWFAR",     cat:"Pidgin", d:1, hint:"The standard hello - 'how far?'", ex:"", alt:[]},
+  {w:"WALAHI",     cat:"Pidgin", d:2, hint:"I swear - borrowed through Hausa", ex:"", alt:["WALLAHI"]},
+  {w:"SEBI",       cat:"Pidgin", d:2, hint:"Isn't it so? - 'sebi I told you'", ex:"", alt:["SHEBI"]},
+  {w:"GHENGHEN",   cat:"Pidgin", d:2, hint:"Sound-effect for drama - 'and then, ghen ghen'", ex:"", alt:[]},
+  {w:"YAKATA",     cat:"Pidgin", d:2, hint:"Flat on the ground - 'he fall yakata'", ex:"", alt:[]},
+  {w:"TORI",       cat:"Pidgin", d:1, hint:"Story, news - 'wetin be the tori?'", ex:"", alt:[]},
   {w:"EFIZZY",     cat:"Pidgin", d:2, hint:"Showing off, flamboyance", ex:"", alt:[]},
-  {w:"PIKIN",      cat:"Pidgin", d:1, hint:"A child — 'that pikin sabi book'", ex:"", alt:[]},
-  {w:"MAKA",       cat:"Pidgin", d:2, hint:"Because — Igbo 'maka gini?' means why", ex:"", alt:[]},
-  {w:"GOSLOW",     cat:"Pidgin", d:1, hint:"A traffic jam — Lagos calls it this", ex:"", alt:[]},
+  {w:"PIKIN",      cat:"Pidgin", d:1, hint:"A child - 'that pikin sabi book'", ex:"", alt:[]},
+  {w:"MAKA",       cat:"Pidgin", d:2, hint:"Because - Igbo 'maka gini?' means why", ex:"", alt:[]},
+  {w:"GOSLOW",     cat:"Pidgin", d:1, hint:"A traffic jam - Lagos calls it this", ex:"", alt:[]},
   {w:"LASGIDI",    cat:"Pidgin", d:2, hint:"Fond nickname for Lagos", ex:"", alt:[]},
-  {w:"NASO",       cat:"Pidgin", d:2, hint:"That's how it is — 'na so we see am'", ex:"", alt:[]},
-  {w:"KPATAKPATA",  cat:"Pidgin", d:2, hint:"Completely, totally — 'e spoil kpatakpata'", ex:"", alt:[]},
-  {w:"FIAM",       cat:"Pidgin", d:3, hint:"Instantly, in a flash — 'e disappear fiam'", ex:"", alt:[]},
+  {w:"NASO",       cat:"Pidgin", d:2, hint:"That's how it is - 'na so we see am'", ex:"", alt:[]},
+  {w:"KPATAKPATA",  cat:"Pidgin", d:2, hint:"Completely, totally - 'e spoil kpatakpata'", ex:"", alt:[]},
+  {w:"FIAM",       cat:"Pidgin", d:3, hint:"Instantly, in a flash - 'e disappear fiam'", ex:"", alt:[]},
 
   /* ---- Naija (money, life, weather) ---- */
   {w:"FUELQUEUE",  cat:"Naija", d:2, hint:"The line at the filling station that never moves", ex:"", alt:[]},
   {w:"PETROL",     cat:"Naija", d:1, hint:"What you queue for while the price keeps jumping", ex:"", alt:[]},
   {w:"DIESEL",     cat:"Naija", d:1, hint:"Runs the big gen when there's no light", ex:"", alt:[]},
-  {w:"TRANSFER",   cat:"Naija", d:1, hint:"How you pay now — 'I've done the transfer'", ex:"", alt:[]},
+  {w:"TRANSFER",   cat:"Naija", d:1, hint:"How you pay now - 'I've done the transfer'", ex:"", alt:[]},
   {w:"RECHARGE",   cat:"Naija", d:1, hint:"Buy credit for the phone", ex:"", alt:[]},
   {w:"INFLATION",  cat:"Naija", d:2, hint:"Why the same market money now buys half", ex:"", alt:[]},
   {w:"CAUTION",    cat:"Naija", d:2, hint:"Deposit the landlord keeps 'for repairs'", ex:"", alt:[]},
   {w:"TENEMENT",   cat:"Naija", d:3, hint:"Face-me-I-face-you rooms off one corridor", ex:"", alt:[]},
-  {w:"QUARTERS",   cat:"Naija", d:2, hint:"Staff housing that comes with the job — 'BQ'", ex:"", alt:[]},
+  {w:"QUARTERS",   cat:"Naija", d:2, hint:"Staff housing that comes with the job - 'BQ'", ex:"", alt:[]},
   {w:"PENSION",    cat:"Naija", d:2, hint:"The money retirees queue in the sun to verify", ex:"", alt:[]},
   {w:"GRATUITY",   cat:"Naija", d:3, hint:"Lump sum owed at retirement, often unpaid", ex:"", alt:[]},
   {w:"UPNEPA",     cat:"Naija", d:2, hint:"The shout when the power suddenly returns", ex:"", alt:[]},
@@ -609,7 +609,7 @@ window.NS_WORDS = [
   {w:"ETIBO",      cat:"Owambe", d:2, hint:"Long shirt of the Niger Delta chiefs", ex:"", alt:[]},
   {w:"HOLLANDIS",  cat:"Owambe", d:3, hint:"Real Dutch wax, the wrapper you save for big days", ex:"", alt:[]},
   {w:"BROCADE",    cat:"Owambe", d:2, hint:"Shiny raised-pattern fabric for kaftans", ex:"", alt:[]},
-  {w:"LACE",       cat:"Owambe", d:1, hint:"The party fabric — French, Swiss, dry or soft", ex:"", alt:[]},
+  {w:"LACE",       cat:"Owambe", d:1, hint:"The party fabric - French, Swiss, dry or soft", ex:"", alt:[]},
   {w:"IPELE",      cat:"Owambe", d:2, hint:"Shoulder sash worn over the buba", ex:"", alt:[]},
   {w:"ABETIAJA",   cat:"Owambe", d:3, hint:"'Dog-ear' cap that folds at the sides", ex:"", alt:[]},
   {w:"GOBI",       cat:"Owambe", d:2, hint:"Tall straight-up cap worn with agbada", ex:"", alt:[]},
@@ -626,7 +626,7 @@ window.NS_WORDS = [
   {w:"STOVE",      cat:"Home", d:1, hint:"Kerosene one you pump before it lights", ex:"", alt:[]},
   {w:"WARMER",     cat:"Home", d:1, hint:"Where the soup waits between meals", ex:"", alt:[]},
   {w:"WRAPPER",    cat:"Home", d:1, hint:"Blanket, towel and baby-carrier in one cloth", ex:"", alt:[]},
-  {w:"BURGLARY",   cat:"Home", d:2, hint:"The welded bars over every window — 'burglary proof'", ex:"", alt:[]},
+  {w:"BURGLARY",   cat:"Home", d:2, hint:"The welded bars over every window - 'burglary proof'", ex:"", alt:[]},
   {w:"PARLOUR",    cat:"Home", d:1, hint:"The sitting room kept nice for visitors", ex:"", alt:[]},
   {w:"VERANDAH",   cat:"Home", d:1, hint:"The front porch where evenings are spent", ex:"", alt:["VERANDA"]},
   {w:"SOAKAWAY",   cat:"Home", d:2, hint:"The pit that takes the house's waste water", ex:"", alt:[]},
@@ -635,7 +635,7 @@ window.NS_WORDS = [
 
   /* ---- Market ---- */
   {w:"BENDDOWN",   cat:"Market", d:2, hint:"Second-hand clothes spread on the ground", ex:"", alt:[]},
-  {w:"LASTPRICE",  cat:"Market", d:2, hint:"'How much last?' — the real starting point", ex:"", alt:[]},
+  {w:"LASTPRICE",  cat:"Market", d:2, hint:"'How much last?' - the real starting point", ex:"", alt:[]},
   {w:"JARA",       cat:"Market", d:1, hint:"The little extra the seller tops your measure with", ex:"", alt:[]},
   {w:"MEASURE",    cat:"Market", d:1, hint:"The cup or tin the grains are sold by", ex:"", alt:[]},
   {w:"TRADER",     cat:"Market", d:1, hint:"The woman who owns the stall and the last word", ex:"", alt:[]},
@@ -643,9 +643,9 @@ window.NS_WORDS = [
   {w:"BABALOJA",   cat:"Market", d:3, hint:"The market's chief, counterpart to iyaloja", ex:"", alt:[]},
   {w:"LOADER",     cat:"Market", d:1, hint:"Fills the bus at the park and shouts the fare", ex:"", alt:[]},
   {w:"SUPPLIER",   cat:"Market", d:2, hint:"The one 'wey dey supply', a rung above retail", ex:"", alt:[]},
-  {w:"CREDIT",     cat:"Market", d:1, hint:"'Write am for book' — pay after payday", ex:"", alt:[]},
+  {w:"CREDIT",     cat:"Market", d:1, hint:"'Write am for book' - pay after payday", ex:"", alt:[]},
   {w:"STOCKFISH",  cat:"Market", d:2, hint:"Dried cod traded by the carton", ex:"", alt:[]},
-  {w:"PROVISIONS", cat:"Market", d:1, hint:"Milk, sugar, tea — the kiosk shelf staples", ex:"", alt:[]},
+  {w:"PROVISIONS", cat:"Market", d:1, hint:"Milk, sugar, tea - the kiosk shelf staples", ex:"", alt:[]},
 
   /* ---- Animal ---- */
   {w:"HYENA",      cat:"Animal", d:1, hint:"Laughs in the northern bush at night", ex:"", alt:[]},
@@ -677,25 +677,25 @@ window.NS_WORDS = [
   {w:"IFTAR",      cat:"Faith", d:2, hint:"The meal that breaks the Ramadan fast", ex:"", alt:[]},
   {w:"ALMAJIRI",   cat:"Faith", d:3, hint:"A boy sent far from home to study the Qur'an", ex:"", alt:[]},
   {w:"HALAL",      cat:"Faith", d:1, hint:"Permitted, especially the meat", ex:"", alt:[]},
-  {w:"HARAM",      cat:"Faith", d:1, hint:"Forbidden — 'that thing na haram'", ex:"", alt:[]},
+  {w:"HARAM",      cat:"Faith", d:1, hint:"Forbidden - 'that thing na haram'", ex:"", alt:[]},
 
   /* ---- School ---- */
   {w:"JAMBITE",    cat:"School", d:2, hint:"A fresh undergraduate, still finding classes", ex:"", alt:[]},
   {w:"MATRIC",     cat:"School", d:2, hint:"The gown-and-oath ceremony for new students", ex:"", alt:[]},
   {w:"ACADA",      cat:"School", d:2, hint:"Slang for a bookish, serious student", ex:"", alt:[]},
   {w:"BURSARY",    cat:"School", d:2, hint:"The office that pays, and the small grant itself", ex:"", alt:[]},
-  {w:"DEPARTMENT", cat:"School", d:1, hint:"Your course's home — 'which department?'", ex:"", alt:[]},
+  {w:"DEPARTMENT", cat:"School", d:1, hint:"Your course's home - 'which department?'", ex:"", alt:[]},
   {w:"SANDWICH",   cat:"School", d:2, hint:"Part-time degree run in the long vacation", ex:"", alt:[]},
   {w:"CORPER",     cat:"School", d:1, hint:"A youth-service member in khaki for a year", ex:"", alt:["KOPA"]},
-  {w:"KHAKI",      cat:"School", d:1, hint:"The NYSC uniform — 'off your khaki'", ex:"", alt:[]},
+  {w:"KHAKI",      cat:"School", d:1, hint:"The NYSC uniform - 'off your khaki'", ex:"", alt:[]},
   {w:"REDEMPTION", cat:"School", d:2, hint:"The final NYSC clearance date", ex:"", alt:[]},
   {w:"EXPO",       cat:"School", d:2, hint:"Leaked answers passed round the exam hall", ex:"", alt:[]},
   {w:"CHALKBOARD", cat:"School", d:1, hint:"Green board, white chalk, dusty duster", ex:"", alt:[]},
-  {w:"BOARDING",   cat:"School", d:1, hint:"School you sleep in — 'boarding house'", ex:"", alt:[]},
+  {w:"BOARDING",   cat:"School", d:1, hint:"School you sleep in - 'boarding house'", ex:"", alt:[]},
 
   /* ---- Screen (Nollywood) ---- */
   {w:"SCRIPT",     cat:"Screen", d:1, hint:"What the actor is supposed to have learned", ex:"", alt:[]},
-  {w:"LOCATION",   cat:"Screen", d:1, hint:"Where filming happens — 'we're on location'", ex:"", alt:[]},
+  {w:"LOCATION",   cat:"Screen", d:1, hint:"Where filming happens - 'we're on location'", ex:"", alt:[]},
   {w:"TEASER",     cat:"Screen", d:1, hint:"The short clip that drops before the trailer", ex:"", alt:[]},
   {w:"CROSSOVER",  cat:"Screen", d:2, hint:"A film pairing Nollywood and Ghallywood stars", ex:"", alt:[]},
   {w:"MARKETER",   cat:"Screen", d:2, hint:"The Idumota man who funds and sells the film", ex:"", alt:[]},
@@ -707,7 +707,7 @@ window.NS_WORDS = [
 
   /* ---- People (roles & family) ---- */
   {w:"FIRSTBORN",  cat:"People", d:1, hint:"The one who carries the family's hopes", ex:"", alt:[]},
-  {w:"NAMESAKE",   cat:"People", d:1, hint:"You carry their name — 'my namesake'", ex:"", alt:[]},
+  {w:"NAMESAKE",   cat:"People", d:1, hint:"You carry their name - 'my namesake'", ex:"", alt:[]},
   {w:"SUITOR",     cat:"People", d:1, hint:"The man 'coming to see' the family", ex:"", alt:[]},
   {w:"GRANNY",     cat:"People", d:1, hint:"'Mama', the elder everybody defers to", ex:"", alt:[]},
   {w:"GUARDIAN",   cat:"People", d:1, hint:"The relative a child is 'kept with' in the city", ex:"", alt:[]},
@@ -715,7 +715,7 @@ window.NS_WORDS = [
   {w:"ARTISAN",    cat:"People", d:1, hint:"Any hands-on tradesman, carpenter to mason", ex:"", alt:[]},
   {w:"WELDER",     cat:"People", d:1, hint:"Sparks flying at the roadside workshop", ex:"", alt:[]},
   {w:"CARPENTER",  cat:"People", d:1, hint:"Makes the wardrobe and the coffin", ex:"", alt:[]},
-  {w:"BRICKLAYER", cat:"People", d:1, hint:"Lays the blocks — everyone says this, not mason", ex:"", alt:[]},
+  {w:"BRICKLAYER", cat:"People", d:1, hint:"Lays the blocks - everyone says this, not mason", ex:"", alt:[]},
   {w:"OKADAMAN",   cat:"People", d:1, hint:"Rides you through the traffic on two wheels", ex:"", alt:[]},
   {w:"SECURITY",   cat:"People", d:1, hint:"The 'mai guard' at the gate", ex:"", alt:[]},
   {w:"ALFA",       cat:"People", d:2, hint:"A Yoruba Muslim cleric and prayer-writer", ex:"", alt:[]},
