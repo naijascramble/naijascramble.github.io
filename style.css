@@ -277,6 +277,28 @@ footer nav a:hover{color:var(--ink)}
 .thanks h2{font-size:clamp(1.5rem,3.4vw,1.9rem)}
 .thanks p{color:var(--ink-soft);margin:12px 0 22px}
 
+/* ---- leaderboard: post block on the Marathon end screen ---- */
+.lb-post{display:flex;flex-direction:column;gap:10px;margin:22px auto 0;max-width:340px;text-align:left}
+.lb-post label{display:flex;flex-direction:column;gap:6px;font-family:"IBM Plex Mono",monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-soft)}
+.lb-post input{font-family:"Newsreader",Georgia,serif;font-size:1rem;color:var(--ink);background:var(--paper-2);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.lb-post input:focus{outline:2px solid var(--green);outline-offset:1px;border-color:var(--green)}
+.lb-post .cta{align-self:flex-start;border:0;cursor:pointer}
+.lb-post .cta:disabled{opacity:.55;cursor:default}
+.lb-note{font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--clay);min-height:1em}
+.lb-note.good{color:var(--green)}
+.lb-note a,.lb-list a{color:var(--green)}
+
+/* ---- leaderboard page ---- */
+.lb-list{list-style:none;padding:0;margin:26px 0 0;max-width:460px}
+.lb-list li{display:grid;grid-template-columns:2.4rem 1fr auto;gap:14px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--line);font-family:"IBM Plex Mono",monospace;font-size:.9rem}
+.lb-list .rk{color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.lb-list li.top .rk{color:var(--clay);font-weight:600}
+.lb-list .nm{font-family:"Newsreader",Georgia,serif;font-size:1.05rem;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-list .sc{color:var(--green);font-weight:600;font-variant-numeric:tabular-nums}
+.lb-list li.you{background:color-mix(in srgb,var(--green) 12%,transparent);border-radius:6px;margin:0 -10px;padding-left:10px;padding-right:10px}
+.lb-list li.lb-empty{display:block;border:0;color:var(--ink-soft)}
+.lb-meta{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--ink-soft);margin-top:16px;letter-spacing:.04em}
+
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
 }

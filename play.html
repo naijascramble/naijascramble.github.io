@@ -21,6 +21,7 @@
     </a>
     <nav class="nav">
       <a href="index.html#how">How to play</a>
+      <a href="leaderboard.html">Leaderboard</a>
       <a href="suggest.html">Suggest a word</a>
       <a href="index.html">Home</a>
     </nav>
@@ -107,7 +108,7 @@
   <div class="wrap">
     <p>New words drop every Friday. No dulling.</p>
     <nav>
-      <a href="index.html#how">How to play</a>
+      <a href="leaderboard.html">Leaderboard</a>
       <a href="suggest.html">Suggest a word</a>
       <a href="index.html">Home</a>
     </nav>
@@ -139,6 +140,10 @@
   var SHEET_URL = "https://docs.google.com/spreadsheets/d/1fFDew_yrq99BmdX82gqcoK-an5onREF7wHw5O2qUSyY/gviz/tq?tqx=out:csv&gid=0";
   var SHEET_TIMEOUT = 5000;   // ms before we give up and use words.js
   var MIN_LIVE_WORDS = 20;    // ignore a sheet that returns fewer than this
+
+  // Leaderboard: Marathon scores POST to a Google Form (see leaderboard.html for the read side).
+  var LB_ENDPOINT = "https://docs.google.com/forms/d/e/1FAIpQLSeB5DXA9qbex4X3ZrcwchzudeAjzAR16_6x8dV_SiqwXu6WmQ/formResponse";
+  var LB_FIELD = { name: "entry.240726504", score: "entry.1980824040", mode: "entry.1453484304" };
 
   var VAL = {A:1,B:3,C:3,D:2,E:1,F:4,G:2,H:4,I:1,J:8,K:5,L:1,M:3,N:1,O:1,P:3,Q:10,R:1,S:1,T:1,U:1,V:4,W:4,X:8,Y:4,Z:10};
   var ROUND_TIME = 30, REVEAL_COST = 4, COMBO = [1,1.2,1.5,2,2.5];
@@ -782,6 +787,19 @@
     var share = 'NAIJA SCRAMBLE — ' + (S.mode === 'marathon' ? 'Marathon' : S.cat) + '\n' +
                 S.score + ' pts · ' + solved + (S.mode === 'marathon' ? ' solved' : '/' + S.queue.length) + '\n' + squares;
 
+    var lbBlock = '';
+    if(S.mode === 'marathon' && S.score > 0){
+      var savedName = String(load('ns.name') || '').replace(/[<>"&]/g, '');
+      lbBlock =
+        '<form class="lb-post" id="lbForm">' +
+          '<label>Post to the leaderboard' +
+            '<input id="lbName" maxlength="16" autocomplete="off" placeholder="Your name" value="' + savedName + '">' +
+          '</label>' +
+          '<button class="cta" id="lbBtn" type="submit">Post score</button>' +
+          '<span class="lb-note" id="lbNote"></span>' +
+        '</form>';
+    }
+
     el.over.innerHTML =
       '<div class="endscreen">' +
         '<span class="label">' + head + '</span>' +
@@ -789,13 +807,41 @@
         '<div class="result-grid" aria-hidden="true">' + grid + '</div>' +
         '<ul class="scorelist">' + rows + '</ul>' +
         '<pre class="share-card" id="shareText">' + share + '</pre>' +
+        lbBlock +
         '<div class="endactions">' +
           '<button class="cta" id="copyBtn" type="button">Copy result</button>' +
           '<button class="ghost" id="menuBtn" type="button">Back to modes</button>' +
         '</div>' +
       '</div>';
     wireEnd(share);
+    wireLeaderboard();
     show('over');
+  }
+
+  function wireLeaderboard(){
+    var lbForm = $('lbForm');
+    if(!lbForm) return;
+    lbForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      var note = $('lbNote'), btn = $('lbBtn');
+      var nm = $('lbName').value.trim().replace(/\s+/g, ' ').slice(0, 16);
+      if(nm.length < 2){ note.textContent = 'Name needs at least 2 letters.'; note.className = 'lb-note'; return; }
+      store('ns.name', nm);
+      var body = new URLSearchParams();
+      body.append(LB_FIELD.name, nm);
+      body.append(LB_FIELD.score, String(S.score));
+      body.append(LB_FIELD.mode, 'Marathon');
+      btn.disabled = true; btn.textContent = 'Posting…';
+      note.textContent = '';
+      var done = false;
+      function posted(){
+        if(done) return;
+        done = true;
+        lbForm.innerHTML = '<span class="lb-note good">Posted. <a href="leaderboard.html">See the board &rarr;</a></span>';
+      }
+      fetch(LB_ENDPOINT, { method: 'POST', mode: 'no-cors', body: body }).then(posted, posted);
+      setTimeout(posted, 2500);
+    });
   }
 
   function finishDaily(rec, already){

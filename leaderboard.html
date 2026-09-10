@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Leaderboard — Naija Scramble</title>
+<meta name="description" content="The Naija Scramble Marathon leaderboard — top scores, all-time.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <a class="mark" href="index.html" aria-label="Naija Scramble — home">
+      <span>N</span><span>A</span><span>I</span><span>J</span><span>A</span>
+      <span class="a2" style="width:.6ch"></span>
+      <span>S</span><span>C</span><span>R</span><span>A</span><span>M</span><span>B</span><span>L</span><span>E</span>
+    </a>
+    <nav class="nav">
+      <a href="index.html#how">How to play</a>
+      <a href="suggest.html">Suggest a word</a>
+      <a class="play" href="play.html">Play</a>
+    </nav>
+  </div>
+</header>
+
+<main class="play-main">
+  <div class="wrap narrow">
+    <div class="play-intro">
+      <span class="label">Marathon &middot; all-time</span>
+      <h1>Leaderboard.</h1>
+      <p class="lede">Best score from each player&rsquo;s Marathon runs. Post yours from the game-over screen.</p>
+    </div>
+
+    <ol class="lb-list" id="board" aria-live="polite">
+      <li class="lb-empty" id="loading">Loading the board&hellip;</li>
+    </ol>
+    <p class="lb-meta" id="meta"></p>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>New words drop every Friday. No dulling.</p>
+    <nav>
+      <a href="index.html#how">How to play</a>
+      <a href="play.html">Play</a>
+      <a href="index.html">Home</a>
+    </nav>
+  </div>
+</footer>
+
+<script>
+(function(){
+  "use strict";
+  var CSV_URL = "https://docs.google.com/spreadsheets/d/10O2TfIXYfyJNoFSHHD3ZF7xnL4Q8s4B6gX71WVDnMrA/gviz/tq?tqx=out:csv&gid=1645967364";
+  var TOP = 25;
+
+  var board = document.getElementById('board');
+  var meta  = document.getElementById('meta');
+
+  function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
+    return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c];
+  }); }
+  function myName(){
+    try { return (localStorage.getItem('ns.name') || '').trim().toLowerCase(); }
+    catch(e){ return ''; }
+  }
+
+  function parseDelimited(text){
+    var rows = [], row = [], field = '', i = 0, q = false, c;
+    for(; i < text.length; i++){
+      c = text[i];
+      if(q){
+        if(c === '"'){ if(text[i + 1] === '"'){ field += '"'; i++; } else q = false; }
+        else field += c;
+      }
+      else if(c === '"'){ q = true; }
+      else if(c === ',' || c === '\t'){ row.push(field); field = ''; }
+      else if(c === '\n'){ row.push(field); rows.push(row); row = []; field = ''; }
+      else if(c !== '\r'){ field += c; }
+    }
+    if(field.length || row.length){ row.push(field); rows.push(row); }
+    return rows;
+  }
+  function toObjects(text){
+    var rows = parseDelimited(text);
+    if(rows.length < 2) return [];
+    var head = rows.shift().map(function(h){ return String(h).trim().toLowerCase(); });
+    return rows.filter(function(r){ return r.join('').trim(); }).map(function(r){
+      var o = {};
+      head.forEach(function(h, i){ o[h] = r[i] != null ? r[i] : ''; });
+      return o;
+    });
+  }
+
+  function render(list){
+    var mine = myName();
+    if(!list.length){
+      board.innerHTML = '<li class="lb-empty">No scores yet. Be the first &mdash; <a href="play.html">play Marathon</a>.</li>';
+      return;
+    }
+    board.innerHTML = list.map(function(e, i){
+      var cls = 'li';
+      var classes = [];
+      if(i < 3) classes.push('top');
+      if(mine && e.key === mine) classes.push('you');
+      return '<li' + (classes.length ? ' class="' + classes.join(' ') + '"' : '') + '>' +
+               '<span class="rk">' + (i + 1) + '</span>' +
+               '<span class="nm">' + esc(e.name) + '</span>' +
+               '<span class="sc">' + e.score.toLocaleString() + '</span>' +
+             '</li>';
+    }).join('');
+  }
+
+  function load(){
+    fetch(CSV_URL + '&v=' + Date.now())
+      .then(function(r){ return r.ok ? r.text() : Promise.reject(); })
+      .then(function(text){
+        var rows = toObjects(text);
+        var best = {};
+        rows.forEach(function(r){
+          var mode = String(r.mode || '').trim().toLowerCase();
+          if(mode && mode !== 'marathon') return;
+          var name = String(r.name || '').trim().replace(/\s+/g, ' ').slice(0, 16);
+          var score = parseInt(String(r.score || '').replace(/[^\d]/g, ''), 10);
+          if(!name || !(score > 0) || score > 200000) return;
+          var key = name.toLowerCase();
+          if(!best[key] || score > best[key].score){
+            best[key] = { name: name, score: score, key: key };
+          }
+        });
+        var list = Object.keys(best).map(function(k){ return best[k]; })
+          .sort(function(a, b){ return b.score - a.score; })
+          .slice(0, TOP);
+        render(list);
+        meta.textContent = list.length
+          ? list.length + ' player' + (list.length === 1 ? '' : 's') + ' · updates as new runs come in'
+          : '';
+      })
+      .catch(function(){
+        board.innerHTML = '<li class="lb-empty">Could not load the board right now. Try again in a bit.</li>';
+      });
+  }
+
+  load();
+  setInterval(load, 60000);
+})();
+</script>
+</body>
+</html>
