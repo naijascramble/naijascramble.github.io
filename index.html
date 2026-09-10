@@ -18,6 +18,11 @@
 <meta name="twitter:title" content="Naija Scramble">
 <meta name="twitter:description" content="Unscramble the Naija words you already use, against the clock.">
 <meta name="twitter:image" content="https://naijascramble.github.io/og.png">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0B7A3B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Naija Scramble">
+<link rel="apple-touch-icon" href="/icon-192.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
@@ -265,5 +270,6 @@
   render();
 })();
 </script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){});});}</script>
 </body>
 </html>
