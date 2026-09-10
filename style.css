@@ -304,6 +304,37 @@ footer nav a:hover{color:var(--ink)}
 .lb-list li.lb-empty{display:block;border:0;color:var(--ink-soft)}
 .lb-meta{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--ink-soft);margin-top:16px;letter-spacing:.04em}
 
+/* ---- solve payoff (play) ---- */
+.board.solved .slot .tile{animation:solvePop .34s cubic-bezier(.2,.9,.3,1.4) both}
+.board.solved .slot:nth-child(2) .tile{animation-delay:.04s}
+.board.solved .slot:nth-child(3) .tile{animation-delay:.08s}
+.board.solved .slot:nth-child(4) .tile{animation-delay:.12s}
+.board.solved .slot:nth-child(5) .tile{animation-delay:.16s}
+.board.solved .slot:nth-child(6) .tile{animation-delay:.20s}
+.board.solved .slot:nth-child(7) .tile{animation-delay:.24s}
+.board.solved .slot:nth-child(8) .tile{animation-delay:.28s}
+.board.solved .slot:nth-child(9) .tile{animation-delay:.32s}
+.board.solved .slot:nth-child(10) .tile{animation-delay:.36s}
+@keyframes solvePop{0%{transform:translateY(0) scale(1)}45%{transform:translateY(-8px) scale(1.09)}100%{transform:translateY(0) scale(1)}}
+.ex.reveal-word{font-style:normal;color:var(--ink)}
+.ex.reveal-word b{color:var(--green);border-bottom-color:var(--green)}
+.gamebar .streak.bump{animation:streakBump .4s ease}
+@keyframes streakBump{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
+
+/* ---- achievements (play) ---- */
+.ach-shelf{margin-top:26px;border-top:1px solid var(--line);padding-top:18px}
+.ach-head{font-family:"IBM Plex Mono",monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.16em;color:var(--clay);display:flex;justify-content:space-between;align-items:baseline}
+.ach-head span{color:var(--ink-soft);letter-spacing:.06em}
+.ach-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.ach-chip{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.06em;padding:6px 12px;border-radius:99px;border:1px solid var(--line);background:var(--paper-2);color:var(--ink-soft);cursor:pointer}
+.ach-chip.on{color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,var(--line));background:color-mix(in srgb,var(--green) 10%,transparent);font-weight:600}
+.ach-chip:hover{border-color:var(--ink-soft)}
+.ach-tip{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--ink-soft);margin-top:12px;min-height:1.1em;letter-spacing:.03em}
+.ach-toast{position:fixed;left:50%;transform:translate(-50%,140%);bottom:18px;z-index:60;background:var(--indigo);color:var(--indigo-ink);padding:12px 20px;border-radius:10px;box-shadow:0 10px 30px -8px var(--shadow);font-family:"IBM Plex Mono",monospace;font-size:.82rem;text-align:center;transition:transform .4s cubic-bezier(.2,.9,.3,1.2);pointer-events:none;max-width:80vw}
+.ach-toast b{display:block;font-size:.64rem;text-transform:uppercase;letter-spacing:.18em;opacity:.7;margin-bottom:3px;font-weight:500}
+.ach-toast.in{transform:translate(-50%,0)}
+
 @media (prefers-reduced-motion:reduce){
   *{animation:none!important;transition:none!important}
+  .ach-toast{transition:none}
 }
