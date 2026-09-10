@@ -120,8 +120,8 @@
         <div>
           <span class="label">Today&rsquo;s word</span>
           <h2>One shared puzzle a day. Everybody gets the same tiles.</h2>
-          <p>Seven letters, category <b>Owambe</b>. Solve it in one go for the streak. Miss a day and the streak resets to zero &mdash; no mercy.</p>
-          <p class="daily-meta">09 SEP 2026 &middot; 4,112 solved &middot; avg 41s</p>
+          <p>One word, one category, the same for everyone. Solve it in one go for the streak. Miss a day and the streak resets to zero &mdash; no mercy.</p>
+          <p class="daily-meta" id="dailyMeta"></p>
         </div>
         <a class="cta" href="/play">Play the daily</a>
       </div>
@@ -131,7 +131,7 @@
 
 <footer>
   <div class="wrap">
-    <p>New words drop every Friday. No dulling.</p>
+    <p>New words added regularly. No dulling.</p>
     <nav>
       <a href="#how">How to play</a>
       <a href="#daily">Daily</a>
@@ -268,6 +268,12 @@
 
   scramble();
   render();
+
+  var dm = document.getElementById('dailyMeta');
+  if(dm){
+    dm.textContent = new Date().toLocaleDateString('en-GB',
+      { day: '2-digit', month: 'short', year: 'numeric' }).toUpperCase();
+  }
 })();
 </script>
 <script>
