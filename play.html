@@ -144,6 +144,7 @@
   // Leaderboard: Marathon scores POST to a Google Form (see leaderboard.html for the read side).
   var LB_ENDPOINT = "https://docs.google.com/forms/d/e/1FAIpQLSeB5DXA9qbex4X3ZrcwchzudeAjzAR16_6x8dV_SiqwXu6WmQ/formResponse";
   var LB_FIELD = { name: "entry.240726504", score: "entry.1980824040", mode: "entry.1453484304" };
+  var SCORE_CAP = 25000;   // runs above this can't be posted; leaderboard.html also drops them
 
   var VAL = {A:1,B:3,C:3,D:2,E:1,F:4,G:2,H:4,I:1,J:8,K:5,L:1,M:3,N:1,O:1,P:3,Q:10,R:1,S:1,T:1,U:1,V:4,W:4,X:8,Y:4,Z:10};
   var ROUND_TIME = 30, REVEAL_COST = 4, COMBO = [1,1.2,1.5,2,2.5];
@@ -788,7 +789,7 @@
                 S.score + ' pts · ' + solved + (S.mode === 'marathon' ? ' solved' : '/' + S.queue.length) + '\n' + squares;
 
     var lbBlock = '';
-    if(S.mode === 'marathon' && S.score > 0){
+    if(S.mode === 'marathon' && S.score > 0 && S.score <= SCORE_CAP){
       var savedName = String(load('ns.name') || '').replace(/[<>"&]/g, '');
       lbBlock =
         '<form class="lb-post" id="lbForm">' +

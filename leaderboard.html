@@ -58,6 +58,7 @@
   "use strict";
   var CSV_URL = "https://docs.google.com/spreadsheets/d/10O2TfIXYfyJNoFSHHD3ZF7xnL4Q8s4B6gX71WVDnMrA/gviz/tq?tqx=out:csv&gid=1645967364";
   var TOP = 25;
+  var SCORE_CAP = 25000;   // drop anything above this — no honest Marathon run gets close
 
   var board = document.getElementById('board');
   var meta  = document.getElementById('meta');
@@ -127,7 +128,7 @@
           if(mode && mode !== 'marathon') return;
           var name = String(r.name || '').trim().replace(/\s+/g, ' ').slice(0, 16);
           var score = parseInt(String(r.score || '').replace(/[^\d]/g, ''), 10);
-          if(!name || !(score > 0) || score > 200000) return;
+          if(!name || !(score > 0) || score > SCORE_CAP) return;
           var key = name.toLowerCase();
           if(!best[key] || score > best[key].score){
             best[key] = { name: name, score: score, key: key };
