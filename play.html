@@ -274,15 +274,17 @@
   var REDUCED = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
 
   /* ---------- solve payoff ---------- */
+  function stopTally(){ if(S.tallyIv){ clearInterval(S.tallyIv); S.tallyIv = null; } }
   function countTally(target, mult){
+    stopTally();
     var suffix = mult > 1 ? '  ×' + mult : '';
     if(REDUCED || target <= 2){ el.tally.textContent = '+' + target + suffix; return; }
-    var n = 0, step = Math.max(1, Math.round(target / 16));
-    (function tick(){
+    var n = 0, step = Math.max(1, Math.ceil(target / 18));
+    S.tallyIv = setInterval(function(){
       n = Math.min(target, n + step);
       el.tally.textContent = '+' + n + suffix;
-      if(n < target) requestAnimationFrame(tick);
-    })();
+      if(n >= target) stopTally();
+    }, 24);
   }
   function revealInExample(r, good){
     if(r.ex && r.ex.indexOf('___') !== -1){
@@ -548,6 +550,7 @@
       ? '&ldquo;' + S.round.ex.replace('___', '<b>' + '&nbsp;'.repeat(S.round.word.length) + '</b>') + '&rdquo;'
       : '';
     el.ex.classList.remove('reveal-word');
+    stopTally();
     el.tally.textContent = '';
     el.feedback.textContent = 'Tap a tile or use your keyboard.';
     el.feedback.className = 'feedback';
