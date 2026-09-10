@@ -51,7 +51,7 @@
     <div class="wrap">
       <div class="hero-copy">
         <p class="eyebrow label">Word game &middot; Nigerian edition</p>
-        <h1>Six letters land scrambled. One of them is worth <em>8</em>. Spell your way out.</h1>
+        <h1><span id="demoLen">Six</span> letters land scrambled. One of them is worth <em id="demoVal">8</em>. Spell your way out.</h1>
         <p class="lede">Jollof, danfo, owambe, wahala &mdash; the words you already use, shuffled against the clock.</p>
         <div class="hero-cta">
           <a class="cta" href="/play">Play 10 rounds</a>
@@ -61,8 +61,8 @@
 
       <div class="board" id="board" aria-label="Try one round">
         <div class="board-top">
-          <p class="hint"><b>Hint</b> The rice that starts arguments.</p>
-          <p class="cat label">Chop</p>
+          <p class="hint"><b>Hint</b> <span id="demoHint">The rice that starts arguments.</span></p>
+          <p class="cat label" id="demoCat">Chop</p>
         </div>
         <div class="slots" id="slots" aria-label="Your word"></div>
         <div class="pool" id="pool" aria-label="Letter pool"></div>
@@ -143,8 +143,34 @@
 
 <script>
 (function(){
-  var WORD = "JOLLOF";
   var VAL = {A:1,B:3,C:3,D:2,E:1,F:4,G:2,H:4,I:1,J:8,K:5,L:1,M:3,N:1,O:1,P:3,Q:10,R:1,S:1,T:1,U:1,V:4,W:4,X:8,Y:4,Z:10};
+
+  /* the hero demo picks a fresh word each visit */
+  var DEMOS = [
+    {w:"JOLLOF", h:"The rice that starts arguments.",          c:"Chop"},
+    {w:"DANFO",  h:"Yellow bus, no shock absorbers.",          c:"Streets"},
+    {w:"WAHALA", h:"Trouble, and plenty of it.",               c:"Gist"},
+    {w:"OKADA",  h:"Motorbike taxi, helmet optional.",         c:"Streets"},
+    {w:"OWAMBE", h:"Weekend party — aso ebi and spraying.",    c:"Owambe"},
+    {w:"JAPA",   h:"To relocate abroad, and fast.",            c:"Gist"},
+    {w:"SUYA",   h:"Peppered meat off the mallam's grill.",    c:"Chop"},
+    {w:"KEKE",   h:"Three-wheeled tricycle taxi.",             c:"Streets"},
+    {w:"ZOBO",   h:"Deep-red hibiscus drink, served cold.",    c:"Chop"},
+    {w:"FUJI",   h:"Drum-heavy music, Barry and Pasuma.",      c:"Sound"},
+    {w:"AKARA",  h:"Bean cake, fried golden brown.",           c:"Chop"},
+    {w:"WETIN",  h:"What? — 'wetin dey happen?'",          c:"Pidgin"},
+    {w:"KOBOKO", h:"The horsewhip that keeps order.",          c:"Naija"}
+  ];
+  var DEMO = DEMOS[Math.floor(Math.random() * DEMOS.length)];
+  var WORD = DEMO.w;
+  var NUM = { 4:"Four", 5:"Five", 6:"Six", 7:"Seven" };
+  (function(){
+    var set = function(id, v){ var n = document.getElementById(id); if(n) n.textContent = v; };
+    set('demoHint', DEMO.h);
+    set('demoCat', DEMO.c);
+    set('demoLen', NUM[WORD.length] || WORD.length);
+    set('demoVal', Math.max.apply(null, WORD.split('').map(function(ch){ return VAL[ch]; })));
+  })();
   var slotsEl = document.getElementById('slots');
   var poolEl  = document.getElementById('pool');
   var feedback = document.getElementById('feedback');
@@ -225,7 +251,7 @@
     if(guess === WORD){
       solved = true;
       document.getElementById('board').classList.add('solved');
-      feedback.textContent = 'Correct. Dinner is served. That is the game — play the full 10.';
+      feedback.textContent = 'Correct. That is the whole game — now play the full 10.';
       feedback.className = 'feedback good';
       countUp(WORD.split('').reduce(function(a,c){return a+VAL[c];},0));
     } else {
