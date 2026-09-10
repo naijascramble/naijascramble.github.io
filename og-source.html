@@ -6,9 +6,11 @@
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,700;12..96,800&family=IBM+Plex+Mono:wght@500;600&family=Newsreader:opsz,wght@6..72,400&display=swap">
 <style>
   *{margin:0;box-sizing:border-box}
-  html,body{width:1200px;height:630px;overflow:hidden}
-  body{background:#FBF6EA;color:#18140C;font-family:"Newsreader",Georgia,serif;
-    display:flex;flex-direction:column;justify-content:center;gap:32px;padding:74px 84px;position:relative}
+  body{min-height:100vh;background:#20304F;display:grid;place-items:center}
+  /* everything the OG image should contain lives in .card (1200x630);
+     the page centres it so a centre-crop of a wider screenshot = the card */
+  .card{width:1200px;height:630px;background:#FBF6EA;color:#18140C;overflow:hidden;position:relative;
+    font-family:"Newsreader",Georgia,serif;display:flex;flex-direction:column;justify-content:center;gap:32px;padding:74px 84px}
   .band{position:absolute;top:0;right:0;width:16px;height:100%;background:#20304F}
   .eyebrow{font-family:"IBM Plex Mono",monospace;font-size:20px;letter-spacing:.24em;text-transform:uppercase;color:#BE3A11}
   .mark{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:100px;line-height:.94;letter-spacing:-.01em;display:flex;gap:.12ch}
@@ -24,22 +26,24 @@
 </style>
 </head>
 <body>
-  <div class="band"></div>
-  <span class="eyebrow">Word game &middot; Nigerian edition</span>
-  <div class="mark">
-    <span>N</span><span>A</span><span>I</span><span>J</span><span>A</span>
-    <span style="width:.5ch"></span>
-    <span>S</span><span>C</span><span>R</span><span>A</span><span>M</span><span>B</span><span>L</span><span>E</span>
+  <div class="card">
+    <div class="band"></div>
+    <span class="eyebrow">Word game &middot; Nigerian edition</span>
+    <div class="mark">
+      <span>N</span><span>A</span><span>I</span><span>J</span><span>A</span>
+      <span style="width:.5ch"></span>
+      <span>S</span><span>C</span><span>R</span><span>A</span><span>M</span><span>B</span><span>L</span><span>E</span>
+    </div>
+    <div class="tag">Unscramble the words you already use, against the clock.</div>
+    <div class="tiles">
+      <div class="t">J<small>8</small></div>
+      <div class="t">O<small>1</small></div>
+      <div class="t">L<small>1</small></div>
+      <div class="t">L<small>1</small></div>
+      <div class="t">O<small>1</small></div>
+      <div class="t">F<small>4</small></div>
+    </div>
+    <span class="url">naijascramble.github.io</span>
   </div>
-  <div class="tag">Unscramble the words you already use, against the clock.</div>
-  <div class="tiles">
-    <div class="t">J<small>8</small></div>
-    <div class="t">O<small>1</small></div>
-    <div class="t">L<small>1</small></div>
-    <div class="t">L<small>1</small></div>
-    <div class="t">O<small>1</small></div>
-    <div class="t">F<small>4</small></div>
-  </div>
-  <span class="url">naijascramble.github.io</span>
 </body>
 </html>
