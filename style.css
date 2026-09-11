@@ -304,6 +304,23 @@ footer nav a:hover{color:var(--ink)}
 .lb-list li.lb-empty{display:block;border:0;color:var(--ink-soft)}
 .lb-meta{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--ink-soft);margin-top:16px;letter-spacing:.04em}
 
+/* ---- weekly airtime challenge ---- */
+.challenge{background:var(--indigo);color:var(--indigo-ink);border-radius:14px;padding:26px 28px;margin:24px 0}
+.challenge .label{color:#E8A15C;display:block;margin-bottom:10px}
+.challenge-lead{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:1.15rem;line-height:1.4}
+.challenge-lead b{color:#FFD27D}
+.challenge-meta{font-family:"IBM Plex Mono",monospace;font-size:.75rem;color:var(--indigo-ink);opacity:.75;margin-top:10px;letter-spacing:.05em}
+.lb-tabs{display:flex;gap:8px;margin-top:4px}
+.lb-tab{font-family:"IBM Plex Mono",monospace;font-size:.74rem;text-transform:uppercase;letter-spacing:.1em;padding:8px 16px;border-radius:99px;border:1px solid var(--line);background:transparent;color:var(--ink-soft);cursor:pointer}
+.lb-tab.on{background:var(--green);border-color:var(--green);color:var(--paper);font-weight:600}
+.lb-tab:not(.on):hover{border-color:var(--ink-soft);color:var(--ink)}
+.lb-rules{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--ink-soft);margin-top:24px;line-height:1.7;max-width:52ch}
+
+/* ---- site-wide promo bar (challenge callout) ---- */
+.promo-bar{display:block;background:var(--indigo);color:var(--indigo-ink);text-decoration:none;text-align:center;padding:11px 16px;font-family:"IBM Plex Mono",monospace;font-size:.76rem;letter-spacing:.03em;transition:background .12s ease}
+.promo-bar:hover{background:var(--green-deep)}
+.promo-bar b{color:#FFD27D;text-transform:uppercase;letter-spacing:.12em;font-weight:600;margin-right:8px}
+
 /* ---- solve payoff (play) ---- */
 .board.solved .slot .tile{animation:solvePop .34s cubic-bezier(.2,.9,.3,1.4) both}
 .board.solved .slot:nth-child(2) .tile{animation-delay:.04s}

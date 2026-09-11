@@ -4,19 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Leaderboard — Naija Scramble</title>
-<meta name="description" content="The Naija Scramble Marathon leaderboard — top scores, all-time.">
+<meta name="description" content="Top Marathon score each week wins airtime. See who's leading, plus the all-time board.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='6'%20fill='%230B7A3B'/%3E%3Ctext%20x='16'%20y='23'%20font-family='Georgia,serif'%20font-size='20'%20font-weight='bold'%20text-anchor='middle'%20fill='%23FBF6EA'%3EN%3C/text%3E%3C/svg%3E">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Naija Scramble">
 <meta property="og:title" content="Leaderboard — Naija Scramble">
-<meta property="og:description" content="Marathon high scores, all-time. Post yours from the game-over screen.">
+<meta property="og:description" content="Top Marathon score each week wins airtime. Post yours from the game-over screen.">
 <meta property="og:url" content="https://naijascramble.github.io/leaderboard">
 <meta property="og:image" content="https://naijascramble.github.io/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Leaderboard — Naija Scramble">
-<meta name="twitter:description" content="Marathon high scores, all-time.">
+<meta name="twitter:description" content="Top Marathon score each week wins airtime.">
 <meta name="twitter:image" content="https://naijascramble.github.io/og.png">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#0B7A3B">
@@ -48,15 +48,27 @@
 <main class="play-main">
   <div class="wrap narrow">
     <div class="play-intro">
-      <span class="label">Marathon &middot; all-time</span>
+      <span class="label">Marathon &middot; weekly prize</span>
       <h1>Leaderboard.</h1>
-      <p class="lede">Best score from each player&rsquo;s Marathon runs. Post yours from the game-over screen.</p>
+      <p class="lede">Post your Marathon score from the game-over screen. Best score wins the week.</p>
+    </div>
+
+    <div class="challenge">
+      <span class="label">This week&rsquo;s airtime challenge</span>
+      <p class="challenge-lead" id="challengeLead">Loading&hellip;</p>
+      <p class="challenge-meta" id="challengeMeta"></p>
+    </div>
+
+    <div class="lb-tabs" role="tablist">
+      <button type="button" class="lb-tab on" id="tabWeek" role="tab" aria-selected="true">This week</button>
+      <button type="button" class="lb-tab" id="tabAll" role="tab" aria-selected="false">All-time</button>
     </div>
 
     <ol class="lb-list" id="board" aria-live="polite">
       <li class="lb-empty" id="loading">Loading the board&hellip;</li>
     </ol>
     <p class="lb-meta" id="meta"></p>
+    <p class="lb-rules">The week runs Monday to Sunday. Best single Marathon score wins &mdash; we go by the name you played under, so use one you&rsquo;ll recognise. Scores above 25,000 are treated as errors and dropped. Winner is announced here, and wherever we post, every Monday.</p>
   </div>
 </main>
 
@@ -75,11 +87,42 @@
 (function(){
   "use strict";
   var CSV_URL = "https://docs.google.com/spreadsheets/d/10O2TfIXYfyJNoFSHHD3ZF7xnL4Q8s4B6gX71WVDnMrA/gviz/tq?tqx=out:csv&gid=1645967364";
-  var TOP = 25;
+  var TOP_WEEK = 10, TOP_ALL = 25;
   var SCORE_CAP = 25000;   // drop anything above this — no honest Marathon run gets close
 
   var board = document.getElementById('board');
   var meta  = document.getElementById('meta');
+  var challengeLead = document.getElementById('challengeLead');
+  var challengeMeta = document.getElementById('challengeMeta');
+  var tabWeek = document.getElementById('tabWeek');
+  var tabAll  = document.getElementById('tabAll');
+  var view = 'week';
+  var ROWS = [];   // every valid marathon run: {name, score, key, ts}
+
+  /* the challenge week runs Monday 00:00 -> the following Monday 00:00, local time */
+  function weekStart(d){
+    d = d || new Date();
+    var day = d.getDay();                 // 0 = Sun .. 6 = Sat
+    var back = (day === 0) ? 6 : day - 1;  // days since Monday
+    var mon = new Date(d.getFullYear(), d.getMonth(), d.getDate() - back);
+    mon.setHours(0, 0, 0, 0);
+    return mon;
+  }
+  function parseSheetDate(s){
+    s = String(s || '').trim();
+    var m = s.match(/^(\d{1,2})\/(\d{1,2})\/(\d{4})\s+(\d{1,2}):(\d{2}):(\d{2})/);
+    if(m) return new Date(+m[3], +m[1] - 1, +m[2], +m[4], +m[5], +m[6]);
+    var d = new Date(s);
+    return isNaN(d) ? null : d;
+  }
+  function daysLeftLabel(){
+    var start = weekStart();
+    var end = new Date(start.getTime() + 7 * 24 * 60 * 60 * 1000);
+    var msLeft = end - new Date();
+    var hrsLeft = msLeft / 3600000;
+    if(hrsLeft <= 24) return 'Ends tonight — new week starts Monday.';
+    return Math.ceil(hrsLeft / 24) + ' days left this week.';
+  }
 
   function esc(s){ return String(s).replace(/[&<>"]/g, function(c){
     return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;' }[c];
@@ -119,11 +162,12 @@
   function render(list){
     var mine = myName();
     if(!list.length){
-      board.innerHTML = '<li class="lb-empty">No scores yet. Be the first &mdash; <a href="/play">play Marathon</a>.</li>';
+      board.innerHTML = view === 'week'
+        ? '<li class="lb-empty">No runs yet this week. Be the first &mdash; <a href="/play">play Marathon</a>.</li>'
+        : '<li class="lb-empty">No scores yet. Be the first &mdash; <a href="/play">play Marathon</a>.</li>';
       return;
     }
     board.innerHTML = list.map(function(e, i){
-      var cls = 'li';
       var classes = [];
       if(i < 3) classes.push('top');
       if(mine && e.key === mine) classes.push('you');
@@ -135,33 +179,71 @@
     }).join('');
   }
 
+  function bestOf(rows){
+    var best = {};
+    rows.forEach(function(r){
+      if(!best[r.key] || r.score > best[r.key].score) best[r.key] = r;
+    });
+    return Object.keys(best).map(function(k){ return best[k]; }).sort(function(a, b){ return b.score - a.score; });
+  }
+
+  function renderChallenge(weekList){
+    if(!weekList.length){
+      challengeLead.textContent = 'No runs yet this week — be the first to set the pace.';
+    } else {
+      var leader = weekList[0];
+      challengeLead.innerHTML = '<b>' + esc(leader.name) + '</b> leads with <b>' + leader.score.toLocaleString() + ' pts</b> — top score wins airtime.';
+    }
+    challengeMeta.textContent = daysLeftLabel();
+  }
+
+  function renderTab(){
+    var start = weekStart();
+    var end = new Date(start.getTime() + 7 * 24 * 60 * 60 * 1000);
+    var weekRows = ROWS.filter(function(r){ return r.ts && r.ts >= start && r.ts < end; });
+    var weekList = bestOf(weekRows).slice(0, TOP_WEEK);
+    renderChallenge(weekList);
+
+    var list = view === 'week' ? weekList : bestOf(ROWS).slice(0, TOP_ALL);
+    render(list);
+    meta.textContent = list.length
+      ? list.length + ' player' + (list.length === 1 ? '' : 's') + (view === 'week' ? ' this week' : ' all-time') + ' · updates as new runs come in'
+      : '';
+  }
+
+  tabWeek.addEventListener('click', function(){
+    view = 'week';
+    tabWeek.classList.add('on'); tabWeek.setAttribute('aria-selected', 'true');
+    tabAll.classList.remove('on'); tabAll.setAttribute('aria-selected', 'false');
+    renderTab();
+  });
+  tabAll.addEventListener('click', function(){
+    view = 'all';
+    tabAll.classList.add('on'); tabAll.setAttribute('aria-selected', 'true');
+    tabWeek.classList.remove('on'); tabWeek.setAttribute('aria-selected', 'false');
+    renderTab();
+  });
+
   function load(){
     fetch(CSV_URL + '&v=' + Date.now())
       .then(function(r){ return r.ok ? r.text() : Promise.reject(); })
       .then(function(text){
         var rows = toObjects(text);
-        var best = {};
+        ROWS = [];
         rows.forEach(function(r){
           var mode = String(r.mode || '').trim().toLowerCase();
           if(mode && mode !== 'marathon') return;
           var name = String(r.name || '').trim().replace(/\s+/g, ' ').slice(0, 16);
           var score = parseInt(String(r.score || '').replace(/[^\d]/g, ''), 10);
           if(!name || !(score > 0) || score > SCORE_CAP) return;
-          var key = name.toLowerCase();
-          if(!best[key] || score > best[key].score){
-            best[key] = { name: name, score: score, key: key };
-          }
+          ROWS.push({ name: name, score: score, key: name.toLowerCase(), ts: parseSheetDate(r.timestamp) });
         });
-        var list = Object.keys(best).map(function(k){ return best[k]; })
-          .sort(function(a, b){ return b.score - a.score; })
-          .slice(0, TOP);
-        render(list);
-        meta.textContent = list.length
-          ? list.length + ' player' + (list.length === 1 ? '' : 's') + ' · updates as new runs come in'
-          : '';
+        renderTab();
       })
       .catch(function(){
         board.innerHTML = '<li class="lb-empty">Could not load the board right now. Try again in a bit.</li>';
+        challengeLead.textContent = 'Could not load this week\'s leader right now.';
+        challengeMeta.textContent = '';
       });
   }
 
