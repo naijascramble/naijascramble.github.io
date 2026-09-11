@@ -3,20 +3,20 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Suggest a Word — Naija Scramble</title>
-<meta name="description" content="Know a Naija word we're missing? Send it in. Every entry is checked before it goes into the game.">
+<title>Claim Your Prize — Naija Scramble</title>
+<meta name="description" content="Top Marathon score each week wins ₦1,500 airtime. Claim yours here.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='6'%20fill='%230B7A3B'/%3E%3Ctext%20x='16'%20y='23'%20font-family='Georgia,serif'%20font-size='20'%20font-weight='bold'%20text-anchor='middle'%20fill='%23FBF6EA'%3EN%3C/text%3E%3C/svg%3E">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Naija Scramble">
-<meta property="og:title" content="Suggest a Word — Naija Scramble">
-<meta property="og:description" content="Know a Naija word we're missing? Send it in — every entry is checked before it goes in the game.">
-<meta property="og:url" content="https://naijascramble.github.io/suggest">
+<meta property="og:title" content="Claim Your Prize — Naija Scramble">
+<meta property="og:description" content="Top Marathon score each week wins ₦1,500 airtime. Claim yours here.">
+<meta property="og:url" content="https://naijascramble.github.io/claim">
 <meta property="og:image" content="https://naijascramble.github.io/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Suggest a Word — Naija Scramble">
-<meta name="twitter:description" content="Know a Naija word we're missing? Send it in.">
+<meta name="twitter:title" content="Claim Your Prize — Naija Scramble">
+<meta name="twitter:description" content="Top Marathon score each week wins ₦1,500 airtime.">
 <meta name="twitter:image" content="https://naijascramble.github.io/og.png">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#0B7A3B">
@@ -38,65 +38,48 @@
       <span>S</span><span>C</span><span>R</span><span>A</span><span>M</span><span>B</span><span>L</span><span>E</span>
     </a>
     <nav class="nav">
-      <a href="/#how">How to play</a>
       <a href="/leaderboard">Leaderboard</a>
       <a href="/">Home</a>
       <a class="play" href="/play">Play</a>
     </nav>
   </div>
 </header>
-<a class="promo-bar" href="/leaderboard"><b>This week</b>Top Marathon score wins &#8358;1,500 airtime — see who&rsquo;s leading &rarr;</a>
 
 <main class="play-main">
   <div class="wrap narrow">
     <div class="play-intro">
-      <span class="label">Help build the bank</span>
-      <h1>Suggest a Naija word.</h1>
-      <p class="lede">Know a word we&rsquo;re missing? Send it. We check every entry before it goes in the game.</p>
+      <span class="label">Weekly airtime challenge</span>
+      <h1>Claim your prize.</h1>
+      <p class="lede">Led the <a href="/leaderboard">Marathon leaderboard</a> this week or last? Fill this in and we'll send your &#8358;1,500 airtime within a few days.</p>
     </div>
 
-    <form id="suggestForm" class="suggest" novalidate>
-      <label>Word <span class="req">required</span>
-        <input name="word" maxlength="16" autocomplete="off" spellcheck="false" placeholder="e.g. OWAMBE">
+    <form id="claimForm" class="suggest" novalidate>
+      <label>Your name <span class="req">required</span>
+        <input name="name" maxlength="16" autocomplete="off" placeholder="Exactly as you played under">
       </label>
-      <label>Category <span class="req">required</span>
-        <select name="cat">
+      <label>Winning Marathon score <span class="req">required</span>
+        <input name="score" inputmode="numeric" maxlength="6" autocomplete="off" placeholder="e.g. 4820">
+      </label>
+      <label>WhatsApp number <span class="req">required</span>
+        <input name="whatsapp" type="tel" maxlength="20" autocomplete="off" placeholder="e.g. 0803 000 0000">
+      </label>
+      <label>Network <span class="req">required</span>
+        <select name="network">
           <option value="" disabled selected>Pick one</option>
-          <option>Chop</option>
-          <option>Gist</option>
-          <option>Pidgin</option>
-          <option>Streets</option>
-          <option>Owambe</option>
-          <option>Naija</option>
-          <option>Market</option>
-          <option>Sound</option>
-          <option>Screen</option>
-          <option>Faith</option>
-          <option>People</option>
-          <option>School</option>
-          <option>Animal</option>
-          <option>Home</option>
-          <option>English</option>
-          <option>Not sure</option>
+          <option>MTN</option>
+          <option>Airtel</option>
+          <option>Glo</option>
+          <option>9mobile</option>
         </select>
       </label>
-      <label>Hint <span class="req">required</span>
-        <input name="hint" maxlength="120" autocomplete="off" placeholder="One short line, plain Naija">
-      </label>
-      <label>Example sentence <span class="opt">optional</span>
-        <input name="ex" maxlength="140" autocomplete="off" placeholder="Put ___ where the word goes">
-      </label>
-      <label>Your name or handle <span class="opt">optional</span>
-        <input name="who" maxlength="60" autocomplete="off" placeholder="So we fit credit you">
-      </label>
-      <button class="cta" type="submit">Send it</button>
-      <p class="form-note" id="formNote" role="status">4&ndash;10 letters works best. No spaces or punctuation in the word.</p>
+      <button class="cta" type="submit">Claim my airtime</button>
+      <p class="form-note" id="formNote" role="status">We check every claim against the leaderboard before sending anything.</p>
     </form>
 
     <div id="thanks" class="thanks" hidden>
       <h2>Got it. Thank you.</h2>
-      <p>We check every word before it enters the game. No dulling.</p>
-      <button class="ghost" id="again" type="button">Suggest another</button>
+      <p>We'll check your score against the leaderboard and send your airtime to the WhatsApp number you gave us within a few days.</p>
+      <button class="ghost" id="again" type="button">Submit another claim</button>
     </div>
   </div>
 </main>
@@ -106,7 +89,6 @@
     <p>New words added regularly. No dulling.</p>
     <nav>
       <a href="/leaderboard">Leaderboard</a>
-      <a href="/claim">Claim prize</a>
       <a href="/play">Play</a>
       <a href="/">Home</a>
     </nav>
@@ -116,16 +98,15 @@
 <script>
 (function(){
   "use strict";
-  var ENDPOINT = "https://docs.google.com/forms/d/e/1FAIpQLSfWmGgir8OTOg12gtJ5RCrvX5qYhSZ7coSBTnO2g66c8y3Gzw/formResponse";
+  var ENDPOINT = "https://docs.google.com/forms/d/e/1FAIpQLSeZasoJDo5I3cED8D9nEqiXtf28XCkQliOgIr2NgRrpji7qWA/formResponse";
   var F = {
-    word: "entry.1972388879",
-    cat:  "entry.1373245733",
-    hint: "entry.1116881915",
-    ex:   "entry.35193210",
-    who:  "entry.943930356"
+    name: "entry.470962407",
+    whatsapp: "entry.1411926142",
+    score: "entry.619968210",
+    network: "entry.783799247"
   };
 
-  var form   = document.getElementById('suggestForm');
+  var form   = document.getElementById('claimForm');
   var note   = document.getElementById('formNote');
   var thanks = document.getElementById('thanks');
   var submit = form.querySelector('button[type="submit"]');
@@ -137,31 +118,36 @@
 
   form.addEventListener('submit', function(e){
     e.preventDefault();
-    var word = form.word.value.toUpperCase().replace(/[^A-Z]/g, '');
-    form.word.value = word;
+    var name = form.name.value.trim().replace(/\s+/g, ' ').slice(0, 16);
+    var score = form.score.value.replace(/[^\d]/g, '');
+    var whatsapp = form.whatsapp.value.trim();
 
-    if(word.length < 3 || word.length > 14){
-      setNote('The word should be 3–14 letters, no spaces or punctuation.', true);
-      form.word.focus();
+    if(name.length < 2){
+      setNote('Enter the name you played under.', true);
+      form.name.focus();
       return;
     }
-    if(!form.cat.value){
-      setNote('Pick a category.', true);
-      form.cat.focus();
+    if(!score){
+      setNote('Enter your winning score.', true);
+      form.score.focus();
       return;
     }
-    if(form.hint.value.trim().length < 3){
-      setNote('Add a short hint so players have a clue.', true);
-      form.hint.focus();
+    if(whatsapp.replace(/[^\d]/g, '').length < 10){
+      setNote('Enter a valid WhatsApp number.', true);
+      form.whatsapp.focus();
+      return;
+    }
+    if(!form.network.value){
+      setNote('Pick your network.', true);
+      form.network.focus();
       return;
     }
 
     var body = new URLSearchParams();
-    body.append(F.word, word);
-    body.append(F.cat, form.cat.value);
-    body.append(F.hint, form.hint.value.trim());
-    if(form.ex.value.trim())  body.append(F.ex, form.ex.value.trim());
-    if(form.who.value.trim()) body.append(F.who, form.who.value.trim());
+    body.append(F.name, name);
+    body.append(F.score, score);
+    body.append(F.whatsapp, whatsapp);
+    body.append(F.network, form.network.value);
 
     submit.disabled = true;
     submit.textContent = 'Sending…';
@@ -186,9 +172,9 @@
     form.hidden = false;
     thanks.hidden = true;
     submit.disabled = false;
-    submit.textContent = 'Send it';
-    setNote('4–10 letters works best. No spaces or punctuation in the word.');
-    form.word.focus();
+    submit.textContent = 'Claim my airtime';
+    setNote('We check every claim against the leaderboard before sending anything.');
+    form.name.focus();
   });
 })();
 </script>

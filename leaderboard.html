@@ -40,6 +40,7 @@
     <nav class="nav">
       <a href="/#how">How to play</a>
       <a href="/suggest">Suggest a word</a>
+      <a href="/claim">Claim prize</a>
       <a class="play" href="/play">Play</a>
     </nav>
   </div>
@@ -50,13 +51,15 @@
     <div class="play-intro">
       <span class="label">Marathon &middot; weekly prize</span>
       <h1>Leaderboard.</h1>
-      <p class="lede">Post your Marathon score from the game-over screen. Best score wins the week.</p>
+      <p class="lede">Post your Marathon score from the game-over screen. Top score wins &#8358;1,500 airtime, every week.</p>
     </div>
 
     <div class="challenge">
-      <span class="label">This week&rsquo;s airtime challenge</span>
+      <span class="label">This week&rsquo;s &#8358;1,500 airtime challenge</span>
       <p class="challenge-lead" id="challengeLead">Loading&hellip;</p>
       <p class="challenge-meta" id="challengeMeta"></p>
+      <p class="challenge-last" id="challengeLast" hidden></p>
+      <a class="ghost challenge-claim" id="claimLink" href="/claim">Claim your prize &rarr;</a>
     </div>
 
     <div class="lb-tabs" role="tablist">
@@ -68,7 +71,7 @@
       <li class="lb-empty" id="loading">Loading the board&hellip;</li>
     </ol>
     <p class="lb-meta" id="meta"></p>
-    <p class="lb-rules">The week runs Monday to Sunday. Best single Marathon score wins &mdash; we go by the name you played under, so use one you&rsquo;ll recognise. Scores above 25,000 are treated as errors and dropped. Winner is announced here, and wherever we post, every Monday.</p>
+    <p class="lb-rules">The week runs Monday to Sunday. Best single Marathon score wins &#8358;1,500 airtime &mdash; we go by the name you played under, so use one you&rsquo;ll recognise. Scores above 25,000 are treated as errors and dropped. Led the board? <a href="/claim">Claim your prize here</a>. Winner announced here, and wherever we post, every Monday.</p>
   </div>
 </main>
 
@@ -77,6 +80,7 @@
     <p>New words added regularly. No dulling.</p>
     <nav>
       <a href="/#how">How to play</a>
+      <a href="/claim">Claim prize</a>
       <a href="/play">Play</a>
       <a href="/">Home</a>
     </nav>
@@ -94,6 +98,7 @@
   var meta  = document.getElementById('meta');
   var challengeLead = document.getElementById('challengeLead');
   var challengeMeta = document.getElementById('challengeMeta');
+  var challengeLast = document.getElementById('challengeLast');
   var tabWeek = document.getElementById('tabWeek');
   var tabAll  = document.getElementById('tabAll');
   var view = 'week';
@@ -187,22 +192,33 @@
     return Object.keys(best).map(function(k){ return best[k]; }).sort(function(a, b){ return b.score - a.score; });
   }
 
-  function renderChallenge(weekList){
+  function renderChallenge(weekList, lastWeekList){
     if(!weekList.length){
       challengeLead.textContent = 'No runs yet this week — be the first to set the pace.';
     } else {
       var leader = weekList[0];
-      challengeLead.innerHTML = '<b>' + esc(leader.name) + '</b> leads with <b>' + leader.score.toLocaleString() + ' pts</b> — top score wins airtime.';
+      challengeLead.innerHTML = '<b>' + esc(leader.name) + '</b> leads with <b>' + leader.score.toLocaleString() + ' pts</b> — top score wins &#8358;1,500 airtime.';
     }
     challengeMeta.textContent = daysLeftLabel();
+
+    if(lastWeekList.length){
+      var lw = lastWeekList[0];
+      challengeLast.innerHTML = 'Last week: <b>' + esc(lw.name) + '</b> &mdash; ' + lw.score.toLocaleString() + ' pts';
+      challengeLast.hidden = false;
+    } else {
+      challengeLast.hidden = true;
+    }
   }
 
   function renderTab(){
     var start = weekStart();
     var end = new Date(start.getTime() + 7 * 24 * 60 * 60 * 1000);
+    var lastStart = new Date(start.getTime() - 7 * 24 * 60 * 60 * 1000);
     var weekRows = ROWS.filter(function(r){ return r.ts && r.ts >= start && r.ts < end; });
+    var lastWeekRows = ROWS.filter(function(r){ return r.ts && r.ts >= lastStart && r.ts < start; });
     var weekList = bestOf(weekRows).slice(0, TOP_WEEK);
-    renderChallenge(weekList);
+    var lastWeekList = bestOf(lastWeekRows).slice(0, 1);
+    renderChallenge(weekList, lastWeekList);
 
     var list = view === 'week' ? weekList : bestOf(ROWS).slice(0, TOP_ALL);
     render(list);
