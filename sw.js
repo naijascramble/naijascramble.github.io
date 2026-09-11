@@ -1,5 +1,5 @@
 /* Naija Scramble service worker — offline shell + fresh content when online */
-var CACHE = 'naija-scramble-v5';
+var CACHE = 'naija-scramble-v6';
 var SHELL = [
   '/', '/index.html',
   '/play', '/play.html',
@@ -7,6 +7,7 @@ var SHELL = [
   '/leaderboard', '/leaderboard.html',
   '/claim', '/claim.html',
   '/privacy', '/privacy.html',
+  '/install', '/install.html',
   '/style.css', '/words.js',
   '/og.png', '/icon-192.png', '/icon-512.png', '/manifest.json'
 ];
