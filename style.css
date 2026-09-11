@@ -360,3 +360,9 @@ footer nav a:hover{color:var(--ink)}
   *{animation:none!important;transition:none!important}
   .ach-toast{transition:none}
 }
+
+/* ---- privacy policy ---- */
+.policy h2{font-family:"Bricolage Grotesque",sans-serif;font-size:1.06rem;font-weight:700;margin:30px 0 8px}
+.policy h2:first-of-type{margin-top:26px}
+.policy p{color:var(--ink-soft);line-height:1.6;max-width:62ch}
+.policy a{color:var(--green);text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--green) 40%,transparent)}
