@@ -989,10 +989,12 @@
 
     var solved = S.results.filter(function(x){ return x.got; }).length;
     checkAch({ marathonSolved: S.mode === 'marathon' ? solved : 0 });
-    var head, sub;
+    var head, sub, isNewBest = false;
     if(S.mode === 'marathon'){
-      var best = load('ns.best.marathon') || 0;
-      if(S.score > best){ best = S.score; store('ns.best.marathon', best); }
+      var prevBest = load('ns.best.marathon') || 0;
+      isNewBest = S.score > prevBest;
+      var best = isNewBest ? S.score : prevBest;
+      if(isNewBest) store('ns.best.marathon', best);
       head = 'Run over';
       sub = solved + ' solved · best ' + best;
     } else {
@@ -1011,15 +1013,19 @@
 
     var lbBlock = '';
     if(S.mode === 'marathon' && S.score > 0 && S.score <= SCORE_CAP){
-      var savedName = String(load('ns.name') || '').replace(/[<>"&]/g, '');
-      lbBlock =
-        '<form class="lb-post" id="lbForm">' +
-          '<label>Post to the leaderboard &mdash; top score this week wins ₦1,500 airtime' +
-            '<input id="lbName" maxlength="16" autocomplete="off" placeholder="Your name" value="' + savedName + '">' +
-          '</label>' +
-          '<button class="cta" id="lbBtn" type="submit">Post score</button>' +
-          '<span class="lb-note" id="lbNote"></span>' +
-        '</form>';
+      if(isNewBest){
+        var savedName = String(load('ns.name') || '').replace(/[<>"&]/g, '');
+        lbBlock =
+          '<form class="lb-post" id="lbForm">' +
+            '<label>New best! Post to the leaderboard &mdash; top score this week wins ₦1,500 airtime' +
+              '<input id="lbName" maxlength="16" autocomplete="off" placeholder="Your name" value="' + savedName + '">' +
+            '</label>' +
+            '<button class="cta" id="lbBtn" type="submit">Post score</button>' +
+            '<span class="lb-note" id="lbNote"></span>' +
+          '</form>';
+      } else {
+        lbBlock = '<p class="lb-hint">Beat your best of ' + fmtScore(best) + ' pts to post a new score to the leaderboard.</p>';
+      }
     }
 
     el.over.innerHTML =
