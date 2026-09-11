@@ -342,7 +342,7 @@
     if(a.lastWord && /[JQXZ]/.test(a.lastWord)) win.push('rare');
     if(a.lastWord === 'JOLLOF') win.push('jollof');
     if(a.lastMult >= 2.5) win.push('combo');
-    if(a.cats.length >= 14) win.push('naija');
+    if(a.cats.length >= 15) win.push('naija');
     var stk = load('ns.streak'); if(stk && stk.n >= 7) win.push('streak7');
     var stg = load('ns.stages'); if(stg && stg.cleared && stg.cleared[2]) win.push('hard');
     if(ctx.cleanDaily) win.push('clean');

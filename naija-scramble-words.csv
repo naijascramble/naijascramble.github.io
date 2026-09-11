@@ -599,3 +599,181 @@ LEGWORK,Sound,2,Fast fancy footwork dance from the streets,,,live
 IGBIN,Sound,2,Sacred Yoruba drum played for Obatala,,,live
 KALANGU,Sound,2,"The Hausa talking drum, squeezed under the arm",,,live
 MOLO,Sound,2,"Northern plucked lute, ancestor of the banjo",,,live
+ONUGBU,Chop,2,"Bitterleaf, the base of bitterleaf soup",,,live
+IYAN,Chop,2,"Pounded yam, Yoruba name for it",,,live
+KANDA,Chop,2,"Cow-skin snack, chewy and salted",,,live
+BALANGU,Chop,2,"Roasted meat, the northern cousin of suya",,,live
+FISHROLL,Chop,1,"Fried pastry with a fish filling, bus-stop snack",,,live
+MEATPIE,Chop,1,Flaky pastry parcel of minced meat,,,live
+ROBO,Chop,2,Melon-seed cake sold on a tray,,,live
+TOMBROWN,Chop,2,"Roasted-maize cereal, for babies and big babies too",,,live
+CUSTARD,Chop,1,"Yellow cornflour porridge, a breakfast staple",,,live
+EGGROLL,Chop,1,Boiled egg wrapped in fried dough,,,live
+GIZZARD,Chop,1,"Chewy chicken part, a party plate favourite",,,live
+ASUN,Chop,2,"Spicy grilled goat meat, chopped small",,,live
+GOMBE,Streets,2,"Northeast capital, 'jewel in the savannah'",,,live
+IJEBU,Streets,2,Yoruba town famous for garri and shrewdness,,,live
+EKITI,Streets,2,"Southwest state, hilly and proud",,,live
+GARKI,Streets,2,One of Abuja's original diplomatic districts,,,live
+BENIN,Streets,2,"Edo capital, ancient bronze-casting city",,,live
+KEFFI,Streets,3,Nasarawa town on the road to Abuja,,,live
+OGBOMOSO,Streets,3,Old Oyo town on the Lagos-Ibadan-Kano road,,,live
+BUSSTOP,Streets,1,Where the danfo conductor is shouting your route,,,live
+TRICYCLE,Streets,1,"Three-wheeled taxi, another name for keke",,,live
+SPEEDBUMP,Streets,1,The 'sleeping policeman' that slows every danfo,,,live
+ONEWAY,Streets,2,"Street with traffic going one direction, until okada ignores it",,,live
+ROADSIDE,Streets,1,"Where the suya, gala and recharge cards are sold",,,live
+GBOZA,Gist,2,"Shout of triumph, 'gboza!'",,,live
+SHEGE,Gist,2,"Big trouble, Hausa-flavoured, 'you don see shege'",,,live
+JAGABAN,Gist,2,"Chieftaincy title for a big man, 'the landlord'",,,live
+BANGER,Gist,1,A song or a jollof that absolutely slaps,,,live
+SLAY,Gist,1,"To dress stunningly, 'slay queen'",,,live
+TRENDING,Gist,1,Everybody's talking about it online right now,,,live
+CRINGE,Gist,2,"Secondhand embarrassment, 'that one cringe well well'",,,live
+TACKLE,Gist,2,"To hit on someone romantically, 'e wan tackle am'",,,live
+BABYGIRL,Gist,1,"A pampered, fashionable young woman",,,live
+OMONILE,Gist,3,Self-declared 'son of the land' who extorts builders,,,live
+CANCEL,Gist,2,To publicly disown someone online,,,live
+KUKUMA,Gist,3,"Filler word for emphasis, 'just do am kukuma'",,,live
+CHEI,Pidgin,1,"Exclamation of shock, 'chei, see wahala'",,,live
+GBOSA,Pidgin,2,"Sound of impact or emphasis, 'gbosa, he don fall'",,,live
+AZAMAN,Pidgin,3,"A show-off, flashy dresser, 'na azaman be that'",,,live
+WUNA,Pidgin,2,"You all, the plural you, pidgin 'wuna'",,,live
+KEDU,Pidgin,2,Igbo for 'how are you',,,live
+SANNU,Pidgin,2,Hausa word for 'welcome' or 'hello',,,live
+BAWO,Pidgin,2,"Yoruba for 'how', start of every greeting",,,live
+ODABO,Pidgin,2,Yoruba for 'goodbye',,,live
+NGWA,Pidgin,3,"Igbo for 'come on, hurry up'",,,live
+DALU,Pidgin,2,Igbo for 'thank you',,,live
+USSD,Naija,2,"Bank code you dial without internet, like *737#",,,live
+DOLLAR,Naija,1,"Currency everybody prices things in, unofficially",,,live
+AGENT,Naija,1,Charges a fee to 'find' you an apartment,,,live
+ESTATE,Naija,1,"Gated compound of similar houses, with its own gate fee",,,live
+DIASPORA,Naija,2,"Nigerians abroad, sending remittances home",,,live
+REMIT,Naija,2,Money sent home from abroad,,,live
+BUDGET,Naija,1,"Government spending plan, argued over every year",,,live
+SALARY,Naija,1,The alert everybody waits for by month-end,,,live
+ALLOWANCE,Naija,2,"Extra pay on top of salary, transport or housing",,,live
+TAXPAYER,Naija,2,Citizen funding the roads that still have potholes,,,live
+BEADS,Owambe,1,"Coral or crystal, worn heavy for the occasion",,,live
+CATERER,Owambe,1,Handles the small chops and jollof for 500 guests,,,live
+COMPERE,Owambe,2,MC who hypes the crowd and calls names for spraying,,,live
+CANOPY,Owambe,1,Rented tent shading the whole street for the party,,,live
+GATECRASH,Owambe,2,"To attend uninvited, everybody does it at owambe",,,live
+EMCEE,Owambe,1,"Party host with the mic, same as compere",,,live
+BALLOON,Owambe,1,"Inflated decoration, arches everywhere at the entrance",,,live
+SOUVENIR,Owambe,1,"The branded fan, mug or towel you go home with",,,live
+CEILING,Home,1,"POP design overhead, the pride of the sitting room",,,live
+TERRAZZO,Home,2,"Shiny speckled floor finish, common in Naija houses",,,live
+BALCONY,Home,1,Upper floor's own verandah,,,live
+GATE,Home,1,"First thing the visitor meets, often locked",,,live
+FENCE,Home,1,"Wall around the compound, topped with broken bottles",,,live
+COMPOUND,Home,1,The whole house and yard together,,,live
+TANK,Home,1,"Overhead water storage, the big black or blue drum",,,live
+PADLOCK,Home,1,"Secures the gate, everybody has a spare key",,,live
+SCALE,Market,1,Weighs the meat or the pepper before you pay,,,live
+BASKET,Market,1,Woven carrier for market shopping,,,live
+STALL,Market,1,A trader's fixed spot in the market,,,live
+KIOSK,Market,1,"Small roadside shop, often selling provisions",,,live
+CHANGE,Market,1,Small notes the conductor never has,,,live
+PROFIT,Market,1,What the trader hopes for after the haggling,,,live
+WAYBILL,Market,2,Paper that tracks goods sent by bus from the market,,,live
+ONIONS,Market,1,Makes every pot cry a little,,,live
+AZONTO,Sound,2,Ghana-born dance craze that swept Naija too,,,live
+ETIGHI,Sound,3,"PSquare-era dance move, shoulder-shrug style",,,live
+SKELEWU,Sound,2,Davido's breakout dance move,,,live
+KUKERE,Sound,2,"Iyanya's hit dance, hips and all",,,live
+ORGAN,Sound,1,Keyboard the church and juju band both can't do without,,,live
+TRUMPET,Sound,1,"Brass instrument, loud at owambe and church",,,live
+BEAT,Sound,1,The rhythm underneath every Afrobeats hit,,,live
+LYRICS,Sound,1,"Words of the song, sometimes half English half pidgin",,,live
+ACTOR,Screen,1,Plays the villain everybody loves to hate,,,live
+ACTRESS,Screen,1,Leading lady of the Nollywood scene,,,live
+DIRECTOR,Screen,1,Shouts 'action' and 'cut' on set,,,live
+PRODUCER,Screen,2,Funds the film and hopes for a box-office return,,,live
+STUNT,Screen,2,"Dangerous scene, usually faked, usually",,,live
+EPISODE,Screen,1,One instalment of a Nollywood series,,,live
+FLASHBACK,Screen,2,Scene that jumps back to explain the plot,,,live
+STREAMING,Screen,2,How new Nollywood reaches the diaspora now,,,live
+PARISH,Faith,1,A church's local district or congregation,,,live
+BAPTISM,Faith,1,"Full immersion or sprinkle, depends on the church",,,live
+COMMUNION,Faith,1,"Bread and wine, remembering the Last Supper",,,live
+REVEREND,Faith,1,Title before a pastor's name,,,live
+MOSQUE,Faith,1,"Muslim place of worship, minaret and all",,,live
+QURAN,Faith,1,Islam's holy book,,,live
+PILGRIM,Faith,2,"Traveller to Mecca or Jerusalem, on a holy journey",,,live
+SCRIPTURE,Faith,1,The holy text quoted every Sunday,,,live
+MIDWIFE,People,2,"Delivers the baby, sometimes at home",,,live
+HERBALIST,People,2,Sells roots and leaves for every ailment,,,live
+FARMER,People,1,"Works the land, feeds the nation, underpaid",,,live
+FISHERMAN,People,1,Casts nets on the river or the lagoon,,,live
+DRIVER,People,1,Behind the wheel of the danfo or the keke,,,live
+CLEANER,People,1,Sweeps the office before anyone else arrives,,,live
+BARBER,People,1,"Cuts fade and low-cut, gists while he works",,,live
+COUSIN,People,1,"Extended-family child, sometimes closer than a sibling",,,live
+PRINCIPAL,School,1,Head of a secondary school,,,live
+HEADMASTER,School,1,"Runs the primary school, cane in hand back in the day",,,live
+DEBATE,School,1,"Two teams argue a motion, prefects judge",,,live
+LIBRARY,School,1,Quiet room full of textbooks nobody borrows,,,live
+TIMETABLE,School,1,Grid that says which subject comes next,,,live
+LATECOMER,School,2,Punished at morning assembly for arriving after the gate shuts,,,live
+EXAMINER,School,2,"Marks your WAEC script, mysterious and strict",,,live
+SEMESTER,School,1,"Half of the academic year, in a university calendar",,,live
+PARROT,Animal,1,"Talking bird, green, kept as a pet",,,live
+OSTRICH,Animal,1,"Tallest bird, buries its head, cannot fly",,,live
+BUFFALO,Animal,1,Horned wild bovine of the savannah,,,live
+GAZELLE,Animal,1,"Fast, graceful antelope of the grassland",,,live
+JACKAL,Animal,2,"Wild dog cousin, scavenger of the bush",,,live
+MONITOR,Animal,2,"Big lizard, the monitor type, found near water",,,live
+SNAIL,Animal,1,"Slow crawler, a delicacy in pepper sauce",,,live
+CENTIPEDE,Animal,1,Many-legged crawler that bites and burns,,,live
+AMBIGUOUS,English,3,Open to more than one interpretation,,,live
+TENACITY,English,3,Firmness of purpose; refusal to give up,,,live
+BENEVOLENT,English,3,Kind and generous in nature,,,live
+CANDID,English,2,Truthful and straightforward; frank,,,live
+DILIGENT,English,2,Showing care and effort in one's work,,,live
+ELOQUENT,English,2,Fluent and persuasive in speaking,,,live
+FRUGAL,English,2,Sparing with money or resources,,,live
+GENUINE,English,2,Truly what it is said to be; authentic,,,live
+HUMBLE,English,1,Not proud; modest,,,live
+IMPARTIAL,English,3,Treating all sides equally; not biased,,,live
+JOVIAL,English,1,Cheerful and friendly,,,live
+KEEN,English,1,Eager or enthusiastic,,,live
+LENIENT,English,3,Merciful; not strict in judgment,,,live
+MODEST,English,1,Not boastful about one's abilities,,,live
+NOTABLE,English,2,Worthy of attention; remarkable,,,live
+OBSOLETE,English,2,No longer in use; outdated,,,live
+PLAUSIBLE,English,3,Seeming reasonable or probable,,,live
+QUAINT,English,3,Attractively unusual or old-fashioned,,,live
+RESILIENT,English,3,Able to recover quickly from difficulty,,,live
+SCARCE,English,1,In short supply; hard to find,,,live
+TRANQUIL,English,2,Calm and peaceful,,,live
+UNIQUE,English,1,Being the only one of its kind,,,live
+VERBOSE,English,3,Using more words than needed,,,live
+WITHER,English,2,"To shrink or dry up, as a plant does",,,live
+ZEALOUS,English,2,Showing great energy for a cause,,,live
+ABUNDANT,English,1,Existing in large quantities,,,live
+BRITTLE,English,1,Hard but easily broken,,,live
+CONCISE,English,2,"Giving information clearly, in few words",,,live
+DEVIOUS,English,3,Showing cunning and deceit,,,live
+EXOTIC,English,1,Foreign and strikingly unusual,,,live
+FICKLE,English,3,Changing frequently; not loyal,,,live
+GRUDGE,English,2,A lasting feeling of resentment,,,live
+HOSTILE,English,2,Unfriendly; antagonistic,,,live
+IDLE,English,1,Not active or in use,,,live
+JUBILANT,English,2,"Feeling great happiness, especially at success",,,live
+LETHAL,English,2,Sufficient to cause death; deadly,,,live
+MEAGRE,English,2,Small in amount; scanty,,,live
+NAIVE,English,2,Showing a lack of experience or wisdom,,,live
+OPAQUE,English,2,Not able to be seen through,,,live
+PECULIAR,English,2,Strange or unusual,,,live
+QUIRKY,English,2,Unusual in an interesting way,,,live
+RECKLESS,English,2,Acting without thinking of consequences,,,live
+STUBBORN,English,1,Refusing to change one's mind,,,live
+THRIFTY,English,2,Careful with money; economical,,,live
+URGENT,English,1,Requiring immediate action,,,live
+VIGILANT,English,2,Keeping careful watch for danger,,,live
+WARY,English,1,Cautious about possible danger,,,live
+YEARN,English,2,To have an intense desire for something,,,live
+ADAMANT,English,2,Refusing to be persuaded; unyielding,,,live
+BLEAK,English,2,Lacking hope or promise,,,live
