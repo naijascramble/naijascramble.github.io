@@ -308,6 +308,20 @@
 })();
 </script>
 <script>
+/* home-screen icon badge: nudge if today's Daily hasn't been played yet */
+(function(){
+  try{
+    if(!('setAppBadge' in navigator)) return;
+    var d = new Date();
+    var key = d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate();
+    var done = null;
+    try{ done = JSON.parse(localStorage.getItem('ns.daily')); }catch(e){}
+    if(done && done.date === key){ navigator.clearAppBadge().catch(function(){}); }
+    else{ navigator.setAppBadge(1).catch(function(){}); }
+  }catch(e){}
+})();
+</script>
+<script>
 /* pageview ping -> "Naija Scramble - Traffic" Google Form -> linked sheet */
 (function(){
   try{

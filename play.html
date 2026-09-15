@@ -976,6 +976,7 @@
       var r = S.round, key = dayKey();
       var rec = { date:key, score:S.score, reveals:r.reveals, solved:S.results[0] && S.results[0].got };
       store('ns.daily', rec);
+      try{ if('clearAppBadge' in navigator) navigator.clearAppBadge().catch(function(){}); }catch(e){}
 
       var st = load('ns.streak') || { last:0, n:0 };
       if(rec.solved){
