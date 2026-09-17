@@ -727,3 +727,109 @@ JACKAL,Animal,2,"Wild dog cousin, scavenger of the bush",,,live
 MONITOR,Animal,2,"Big lizard, the monitor type, found near water",,,live
 SNAIL,Animal,1,"Slow crawler, a delicacy in pepper sauce",,,live
 CENTIPEDE,Animal,1,Many-legged crawler that bites and burns,,,live
+INDOMIE,Chop,2,"Instant noodles, the 2-minute national favorite",,,live
+SEMOVITA,Chop,2,"Smooth semolina swallow, a fufu alternative",,,live
+GIZZDODO,Chop,2,"Gizzard and fried plantain, a party-plate combo",,,live
+EFIRIN,Chop,2,Scent leaf that perfumes the soup pot,,,live
+BITTERLEAF,Chop,1,Washed-down leaf for the soup that shares its name,,,live
+WATERLEAF,Chop,2,Soft leafy green cooked into afang or edikaikong,,,live
+SHAKI,Chop,2,"Cow tripe, chewy and peppered in the pot",,,live
+ABULA,Chop,3,Amala paired with two soups on one plate,,,live
+JALINGO,Streets,3,Taraba's state capital,,,live
+LAFIA,Streets,2,Nasarawa's state capital,,,live
+DUTSE,Streets,3,Jigawa's state capital,,,live
+GUSAU,Streets,3,Zamfara's state capital,,,live
+YOLA,Streets,2,Adamawa's state capital,,,live
+GRIDLOCK,Streets,2,Traffic so thick nobody dey move,,,live
+DIVIDER,Streets,2,Concrete strip splitting the road in two,,,live
+TOLLGATE,Streets,2,Where you stop and pay before the expressway continues,,,live
+SHEY,Gist,1,Pidgin question tag - 'shey you dey come?',,,live
+GIST,Gist,1,"The story, the update, the juicy details",,,live
+PEPPERDEM,Gist,2,Trouble everywhere - reality-TV slang for heated drama,,,live
+KOKO,Gist,2,The real point - 'wetin be the ___?',,,live
+BIGBOY,Gist,1,Flashy young man who no dey carry last,,,live
+FYNE,Pidgin,1,Pidgin spelling of good-looking - 'you dey ___',,,live
+GBOGBO,Pidgin,2,Every single one - 'gbogbo person don show face',,,live
+ANIHOW,Pidgin,1,"Whatever happens, regardless - 'anihow, we go still win'",,,live
+SOSO,Pidgin,1,"Only, just that - 'soso wahala for this house'",,,live
+CHOOK,Pidgin,2,To poke or interfere - 'no ___ mouth for my matter',,,live
+KUKU,Pidgin,2,"Just, simply, instead - 'kuku tell am the truth'",,,live
+NAIJA,Naija,1,"The short, affectionate name everybody calls this country",,,live
+UNITY,Naija,1,First half of the national motto,,,live
+PROGRESS,Naija,2,Second half of the national motto,,,live
+ANTHEM,Naija,1,Song that plays before the match kicks off,,,live
+PLEDGE,Naija,1,Words recited with a hand on the chest at assembly,,,live
+REPUBLIC,Naija,2,"Nigeria is federal, this, and one",,,live
+FEDERAL,Naija,1,Describes the government's structure across 36 states,,,live
+GIANT,Naija,1,Nickname for Africa's most populous nation - '___ of Africa',,,live
+ENTOURAGE,Owambe,2,Matching squad walking in behind the celebrant,,,live
+BUFFET,Owambe,1,"Long table of food, serve yourself",,,live
+DECOR,Owambe,1,"Balloons, drapes and flowers dressing the hall",,,live
+SMALLCHOPS,Owambe,1,Bite-sized snacks passed around on trays,,,live
+STRICTLY,Owambe,2,Printed on the invite card - no gate-crashing,,,live
+BAND,Owambe,1,Live music keeping the dance floor moving,,,live
+CHAIRCOVER,Owambe,2,Fabric dressing rented plastic chairs for the occasion,,,live
+CARPET,Home,1,"Soft floor covering, vacuumed on Saturday mornings",,,live
+DUSTPAN,Home,1,Pairs with a broom to clear the swept dirt,,,live
+STAIRCASE,Home,2,Steps connecting the ground floor to upstairs,,,live
+CEILINGFAN,Home,1,Spins overhead when NEPA cooperates,,,live
+WALLCLOCK,Home,1,Tells the time from up on the sitting-room wall,,,live
+DOORMAT,Home,1,Wipe your feet here before entering,,,live
+SATELLITE,Home,2,Dish on the roof feeding the DSTV decoder,,,live
+WASHLINE,Home,2,Where wrappers and school uniforms dry in the sun,,,live
+CRATE,Market,1,"Stack of bottled drinks, empties returned for a refund",,,live
+RECEIPT,Market,2,"Proof of purchase, if the trader even gives one",,,live
+SACHET,Market,1,Small sealed pack - pure water comes in this,,,live
+STOREOWNER,Market,2,"Runs the shop, knows every regular customer by name",,,live
+MIDDLEMAN,Market,2,Connects buyer to seller and takes a cut,,,live
+AUCTION,Market,2,Goods sold to whoever bids highest,,,live
+INVENTORY,Market,2,Full count of what's on the shelves,,,live
+COMMISSION,Market,2,The agent's cut for closing the sale,,,live
+REMIX,Sound,1,"Reworked version of a track, new beat same lyrics",,,live
+FREESTYLE,Sound,2,"Rapping off the top of the head, no written verse",,,live
+MIXTAPE,Sound,2,Free project an artist drops before the album,,,live
+PLAYLIST,Sound,1,Queue of songs lined up back to back,,,live
+CHORUS,Sound,1,The part of the song everybody sings along to,,,live
+BEATMAKER,Sound,2,Produces the instrumental before the vocalist steps in,,,live
+VOCALIST,Sound,2,The one actually singing the hook,,,live
+SAXOPHONE,Sound,2,Brass instrument wailing through a highlife band,,,live
+COSTUME,Screen,1,What the actor wears for the role,,,live
+CAMERAMAN,Screen,2,Films the scene from behind the lens,,,live
+STUNTMAN,Screen,2,Takes the fall so the lead actor doesn't have to,,,live
+CASTING,Screen,2,Auditions to fill every role in the script,,,live
+REHEARSAL,Screen,2,Running lines before the cameras actually roll,,,live
+ANIMATION,Screen,2,Frame-by-frame drawn or CGI storytelling,,,live
+STORYLINE,Screen,2,The plot holding the whole film together,,,live
+PLOTTWIST,Screen,3,The unexpected turn nobody saw coming,,,live
+EVANGELIST,Faith,2,Travels and preaches to spread the gospel,,,live
+MIRACLE,Faith,1,An event the congregation calls the hand of God,,,live
+BLESSING,Faith,1,"Favour asked for, or given, in prayer",,,live
+COVENANT,Faith,2,A sacred promise or agreement with God,,,live
+SANCTUARY,Faith,2,"The holiest, quietest part of the building",,,live
+PROPHECY,Faith,2,A message declared about what's coming,,,live
+SHRINE,Faith,2,Traditional site set aside for worship or sacrifice,,,live
+PENTECOST,Faith,3,Christian feast marking the coming of the Holy Spirit,,,live
+GATEKEEPER,People,1,Controls who comes in and who stays out,,,live
+MAIGUARD,People,2,Night watchman guarding the estate or compound,,,live
+NANNY,People,1,Looks after the children while parents are at work,,,live
+COOK,People,1,"Prepares the meals, sometimes lives in",,,live
+PLUMBER,People,2,Fixes the burst pipe and the leaking tap,,,live
+PAINTER,People,1,Coats the walls a fresh colour,,,live
+GARDENER,People,2,Keeps the compound's flowers and hedges trimmed,,,live
+BABYSITTER,People,1,"Watches the kids for an evening, paid by the hour",,,live
+TRANSCRIPT,School,2,Official record of every course and grade,,,live
+SUPERVISOR,School,2,Oversees the project or the exam hall,,,live
+GRADUATE,School,1,"Finished the programme, gown and cap included",,,live
+FRESHMAN,School,1,"First-year student, still finding the lecture halls",,,live
+DORMITORY,School,2,Shared sleeping hall on campus,,,live
+ASSIGNMENT,School,1,Homework due before the next lecture,,,live
+CLASSROOM,School,1,Where the lesson actually happens,,,live
+PROJECTOR,School,2,Beams the slides onto the screen at the front,,,live
+ZEBRA,Animal,1,Black and white striped relative of the horse,,,live
+GIRAFFE,Animal,1,"Tallest land animal, neck built for the treetops",,,live
+CHEETAH,Animal,1,"Fastest land animal, built for the sprint",,,live
+MEERKAT,Animal,2,Small burrowing animal that stands guard on two legs,,,live
+OKAPI,Animal,3,"Striped-legged relative of the giraffe, shy forest dweller",,,live
+AARDVARK,Animal,2,Long-snouted burrower that digs up termite mounds,,,live
+PORCUPINE,Animal,2,Rodent covered in sharp defensive quills,,,live
+ANTEATER,Animal,2,Long tongue built for raiding ant and termite nests,,,live

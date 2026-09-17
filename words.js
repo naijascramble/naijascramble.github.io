@@ -889,7 +889,141 @@ window.NS_WORDS = [
   {w:"JACKAL", cat:"Animal", d:2, hint:"Wild dog cousin, scavenger of the bush", ex:"", alt:[]},
   {w:"MONITOR", cat:"Animal", d:2, hint:"Big lizard, the monitor type, found near water", ex:"", alt:[]},
   {w:"SNAIL", cat:"Animal", d:1, hint:"Slow crawler, a delicacy in pepper sauce", ex:"", alt:[]},
-  {w:"CENTIPEDE", cat:"Animal", d:1, hint:"Many-legged crawler that bites and burns", ex:"", alt:[]}
+  {w:"CENTIPEDE", cat:"Animal", d:1, hint:"Many-legged crawler that bites and burns", ex:"", alt:[]},
+
+  /* ---- Chop (batch 7) ---- */
+  {w:"INDOMIE", cat:"Chop", d:2, hint:"Instant noodles, the 2-minute national favorite", ex:"", alt:[]},
+  {w:"SEMOVITA", cat:"Chop", d:2, hint:"Smooth semolina swallow, a fufu alternative", ex:"", alt:[]},
+  {w:"GIZZDODO", cat:"Chop", d:2, hint:"Gizzard and fried plantain, a party-plate combo", ex:"", alt:[]},
+  {w:"EFIRIN", cat:"Chop", d:2, hint:"Scent leaf that perfumes the soup pot", ex:"", alt:[]},
+  {w:"BITTERLEAF", cat:"Chop", d:1, hint:"Washed-down leaf for the soup that shares its name", ex:"", alt:[]},
+  {w:"WATERLEAF", cat:"Chop", d:2, hint:"Soft leafy green cooked into afang or edikaikong", ex:"", alt:[]},
+  {w:"SHAKI", cat:"Chop", d:2, hint:"Cow tripe, chewy and peppered in the pot", ex:"", alt:[]},
+  {w:"ABULA", cat:"Chop", d:3, hint:"Amala paired with two soups on one plate", ex:"", alt:[]},
+
+  /* ---- Streets (batch 7) ---- */
+  {w:"JALINGO", cat:"Streets", d:3, hint:"Taraba's state capital", ex:"", alt:[]},
+  {w:"LAFIA", cat:"Streets", d:2, hint:"Nasarawa's state capital", ex:"", alt:[]},
+  {w:"DUTSE", cat:"Streets", d:3, hint:"Jigawa's state capital", ex:"", alt:[]},
+  {w:"GUSAU", cat:"Streets", d:3, hint:"Zamfara's state capital", ex:"", alt:[]},
+  {w:"YOLA", cat:"Streets", d:2, hint:"Adamawa's state capital", ex:"", alt:[]},
+  {w:"GRIDLOCK", cat:"Streets", d:2, hint:"Traffic so thick nobody dey move", ex:"", alt:[]},
+  {w:"DIVIDER", cat:"Streets", d:2, hint:"Concrete strip splitting the road in two", ex:"", alt:[]},
+  {w:"TOLLGATE", cat:"Streets", d:2, hint:"Where you stop and pay before the expressway continues", ex:"", alt:[]},
+
+  /* ---- Gist (batch 7) ---- */
+  {w:"SHEY", cat:"Gist", d:1, hint:"Pidgin question tag - 'shey you dey come?'", ex:"", alt:[]},
+  {w:"GIST", cat:"Gist", d:1, hint:"The story, the update, the juicy details", ex:"", alt:[]},
+  {w:"PEPPERDEM", cat:"Gist", d:2, hint:"Trouble everywhere - reality-TV slang for heated drama", ex:"", alt:[]},
+  {w:"KOKO", cat:"Gist", d:2, hint:"The real point - 'wetin be the ___?'", ex:"", alt:[]},
+  {w:"BIGBOY", cat:"Gist", d:1, hint:"Flashy young man who no dey carry last", ex:"", alt:[]},
+
+  /* ---- Pidgin (batch 7) ---- */
+  {w:"FYNE", cat:"Pidgin", d:1, hint:"Pidgin spelling of good-looking - 'you dey ___'", ex:"", alt:[]},
+  {w:"GBOGBO", cat:"Pidgin", d:2, hint:"Every single one - 'gbogbo person don show face'", ex:"", alt:[]},
+  {w:"ANIHOW", cat:"Pidgin", d:1, hint:"Whatever happens, regardless - 'anihow, we go still win'", ex:"", alt:[]},
+  {w:"SOSO", cat:"Pidgin", d:1, hint:"Only, just that - 'soso wahala for this house'", ex:"", alt:[]},
+  {w:"CHOOK", cat:"Pidgin", d:2, hint:"To poke or interfere - 'no ___ mouth for my matter'", ex:"", alt:[]},
+  {w:"KUKU", cat:"Pidgin", d:2, hint:"Just, simply, instead - 'kuku tell am the truth'", ex:"", alt:[]},
+
+  /* ---- Naija (batch 7) ---- */
+  {w:"NAIJA", cat:"Naija", d:1, hint:"The short, affectionate name everybody calls this country", ex:"", alt:[]},
+  {w:"UNITY", cat:"Naija", d:1, hint:"First half of the national motto", ex:"", alt:[]},
+  {w:"PROGRESS", cat:"Naija", d:2, hint:"Second half of the national motto", ex:"", alt:[]},
+  {w:"ANTHEM", cat:"Naija", d:1, hint:"Song that plays before the match kicks off", ex:"", alt:[]},
+  {w:"PLEDGE", cat:"Naija", d:1, hint:"Words recited with a hand on the chest at assembly", ex:"", alt:[]},
+  {w:"REPUBLIC", cat:"Naija", d:2, hint:"Nigeria is federal, this, and one", ex:"", alt:[]},
+  {w:"FEDERAL", cat:"Naija", d:1, hint:"Describes the government's structure across 36 states", ex:"", alt:[]},
+  {w:"GIANT", cat:"Naija", d:1, hint:"Nickname for Africa's most populous nation - '___ of Africa'", ex:"", alt:[]},
+
+  /* ---- Owambe (batch 7) ---- */
+  {w:"ENTOURAGE", cat:"Owambe", d:2, hint:"Matching squad walking in behind the celebrant", ex:"", alt:[]},
+  {w:"BUFFET", cat:"Owambe", d:1, hint:"Long table of food, serve yourself", ex:"", alt:[]},
+  {w:"DECOR", cat:"Owambe", d:1, hint:"Balloons, drapes and flowers dressing the hall", ex:"", alt:[]},
+  {w:"SMALLCHOPS", cat:"Owambe", d:1, hint:"Bite-sized snacks passed around on trays", ex:"", alt:[]},
+  {w:"STRICTLY", cat:"Owambe", d:2, hint:"Printed on the invite card - no gate-crashing", ex:"", alt:[]},
+  {w:"BAND", cat:"Owambe", d:1, hint:"Live music keeping the dance floor moving", ex:"", alt:[]},
+  {w:"CHAIRCOVER", cat:"Owambe", d:2, hint:"Fabric dressing rented plastic chairs for the occasion", ex:"", alt:[]},
+
+  /* ---- Home (batch 7) ---- */
+  {w:"CARPET", cat:"Home", d:1, hint:"Soft floor covering, vacuumed on Saturday mornings", ex:"", alt:[]},
+  {w:"DUSTPAN", cat:"Home", d:1, hint:"Pairs with a broom to clear the swept dirt", ex:"", alt:[]},
+  {w:"STAIRCASE", cat:"Home", d:2, hint:"Steps connecting the ground floor to upstairs", ex:"", alt:[]},
+  {w:"CEILINGFAN", cat:"Home", d:1, hint:"Spins overhead when NEPA cooperates", ex:"", alt:[]},
+  {w:"WALLCLOCK", cat:"Home", d:1, hint:"Tells the time from up on the sitting-room wall", ex:"", alt:[]},
+  {w:"DOORMAT", cat:"Home", d:1, hint:"Wipe your feet here before entering", ex:"", alt:[]},
+  {w:"SATELLITE", cat:"Home", d:2, hint:"Dish on the roof feeding the DSTV decoder", ex:"", alt:[]},
+  {w:"WASHLINE", cat:"Home", d:2, hint:"Where wrappers and school uniforms dry in the sun", ex:"", alt:[]},
+
+  /* ---- Market (batch 7) ---- */
+  {w:"CRATE", cat:"Market", d:1, hint:"Stack of bottled drinks, empties returned for a refund", ex:"", alt:[]},
+  {w:"RECEIPT", cat:"Market", d:2, hint:"Proof of purchase, if the trader even gives one", ex:"", alt:[]},
+  {w:"SACHET", cat:"Market", d:1, hint:"Small sealed pack - pure water comes in this", ex:"", alt:[]},
+  {w:"STOREOWNER", cat:"Market", d:2, hint:"Runs the shop, knows every regular customer by name", ex:"", alt:[]},
+  {w:"MIDDLEMAN", cat:"Market", d:2, hint:"Connects buyer to seller and takes a cut", ex:"", alt:[]},
+  {w:"AUCTION", cat:"Market", d:2, hint:"Goods sold to whoever bids highest", ex:"", alt:[]},
+  {w:"INVENTORY", cat:"Market", d:2, hint:"Full count of what's on the shelves", ex:"", alt:[]},
+  {w:"COMMISSION", cat:"Market", d:2, hint:"The agent's cut for closing the sale", ex:"", alt:[]},
+
+  /* ---- Sound (batch 7) ---- */
+  {w:"REMIX", cat:"Sound", d:1, hint:"Reworked version of a track, new beat same lyrics", ex:"", alt:[]},
+  {w:"FREESTYLE", cat:"Sound", d:2, hint:"Rapping off the top of the head, no written verse", ex:"", alt:[]},
+  {w:"MIXTAPE", cat:"Sound", d:2, hint:"Free project an artist drops before the album", ex:"", alt:[]},
+  {w:"PLAYLIST", cat:"Sound", d:1, hint:"Queue of songs lined up back to back", ex:"", alt:[]},
+  {w:"CHORUS", cat:"Sound", d:1, hint:"The part of the song everybody sings along to", ex:"", alt:[]},
+  {w:"BEATMAKER", cat:"Sound", d:2, hint:"Produces the instrumental before the vocalist steps in", ex:"", alt:[]},
+  {w:"VOCALIST", cat:"Sound", d:2, hint:"The one actually singing the hook", ex:"", alt:[]},
+  {w:"SAXOPHONE", cat:"Sound", d:2, hint:"Brass instrument wailing through a highlife band", ex:"", alt:[]},
+
+  /* ---- Screen (batch 7) ---- */
+  {w:"COSTUME", cat:"Screen", d:1, hint:"What the actor wears for the role", ex:"", alt:[]},
+  {w:"CAMERAMAN", cat:"Screen", d:2, hint:"Films the scene from behind the lens", ex:"", alt:[]},
+  {w:"STUNTMAN", cat:"Screen", d:2, hint:"Takes the fall so the lead actor doesn't have to", ex:"", alt:[]},
+  {w:"CASTING", cat:"Screen", d:2, hint:"Auditions to fill every role in the script", ex:"", alt:[]},
+  {w:"REHEARSAL", cat:"Screen", d:2, hint:"Running lines before the cameras actually roll", ex:"", alt:[]},
+  {w:"ANIMATION", cat:"Screen", d:2, hint:"Frame-by-frame drawn or CGI storytelling", ex:"", alt:[]},
+  {w:"STORYLINE", cat:"Screen", d:2, hint:"The plot holding the whole film together", ex:"", alt:[]},
+  {w:"PLOTTWIST", cat:"Screen", d:3, hint:"The unexpected turn nobody saw coming", ex:"", alt:[]},
+
+  /* ---- Faith (batch 7) ---- */
+  {w:"EVANGELIST", cat:"Faith", d:2, hint:"Travels and preaches to spread the gospel", ex:"", alt:[]},
+  {w:"MIRACLE", cat:"Faith", d:1, hint:"An event the congregation calls the hand of God", ex:"", alt:[]},
+  {w:"BLESSING", cat:"Faith", d:1, hint:"Favour asked for, or given, in prayer", ex:"", alt:[]},
+  {w:"COVENANT", cat:"Faith", d:2, hint:"A sacred promise or agreement with God", ex:"", alt:[]},
+  {w:"SANCTUARY", cat:"Faith", d:2, hint:"The holiest, quietest part of the building", ex:"", alt:[]},
+  {w:"PROPHECY", cat:"Faith", d:2, hint:"A message declared about what's coming", ex:"", alt:[]},
+  {w:"SHRINE", cat:"Faith", d:2, hint:"Traditional site set aside for worship or sacrifice", ex:"", alt:[]},
+  {w:"PENTECOST", cat:"Faith", d:3, hint:"Christian feast marking the coming of the Holy Spirit", ex:"", alt:[]},
+
+  /* ---- People (batch 7) ---- */
+  {w:"GATEKEEPER", cat:"People", d:1, hint:"Controls who comes in and who stays out", ex:"", alt:[]},
+  {w:"MAIGUARD", cat:"People", d:2, hint:"Night watchman guarding the estate or compound", ex:"", alt:[]},
+  {w:"NANNY", cat:"People", d:1, hint:"Looks after the children while parents are at work", ex:"", alt:[]},
+  {w:"COOK", cat:"People", d:1, hint:"Prepares the meals, sometimes lives in", ex:"", alt:[]},
+  {w:"PLUMBER", cat:"People", d:2, hint:"Fixes the burst pipe and the leaking tap", ex:"", alt:[]},
+  {w:"PAINTER", cat:"People", d:1, hint:"Coats the walls a fresh colour", ex:"", alt:[]},
+  {w:"GARDENER", cat:"People", d:2, hint:"Keeps the compound's flowers and hedges trimmed", ex:"", alt:[]},
+  {w:"BABYSITTER", cat:"People", d:1, hint:"Watches the kids for an evening, paid by the hour", ex:"", alt:[]},
+
+  /* ---- School (batch 7) ---- */
+  {w:"TRANSCRIPT", cat:"School", d:2, hint:"Official record of every course and grade", ex:"", alt:[]},
+  {w:"SUPERVISOR", cat:"School", d:2, hint:"Oversees the project or the exam hall", ex:"", alt:[]},
+  {w:"GRADUATE", cat:"School", d:1, hint:"Finished the programme, gown and cap included", ex:"", alt:[]},
+  {w:"FRESHMAN", cat:"School", d:1, hint:"First-year student, still finding the lecture halls", ex:"", alt:[]},
+  {w:"DORMITORY", cat:"School", d:2, hint:"Shared sleeping hall on campus", ex:"", alt:[]},
+  {w:"ASSIGNMENT", cat:"School", d:1, hint:"Homework due before the next lecture", ex:"", alt:[]},
+  {w:"CLASSROOM", cat:"School", d:1, hint:"Where the lesson actually happens", ex:"", alt:[]},
+  {w:"PROJECTOR", cat:"School", d:2, hint:"Beams the slides onto the screen at the front", ex:"", alt:[]},
+
+  /* ---- Animal (batch 7) ---- */
+  {w:"ZEBRA", cat:"Animal", d:1, hint:"Black and white striped relative of the horse", ex:"", alt:[]},
+  {w:"GIRAFFE", cat:"Animal", d:1, hint:"Tallest land animal, neck built for the treetops", ex:"", alt:[]},
+  {w:"CHEETAH", cat:"Animal", d:1, hint:"Fastest land animal, built for the sprint", ex:"", alt:[]},
+  {w:"MEERKAT", cat:"Animal", d:2, hint:"Small burrowing animal that stands guard on two legs", ex:"", alt:[]},
+  {w:"OKAPI", cat:"Animal", d:3, hint:"Striped-legged relative of the giraffe, shy forest dweller", ex:"", alt:[]},
+  {w:"AARDVARK", cat:"Animal", d:2, hint:"Long-snouted burrower that digs up termite mounds", ex:"", alt:[]},
+  {w:"PORCUPINE", cat:"Animal", d:2, hint:"Rodent covered in sharp defensive quills", ex:"", alt:[]},
+  {w:"ANTEATER", cat:"Animal", d:2, hint:"Long tongue built for raiding ant and termite nests", ex:"", alt:[]},
 ];
 
 /* ------------------------------------------------------------
