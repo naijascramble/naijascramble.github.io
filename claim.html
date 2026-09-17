@@ -4,19 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Claim Your Prize — Naija Scramble</title>
-<meta name="description" content="Top Marathon score each week wins ₦1,500 airtime. Claim yours here.">
+<meta name="description" content="Top Marathon score each week wins ₦3,000 cash. Claim yours here.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='6'%20fill='%230B7A3B'/%3E%3Ctext%20x='16'%20y='23'%20font-family='Georgia,serif'%20font-size='20'%20font-weight='bold'%20text-anchor='middle'%20fill='%23FBF6EA'%3EN%3C/text%3E%3C/svg%3E">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Naija Scramble">
 <meta property="og:title" content="Claim Your Prize — Naija Scramble">
-<meta property="og:description" content="Top Marathon score each week wins ₦1,500 airtime. Claim yours here.">
+<meta property="og:description" content="Top Marathon score each week wins ₦3,000 cash. Claim yours here.">
 <meta property="og:url" content="https://naijascramble.github.io/claim">
 <meta property="og:image" content="https://naijascramble.github.io/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Claim Your Prize — Naija Scramble">
-<meta name="twitter:description" content="Top Marathon score each week wins ₦1,500 airtime.">
+<meta name="twitter:description" content="Top Marathon score each week wins ₦3,000 cash.">
 <meta name="twitter:image" content="https://naijascramble.github.io/og.png">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#0B7A3B">
@@ -48,9 +48,9 @@
 <main class="play-main">
   <div class="wrap narrow">
     <div class="play-intro">
-      <span class="label">Weekly airtime challenge</span>
+      <span class="label">Weekly cash challenge</span>
       <h1>Claim your prize.</h1>
-      <p class="lede">Led the <a href="/leaderboard">Marathon leaderboard</a> this week or last? Fill this in and we'll send your &#8358;1,500 airtime within a few days.</p>
+      <p class="lede">Led the <a href="/leaderboard">Marathon leaderboard</a> this week or last? Fill this in and we'll send your &#8358;3,000 cash within a few days.</p>
     </div>
 
     <form id="claimForm" class="suggest" novalidate>
@@ -60,25 +60,22 @@
       <label>Winning Marathon score <span class="req">required</span>
         <input name="score" inputmode="numeric" maxlength="6" autocomplete="off" placeholder="e.g. 4820">
       </label>
-      <label>WhatsApp number <span class="req">required</span>
-        <input name="whatsapp" type="tel" maxlength="20" autocomplete="off" placeholder="e.g. 0803 000 0000">
+      <label>Bank name <span class="req">required</span>
+        <input name="bank" maxlength="40" autocomplete="off" placeholder="e.g. GTBank, OPay, Kuda">
       </label>
-      <label>Network <span class="req">required</span>
-        <select name="network">
-          <option value="" disabled selected>Pick one</option>
-          <option>MTN</option>
-          <option>Airtel</option>
-          <option>Glo</option>
-          <option>9mobile</option>
-        </select>
+      <label>Account number <span class="req">required</span>
+        <input name="acctnum" inputmode="numeric" type="tel" maxlength="10" autocomplete="off" placeholder="10-digit NUBAN">
       </label>
-      <button class="cta" type="submit">Claim my airtime</button>
+      <label>Account name <span class="req">required</span>
+        <input name="acctname" maxlength="60" autocomplete="off" placeholder="Must match the bank account">
+      </label>
+      <button class="cta" type="submit">Claim my cash prize</button>
       <p class="form-note" id="formNote" role="status">We check every claim against the leaderboard before sending anything.</p>
     </form>
 
     <div id="thanks" class="thanks" hidden>
       <h2>Got it. Thank you.</h2>
-      <p>We'll check your score against the leaderboard and send your airtime to the WhatsApp number you gave us within a few days.</p>
+      <p>We'll check your score against the leaderboard and send your cash to the account you gave us within a few days.</p>
       <button class="ghost" id="again" type="button">Submit another claim</button>
     </div>
   </div>
@@ -103,9 +100,10 @@
   var ENDPOINT = "https://docs.google.com/forms/d/e/1FAIpQLSeZasoJDo5I3cED8D9nEqiXtf28XCkQliOgIr2NgRrpji7qWA/formResponse";
   var F = {
     name: "entry.470962407",
-    whatsapp: "entry.1411926142",
+    bank: "entry.1411926142",
+    acctnum: "entry.116031490",
     score: "entry.619968210",
-    network: "entry.783799247"
+    acctname: "entry.783799247"
   };
 
   var form   = document.getElementById('claimForm');
@@ -122,7 +120,9 @@
     e.preventDefault();
     var name = form.name.value.trim().replace(/\s+/g, ' ').slice(0, 16);
     var score = form.score.value.replace(/[^\d]/g, '');
-    var whatsapp = form.whatsapp.value.trim();
+    var bank = form.bank.value.trim();
+    var acctnum = form.acctnum.value.replace(/[^\d]/g, '');
+    var acctname = form.acctname.value.trim().replace(/\s+/g, ' ');
 
     if(name.length < 2){
       setNote('Enter the name you played under.', true);
@@ -134,22 +134,28 @@
       form.score.focus();
       return;
     }
-    if(whatsapp.replace(/[^\d]/g, '').length < 10){
-      setNote('Enter a valid WhatsApp number.', true);
-      form.whatsapp.focus();
+    if(bank.length < 2){
+      setNote('Enter your bank (or OPay/Kuda/PalmPay etc).', true);
+      form.bank.focus();
       return;
     }
-    if(!form.network.value){
-      setNote('Pick your network.', true);
-      form.network.focus();
+    if(acctnum.length !== 10){
+      setNote('Enter a valid 10-digit account number.', true);
+      form.acctnum.focus();
+      return;
+    }
+    if(acctname.length < 2){
+      setNote('Enter the account name.', true);
+      form.acctname.focus();
       return;
     }
 
     var body = new URLSearchParams();
     body.append(F.name, name);
     body.append(F.score, score);
-    body.append(F.whatsapp, whatsapp);
-    body.append(F.network, form.network.value);
+    body.append(F.bank, bank);
+    body.append(F.acctnum, acctnum);
+    body.append(F.acctname, acctname);
 
     submit.disabled = true;
     submit.textContent = 'Sending…';
@@ -174,7 +180,7 @@
     form.hidden = false;
     thanks.hidden = true;
     submit.disabled = false;
-    submit.textContent = 'Claim my airtime';
+    submit.textContent = 'Claim my cash prize';
     setNote('We check every claim against the leaderboard before sending anything.');
     form.name.focus();
   });

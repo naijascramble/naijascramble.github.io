@@ -4,19 +4,19 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Leaderboard — Naija Scramble</title>
-<meta name="description" content="Top Marathon score each week wins airtime. See who's leading, plus the all-time board.">
+<meta name="description" content="Top Marathon score each week wins cash. See who's leading, plus the all-time board.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='6'%20fill='%230B7A3B'/%3E%3Ctext%20x='16'%20y='23'%20font-family='Georgia,serif'%20font-size='20'%20font-weight='bold'%20text-anchor='middle'%20fill='%23FBF6EA'%3EN%3C/text%3E%3C/svg%3E">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Naija Scramble">
 <meta property="og:title" content="Leaderboard — Naija Scramble">
-<meta property="og:description" content="Top Marathon score each week wins airtime. Post yours from the game-over screen.">
+<meta property="og:description" content="Top Marathon score each week wins cash. Post yours from the game-over screen.">
 <meta property="og:url" content="https://naijascramble.github.io/leaderboard">
 <meta property="og:image" content="https://naijascramble.github.io/og.png">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta name="twitter:card" content="summary_large_image">
 <meta name="twitter:title" content="Leaderboard — Naija Scramble">
-<meta name="twitter:description" content="Top Marathon score each week wins airtime.">
+<meta name="twitter:description" content="Top Marathon score each week wins cash.">
 <meta name="twitter:image" content="https://naijascramble.github.io/og.png">
 <link rel="manifest" href="/manifest.json">
 <meta name="theme-color" content="#0B7A3B">
@@ -51,11 +51,11 @@
     <div class="play-intro">
       <span class="label">Marathon &middot; weekly prize</span>
       <h1>Leaderboard.</h1>
-      <p class="lede">Post your Marathon score from the game-over screen. Top score wins &#8358;1,500 airtime, every week.</p>
+      <p class="lede">Post your Marathon score from the game-over screen. Top score wins &#8358;3,000 cash, every week.</p>
     </div>
 
     <div class="challenge">
-      <span class="label">This week&rsquo;s &#8358;1,500 airtime challenge</span>
+      <span class="label">This week&rsquo;s &#8358;3,000 cash challenge</span>
       <p class="challenge-lead" id="challengeLead">Loading&hellip;</p>
       <p class="challenge-meta" id="challengeMeta"></p>
       <p class="challenge-last" id="challengeLast" hidden></p>
@@ -71,7 +71,7 @@
       <li class="lb-empty" id="loading">Loading the board&hellip;</li>
     </ol>
     <p class="lb-meta" id="meta"></p>
-    <p class="lb-rules">The week runs Monday to Sunday. Best single Marathon score wins &#8358;1,500 airtime &mdash; we go by the name you played under, so use one you&rsquo;ll recognise. Scores above 25,000 are treated as errors and dropped. Led the board? <a href="/claim">Claim your prize here</a>. Winner announced here, and wherever we post, every Monday.</p>
+    <p class="lb-rules">The week runs Monday to Sunday. Best single Marathon score wins &#8358;3,000 cash &mdash; we go by the name you played under, so use one you&rsquo;ll recognise. Scores above 25,000 are treated as errors and dropped. Led the board? <a href="/claim">Claim your prize here</a>. Winner announced here, and wherever we post, every Monday.</p>
   </div>
 </main>
 
@@ -199,7 +199,7 @@
       challengeLead.textContent = 'No runs yet this week — be the first to set the pace.';
     } else {
       var leader = weekList[0];
-      challengeLead.innerHTML = '<b>' + esc(leader.name) + '</b> leads with <b>' + leader.score.toLocaleString() + ' pts</b> — top score wins &#8358;1,500 airtime.';
+      challengeLead.innerHTML = '<b>' + esc(leader.name) + '</b> leads with <b>' + leader.score.toLocaleString() + ' pts</b> — top score wins &#8358;3,000 cash.';
     }
     challengeMeta.textContent = daysLeftLabel();
 
