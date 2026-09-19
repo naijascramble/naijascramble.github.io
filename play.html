@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
-<link rel="stylesheet" href="style.css?v=16">
+<link rel="stylesheet" href="style.css?v=17">
 </head>
 <body>
 
@@ -54,6 +54,7 @@
 
     <!-- ============ MENU ============ -->
     <section id="menu">
+      <div class="challenge-card" id="challengeCard" hidden></div>
       <div class="play-intro">
         <span class="label">Pick a mode</span>
         <h1>Five ways to play.</h1>
@@ -783,6 +784,7 @@
   /* ---------- modes ---------- */
   function chooseMode(mode){
     S.mode = mode;
+    S.challenge = null;
     S.score = 0; S.combo = 0; S.qi = 0; S.results = []; S.endedRun = false;
     S.roundTime = 30;
 
@@ -1131,6 +1133,77 @@
     show('over');
   }
 
+  /* ---------- Friend challenges: a link that carries the words and the score to beat ----------
+     Nothing is stored on a server. The link holds the score, the word order and a name the sender typed.
+     Everything read back from a link is untrusted: strict pattern, sanitised name, capped score. */
+  var CH_MAX_SCORE = 1500;
+  function chEsc(v){ return String(v).replace(/[&<>"']/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]; }); }
+  function chSanitizeName(v){
+    return String(v == null ? '' : v).replace(/[^A-Za-z0-9\u00C0-\u024F\u1E00-\u1EFF ._'\-]/g, '').replace(/\s+/g, ' ').trim().slice(0, 16);
+  }
+  function chWords(){
+    return (S.queue || []).map(function(x){ return x.w; }).filter(function(w){ return /^[A-Z]{3,10}$/.test(w); });
+  }
+  function readChallenge(){
+    try{
+      var q = new URLSearchParams(location.search), c = q.get('c');
+      if(!c) return null;
+      var m = c.match(/^(\d{1,4})\.([A-Z]{3,10}(?:-[A-Z]{3,10}){2,9})$/);
+      if(!m) return null;
+      var score = parseInt(m[1], 10);
+      if(score > CH_MAX_SCORE) return null;
+      return {
+        score: score,
+        words: m[2].split('-'),
+        name: chSanitizeName(q.get('n')) || 'A friend',
+        cat: String(q.get('k') || '').replace(/[^A-Za-z ]/g, '').trim().slice(0, 12)
+      };
+    }catch(e){ return null; }
+  }
+  function showChallengeCard(ch){
+    var card = $('challengeCard');
+    card.innerHTML =
+      '<span class="tag">Challenge from a friend</span>' +
+      '<h3>' + chEsc(ch.name) + ' scored ' + ch.score + '</h3>' +
+      '<p>' + ch.words.length + (ch.cat ? ' ' + chEsc(ch.cat) : '') + ' words, 30 seconds each, the same for both of you. Beat ' + ch.score + ' and it is yours.</p>' +
+      '<button class="cta" id="chAccept" type="button">Play the challenge</button>' +
+      '<span class="lb-note" id="chErr"></span>';
+    card.hidden = false;
+    $('chAccept').addEventListener('click', function(){ startChallenge(ch); });
+  }
+  function startChallenge(ch){
+    var byWord = {};
+    WORDS.forEach(function(x){ byWord[x.w] = x; });
+    var queue = ch.words.map(function(w){ return byWord[w]; }).filter(Boolean);
+    if(queue.length < 3){
+      $('chErr').textContent = 'This challenge uses words that are no longer in the game. Pick a mode below.';
+      return;
+    }
+    S.mode = 'category'; S.cat = ch.cat || 'Challenge';
+    S.score = 0; S.combo = 0; S.qi = 0; S.results = []; S.endedRun = false;
+    S.roundTime = 30; S.queue = queue; S.challenge = ch;
+    $('challengeCard').hidden = true;
+    el.catpick.hidden = true;
+    startRound();
+  }
+  function wireChallengeSend(){
+    var btn = $('chBtn');
+    if(!btn) return;
+    var words = chWords(), cat = String(S.cat || 'Challenge').replace(/[^A-Za-z ]/g, '').trim().slice(0, 12) || 'Challenge', score = S.score;
+    btn.addEventListener('click', function(){
+      var name = chSanitizeName($('chName').value) || 'A friend';
+      store('ns.chname', name);
+      var url = 'https://' + SHARE_URL + '/play?c=' + score + '.' + words.join('-') + '&n=' + encodeURIComponent(name) + '&k=' + encodeURIComponent(cat) + '&utm_source=challenge&utm_medium=whatsapp';
+      var msg = name + ' scored ' + score + ' on ' + words.length + ' ' + cat + ' words in Naija Scramble ' + FLAG + '. Think you can beat it? ' + url;
+      function viaWhatsApp(){ window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank', 'noopener'); }
+      if(navigator.share){
+        navigator.share({ text: msg }).catch(function(e){ if(!e || e.name !== 'AbortError') viaWhatsApp(); });
+      } else {
+        viaWhatsApp();
+      }
+    });
+  }
+
   /* ---------- Word Coach (AI via Cloudflare Worker; only a word, its category and hint are sent) ---------- */
   var COACH_URL = 'https://word-coach.betterdays-goalhub.workers.dev/';
   var HINT_LABEL = 'Pidgin hint −' + REVEAL_COST;
@@ -1278,6 +1351,13 @@
     } else {
       head = S.cat + ' run';
       sub = solved + ' of ' + S.queue.length + ' solved';
+      if(S.challenge){
+        var diff = S.score - S.challenge.score;
+        head = 'Challenge from ' + S.challenge.name;
+        sub = (diff > 0 ? 'You beat ' + S.challenge.name + ' by ' + diff + ' pts'
+             : diff < 0 ? S.challenge.name + ' wins by ' + (-diff) + ' pts'
+             : 'Tied with ' + S.challenge.name) + ' \u00B7 ' + solved + '/' + S.queue.length;
+      }
     }
 
     var grid = S.results.map(function(x){ return '<i class="' + (x.got ? 'got' : '') + '"></i>'; }).join('');
@@ -1287,7 +1367,20 @@
     }).join('');
     var share = 'Naija Scramble ' + FLAG + ' ' + (S.mode === 'marathon' ? 'Marathon' : S.cat) + '\n' +
                 fmtScore(S.score) + ' pts · ' + solved + (S.mode === 'marathon' ? ' words' : '/' + S.queue.length) + '\n' +
+                (S.challenge ? 'vs ' + S.challenge.name + ' (' + S.challenge.score + ')\n' : '') +
                 gridText(S.results) + '\n' + SHARE_URL;
+
+    var chBlock = '';
+    if(S.mode === 'category' && chWords().length >= 3){
+      chBlock =
+        '<div class="lb-post ch-send">' +
+          '<label>Dare a friend &mdash; same words, beat ' + S.score + '. Your name for the challenge' +
+            '<input id="chName" maxlength="16" autocomplete="off" placeholder="Your name" value="' + chEsc(load('ns.chname') || load('ns.name') || '') + '">' +
+          '</label>' +
+          '<button class="cta" id="chBtn" type="button">Challenge a friend</button>' +
+          '<span class="lb-note" id="chNote"></span>' +
+        '</div>';
+    }
 
     var lbBlock = '';
     if(S.mode === 'marathon' && S.score > 0 && S.score <= SCORE_CAP){
@@ -1314,13 +1407,15 @@
         '<ul class="scorelist">' + rows + '</ul>' +
         '<pre class="share-card" id="shareText">' + share + '</pre>' +
         lbBlock +
+        chBlock +
         '<div class="endactions">' +
-          '<button class="cta" id="copyBtn" type="button">Copy result</button>' +
+          '<button class="' + (chBlock ? 'ghost' : 'cta') + '" id="copyBtn" type="button">Copy result</button>' +
           '<button class="ghost" id="menuBtn" type="button">Back to modes</button>' +
         '</div>' +
       '</div>';
     wireEnd(share);
     wireLeaderboard();
+    wireChallengeSend();
     show('over');
   }
 
@@ -1452,6 +1547,8 @@
     });
   });
   renderAchShelf();
+  var pendingChallenge = readChallenge();
+  if(pendingChallenge) showChallengeCard(pendingChallenge);
 
   // Playable straight away with the bundled bank; the Sheet (if set)
   // swaps in the live list as soon as it arrives.

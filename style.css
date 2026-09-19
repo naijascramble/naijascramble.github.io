@@ -711,3 +711,18 @@ footer .wrap{
 .rivalbar .pips i.on{background:var(--clay)}
 .rivalbar .rstate{min-width:9ch;text-align:right;white-space:nowrap;text-transform:none;letter-spacing:.04em}
 .board.vs #reveal,.board.vs #aiHint{display:none}
+
+/* ---- Friend challenges ---- */
+.challenge-card{
+  margin:0 0 26px;padding:18px 18px 20px;border-radius:22px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;
+  background:var(--glass-bg);color:var(--ink);
+  border:1px solid color-mix(in srgb,var(--green) 50%,var(--glass-line));
+  box-shadow:var(--glass-rim),0 18px 40px -18px color-mix(in srgb,var(--green) 55%,transparent);
+}
+.challenge-card[hidden]{display:none}
+.challenge-card .tag{font-family:"IBM Plex Mono",monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.16em;color:var(--clay)}
+.challenge-card h3{font-size:1.5rem;line-height:1.1;margin:0}
+.challenge-card p{margin:0;color:var(--ink-soft);max-width:52ch}
+.challenge-card .cta{margin-top:6px;border:0;cursor:pointer}
+.ch-send{margin-top:26px}
+.ch-send label{line-height:1.5}
