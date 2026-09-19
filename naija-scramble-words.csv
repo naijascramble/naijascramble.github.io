@@ -833,3 +833,158 @@ OKAPI,Animal,3,"Striped-legged relative of the giraffe, shy forest dweller",,,li
 AARDVARK,Animal,2,Long-snouted burrower that digs up termite mounds,,,live
 PORCUPINE,Animal,2,Rodent covered in sharp defensive quills,,,live
 ANTEATER,Animal,2,Long tongue built for raiding ant and termite nests,,,live
+SPEAKER,Sound,1,What blasts the bass at the owambe,The ___ don tear from too much bass,,live
+CONCERT,Sound,2,Big live show with a paid ticket,We go the ___ for Eko Hotel,,live
+BASSLINE,Sound,3,Deep rolling note that makes chests thump,Amapiano is all about that ___,,live
+BLOOPER,Screen,3,Funny mistake left in after filming,My favourite part na the ___ reel,,live
+DECODER,Screen,2,The box you connect to get DStv,The ___ don show E16,,live
+CHANNEL,Screen,1,What you keep changing with the remote,"Madam, change that ___ abeg",,live
+SITCOM,Screen,3,A funny TV series with a set family or workplace,Papa Ajasco was a Nigerian ___,,live
+PSALM,Faith,2,"A song from the Bible, like the 23rd",Read ___ 91 before you sleep,,live
+FASTING,Faith,2,Going without food for a spiritual purpose,They start ___ on Monday,,live
+STRANGER,People,2,"Someone you do not know, and mama warns you about",No follow ___ go anywhere,,live
+GROOM,People,2,"The man the wedding is about, besides the bride",The ___ danced in with his friends,,live
+ELDER,People,1,A respected older person in the community,Greet the ___ first,,live
+BURSAR,School,3,School staff who collects the fees,Go to the ___ office,,live
+SYLLABUS,School,3,List of topics for the term or exam,That topic no dey the ___,,live
+THESIS,School,3,Long final paper for a degree,He dey defend his ___,,live
+TILAPIA,Animal,2,"Popular farmed fish, fried whole with pepper",Buy roasted ___ for me,,live
+GORILLA,Animal,2,"The largest ape, Cross River has a rare one",A ___ can beat ten men,,live
+ANAMBRA,Naija,2,Igbo state whose capital is Awka,Onitsha na inside ___ State,,live
+BAYELSA,Naija,2,Oil state whose capital is Yenagoa,,,live
+BENUE,Naija,1,"The food basket state, capital Makurdi",Yam plenty for ___ State,,live
+BORNO,Naija,1,Northeast state whose capital is Maiduguri,,,live
+DELTA,Naija,1,South-south state with Asaba as capital,,,live
+EBONYI,Naija,2,"Rice-growing Igbo state, capital Abakaliki",,,live
+KEBBI,Naija,2,Northwest state known for the Argungu fishing festival,,,live
+KOGI,Naija,1,"Confluence state where the Niger meets the Benue, capital Lokoja",,,live
+KWARA,Naija,1,North-central state with Ilorin as capital,,,live
+NASARAWA,Naija,3,North-central state whose capital is Lafia,,,live
+NIGER,Naija,1,"Largest state by land area, capital Minna",,,live
+OGUN,Naija,1,Gateway state with Abeokuta as capital,,,live
+ONDO,Naija,1,"Southwest state, capital Akure",,,live
+OSUN,Naija,1,Southwest state whose capital is Osogbo,,,live
+PLATEAU,Naija,2,Cool-weather state with Jos as capital,,,live
+RIVERS,Naija,1,Oil state whose capital is Port Harcourt,,RIVER,live
+TARABA,Naija,2,"Northeast state, capital Jalingo",,,live
+YOBE,Naija,1,Northeast state whose capital is Damaturu,,,live
+ZAMFARA,Naija,2,Northwest state with Gusau as capital,,,live
+ADAMAWA,Naija,2,"Northeast state, capital Yola",,,live
+JIGAWA,Naija,2,"Northwest state, capital Dutse",,,live
+ABIA,Naija,1,Igbo state whose capital is Umuahia,,,live
+NAFDAC,Naija,2,Agency whose number is on every packaged food and drug,Check for the ___ number before you buy,,live
+PASSPORT,Naija,2,Green booklet you need to japa,Renew your ___ before the visa appointment,,live
+GOVERNOR,Naija,2,The chief executive of a state,The ___ commissioned the road,,live
+ELECTION,Naija,2,When you queue with your PVC,The ___ hold on Saturday,,live
+CUSTOMS,Naija,2,Officers who check goods at the border and airport,,,live
+AIRPORT,Naija,1,Where planes land in Ikeja or Abuja,The ___ traffic was crazy,,live
+CENSUS,Naija,3,Counting the whole population,,,live
+AJAH,Streets,1,Lagos area along the Lekki-Epe Expressway,I live for ___ but work for Island,,live
+OJOTA,Streets,2,Lagos area with a big motor park on Ikorodu Road,,,live
+MARYLAND,Streets,2,Lagos area with a mall and a busy roundabout,,,live
+BERGER,Streets,2,Busy Lagos bus stop on the Lagos-Ibadan Expressway,,,live
+OGBA,Streets,1,"Lagos area near Ikeja and Agege, home of an industrial estate",,,live
+IPAJA,Streets,2,"Lagos suburb in the Alimosho area, near Ayobo",,,live
+ISOLO,Streets,2,Lagos area near Mushin and Ejigbo,,,live
+JABI,Streets,1,Abuja district with a famous lake and mall,We go the lake for ___,,live
+ASOKORO,Streets,2,Upscale Abuja district of ministers and diplomats,,,live
+GWARINPA,Streets,3,Huge housing estate in Abuja,,,live
+UTAKO,Streets,2,Abuja district with a popular market,,,live
+LUGBE,Streets,2,Abuja suburb along the airport road,,,live
+BODIJA,Streets,2,Ibadan area famous for its big market,,,live
+DUGBE,Streets,2,Ibadan area near Cocoa House,,,live
+AGODI,Streets,2,Ibadan area with famous gardens,,,live
+DIOBU,Streets,2,Port Harcourt area famous for Mile 1 to Mile 4,,,live
+RUMUOLA,Streets,3,Busy Port Harcourt junction and neighbourhood,,,live
+TINCAN,Streets,2,Lagos port where trucks queue for hours,,,live
+ALIMOSHO,Streets,3,Lagos local government with the most residents,,,live
+PUFFPUFF,Chop,1,Fried dough balls sold at parties and by the roadside,Buy hot ___ for the children,PUFF,live
+TITUS,Chop,2,Oily mackerel fish in the market and in stew,The stew get plenty ___,,live
+BONGA,Chop,2,Smoked shad fish that flavours many soups,,,live
+YAJI,Chop,2,The spicy peanut mix that goes on suya,Sprinkle more ___ abeg,,live
+AKPU,Chop,3,Igbo fufu made from fermented cassava,,,live
+EKPANG,Chop,3,Cocoyam and water yam pottage from Calabar,,,live
+BEANS,Chop,1,Cooked with palm oil and eaten with dodo or garri,Mama cook ___ and plantain,BEAN,live
+PEANUTS,Chop,1,Groundnuts sold in cones at bus stops,,,live
+DOUGHNUT,Chop,2,"Sweet ring fried in oil, sold with tea",,DONUT,live
+SARDINE,Chop,1,Tinned fish that saves the day in emergency stew,,,live
+SPAGHETTI,Chop,1,Long pasta strands cooked in tomato stew,"Mama, cook ___ tonight",,live
+AWOOF,Gist,1,Something you get for free,Free data na ___,,live
+YABIS,Gist,2,Public teasing and insults,Stop the ___ na,YABBIS,live
+ABOKI,Gist,2,Hausa word for a close friend,Na my ___ dey come,,live
+BOBO,Gist,1,Slang for a boy or boyfriend,Your ___ dey outside,,live
+BEEF,Gist,1,A quarrel or grudge between two people,Dem get ___ since last year,,live
+VIBES,Gist,1,The mood or energy of a place,The ___ were on point,VIBE,live
+LOWKEY,Gist,2,"Secretly, or in a quiet way",I ___ like the guy,,live
+GRINDING,Gist,2,Working hard hustle after hustle,Weekend dey ___ mode,GRIND,live
+PIDGIN,Gist,1,The English-based language everyone speaks on the street,Speak ___ if you want gist,,live
+PRESSURE,Gist,2,What people put on you to do something or behave a certain way,Life dey give ___,,live
+DOWRY,Owambe,2,Gifts the groom brings for the bride's family,Bring the ___ list on Saturday,,live
+ENGAGEMENT,Owambe,3,The traditional ceremony before the church wedding,,,live
+BRIDEPRICE,Owambe,3,What the groom pays the family of the bride,,,live
+BESTMAN,Owambe,2,The groom's main supporter on the wedding day,,,live
+PROCESSION,Owambe,3,Everyone walking in to music before the ceremony,,,live
+DANCEFLOOR,Owambe,3,Where guests gather to spray money,,,live
+SEQUIN,Owambe,3,Shiny little discs that catch the party light,,,live
+BARTER,Market,2,Swap goods without using money,,,live
+TROLLEY,Market,2,Wheeled basket used in supermarkets,,,live
+CASHIER,Market,2,Person you pay at the counter,,,live
+MARKUP,Market,3,Extra price a seller adds to make profit,,,live
+REFUND,Market,2,Money returned when the order fails,,,live
+HEAP,Market,1,A small pile of tomatoes or pepper sold for one price,Give me one ___ of tomato,,live
+TUBER,Market,2,"One whole yam, priced by size",Buy one ___ for New Yam,,live
+PEDDLER,Market,3,A trader who moves around selling small things,,,live
+AFROPOP,Sound,2,Pop music with a strong African sound,,,live
+KEYBOARD,Sound,2,Piano-like instrument the church band plays,,,live
+AUTOTUNE,Sound,3,Effect that smooths a shaky voice,,,live
+ENCORE,Sound,3,When the crowd screams for one more song,,,live
+MICROPHONE,Sound,3,What the compere holds to speak loudly,,,live
+HEADPHONES,Sound,3,Cover your ears to enjoy music alone,,,live
+RINGTONE,Sound,2,The song your phone plays when someone calls,,,live
+DSTV,Screen,1,The satellite TV brand every home knows,Please pay my ___ subscription,,live
+NETFLIX,Screen,1,Streaming app for series and Nollywood originals,Let's watch ___ tonight,,live
+YOUTUBE,Screen,1,"Where you watch skits, music videos and tutorials",,,live
+TIKTOK,Screen,1,Short video app where dances go viral,,,live
+BBNAIJA,Screen,2,Reality show where housemates live on camera,,,live
+THRILLER,Screen,3,A film that keeps you on the edge of your seat,,,live
+SPOILER,Screen,2,Someone telling you the ending before you watch,,,live
+SCREENPLAY,Screen,3,The script written for a movie,,,live
+ANTENNA,Screen,2,Roof aerial that caught the old TV signal,,,live
+ROSARY,Faith,2,Beads a Catholic uses to pray,,,live
+CHAPEL,Faith,2,"Small church, often on a campus or school compound",,,live
+CATHEDRAL,Faith,3,Main church of a diocese,,,live
+GOSPEL,Faith,2,"Good news of Jesus, or a popular music genre",,,live
+USHER,Faith,2,Person who shows you to your seat at church,,,live
+LENT,Faith,2,Forty days of fasting before Easter,,,live
+EASTER,Faith,1,Celebration of the resurrection of Jesus,,,live
+CHRISTMAS,Faith,1,December holiday that brings everyone home,,,live
+HAJJ,Faith,2,The pilgrimage every able Muslim makes at least once,,,live
+MECCA,Faith,1,Holy city Muslims face when they pray,,,live
+WUDU,Faith,3,Washing before Muslim prayer,,WUDHU,live
+NEPHEW,People,2,Your sibling's son,,,live
+NIECE,People,2,Your sibling's daughter,,,live
+TWINS,People,1,"Two children born together, called Taiwo and Kehinde in Yoruba",,TWIN,live
+ORPHAN,People,2,A child who has lost both parents,,,live
+BACHELOR,People,2,A man who has never married,,,live
+PORTER,People,2,Person who carries loads for a fee,,,live
+BAALE,People,3,Head of a family or compound in Yoruba land,,,live
+BABA,People,1,"Father, or a respected old man, in Yoruba",,,live
+SULTAN,People,2,Muslim leader of Sokoto,,,live
+OONI,People,2,Traditional ruler of Ile-Ife,,,live
+ALAAFIN,People,3,Traditional ruler of Oyo,,,live
+CANTEEN,School,1,Where students buy food during break,,,live
+TUCKSHOP,School,2,Small shop that sells snacks on campus,,,live
+INTERHOUSE,School,3,Sports competition between school houses,,,live
+MARCHPAST,School,3,School parade at the sports day,,,live
+GRADUATION,School,3,Ceremony where you receive your degree,,,live
+PRACTICAL,School,2,Hands-on lesson in the science lab,,,live
+FRIDGE,Home,1,"Keeps drinks cold, when light is on",,,live
+FREEZER,Home,2,Big cold box for meat and fish,,,live
+MICROWAVE,Home,2,Oven that heats food in minutes,,,live
+EXTENSION,Home,2,Multi-socket cable everyone borrows,,,live
+CHANDELIER,Home,3,Fancy hanging light in a rich parlour,,,live
+ZINC,Home,1,Metal sheets used for roofing,,,live
+ASBESTOS,Home,3,Cement roofing sheet common in old houses,,,live
+COBRA,Animal,2,Hooded snake that rises to strike,,,live
+CHIMPANZEE,Animal,3,"Close cousin of humans, found in Cross River forests",,,live
+BUSHBABY,Animal,3,Small night animal with huge eyes,,,live
