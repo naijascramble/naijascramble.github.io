@@ -254,6 +254,7 @@
           var name = String(r.name || '').trim().replace(/\s+/g, ' ').slice(0, 16);
           var score = parseInt(String(r.score || '').replace(/[^\d]/g, ''), 10);
           if(!name || !(score > 0) || score > SCORE_CAP) return;
+          if(String(r.check || '').trim().toLowerCase() === 'review') return;   // sheet flagged it as implausible
           ROWS.push({ name: name, score: score, key: name.toLowerCase(), ts: parseSheetDate(r.timestamp) });
         });
         renderTab();

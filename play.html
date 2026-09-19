@@ -182,7 +182,7 @@
 
   // Leaderboard: Marathon scores POST to a Google Form (see leaderboard.html for the read side).
   var LB_ENDPOINT = "https://docs.google.com/forms/d/e/1FAIpQLSeB5DXA9qbex4X3ZrcwchzudeAjzAR16_6x8dV_SiqwXu6WmQ/formResponse";
-  var LB_FIELD = { name: "entry.240726504", score: "entry.1980824040", mode: "entry.1453484304" };
+  var LB_FIELD = { name: "entry.240726504", score: "entry.1980824040", mode: "entry.1453484304", words: "entry.1506908293", secs: "entry.1143495746" };
   var SCORE_CAP = 25000;   // runs above this can't be posted; leaderboard.html also drops them
 
   var VAL = {A:1,B:3,C:3,D:2,E:1,F:4,G:2,H:4,I:1,J:8,K:5,L:1,M:3,N:1,O:1,P:3,Q:10,R:1,S:1,T:1,U:1,V:4,W:4,X:8,Y:4,Z:10};
@@ -742,7 +742,7 @@
     el.feedback.className = 'feedback bad';
     updateBar();
 
-    if(S.mode === 'marathon'){ S.endedRun = true; }
+    if(S.mode === 'marathon'){ S.endedRun = true; S.runEnd = Date.now(); }
     queueNext();
   }
 
@@ -797,6 +797,7 @@
     }
     else if(mode === 'marathon'){
       buildMarathon();
+      S.runStart = Date.now(); S.runEnd = 0;
       startRound();
     }
     else if(mode === 'stages'){
@@ -1336,6 +1337,11 @@
       body.append(LB_FIELD.name, nm);
       body.append(LB_FIELD.score, String(S.score));
       body.append(LB_FIELD.mode, 'Marathon');
+      // run details let the sheet flag scores that are impossible for the words solved / time taken
+      var solvedN = S.results.filter(function(x){ return x.got; }).length;
+      var runSecs = Math.max(1, Math.round(((S.runEnd || Date.now()) - (S.runStart || Date.now())) / 1000));
+      body.append(LB_FIELD.words, String(solvedN));
+      body.append(LB_FIELD.secs, String(runSecs));
       btn.disabled = true; btn.textContent = 'Posting…';
       note.textContent = '';
       var done = false;
