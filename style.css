@@ -730,3 +730,11 @@ footer .wrap{
 .challenge-card .cta{margin-top:6px;border:0;cursor:pointer}
 .ch-send{margin-top:26px}
 .ch-send label{line-height:1.5}
+
+/* ---- iOS home-screen width diagnosis: fix.js adds html.hf1..hf5 one at a time (cumulative) if the installed
+   app opens zoomed out. Each rule switches off one suspect. Remove with fix.js once the cause is known. ---- */
+html.hf1 body::before{display:none}
+html.hf2 *,html.hf2 *::before,html.hf2 *::after{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html.hf3 body{position:static!important;min-height:0!important}
+html.hf4 *{transform:none!important;animation:none!important}
+html.hf5,html.hf5 body{overflow-x:hidden!important;max-width:100%!important}
