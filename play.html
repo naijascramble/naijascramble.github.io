@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Naija Scramble — Play</title>
-<meta name="description" content="Nigerian word-scramble: a Stages campaign plus Daily, Marathon and Category modes.">
+<meta name="description" content="Nigerian word-scramble: a Stages campaign plus Daily, Marathon, Category and Rival modes.">
 <link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='6'%20fill='%230B7A3B'/%3E%3Ctext%20x='16'%20y='23'%20font-family='Georgia,serif'%20font-size='20'%20font-weight='bold'%20text-anchor='middle'%20fill='%23FBF6EA'%3EN%3C/text%3E%3C/svg%3E">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Naija Scramble">
@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
-<link rel="stylesheet" href="style.css?v=15">
+<link rel="stylesheet" href="style.css?v=16">
 </head>
 <body>
 
@@ -56,7 +56,7 @@
     <section id="menu">
       <div class="play-intro">
         <span class="label">Pick a mode</span>
-        <h1>Four ways to play.</h1>
+        <h1>Five ways to play.</h1>
       </div>
       <div class="modes">
         <button class="mode-card" type="button" data-mode="stages">
@@ -80,7 +80,13 @@
           <h3>Category</h3>
           <p>Pick Chop, Pidgin, Owambe&hellip; ten words from that world, timed, misses just score zero.</p>
         </button>
+        <button class="mode-card wide" type="button" data-mode="rival">
+          <span class="tag">Head to head</span>
+          <h3>Rival</h3>
+          <p>Race a computer rival on the same word. First to unscramble it wins the round; first to four rounds wins the match. Practice only &mdash; no prize, no leaderboard.</p>
+        </button>
       </div>
+      <div id="rivalpick" hidden></div>
       <div id="catpick" hidden>
         <p class="label" style="display:block;margin-top:26px;color:var(--clay)">Choose a category</p>
         <div class="catlist" id="catlist"></div>
@@ -105,6 +111,11 @@
           <p class="cat label" id="cat">&mdash;</p>
         </div>
         <p class="ex" id="ex"></p>
+        <div class="rivalbar" id="rivalbar" aria-hidden="true" hidden>
+          <span class="rname" id="rivalName">Rival</span>
+          <span class="pips" id="rivalPips"></span>
+          <span class="rstate" id="rivalState"></span>
+        </div>
         <div class="slots" id="slots" aria-label="Your word"></div>
         <div class="pool" id="pool" aria-label="Letter pool"></div>
         <div class="controls">
@@ -536,7 +547,7 @@
     return {
       word:word,
       accept:[word].concat(entry.alt || []),
-      hint:entry.hint, ex:entry.ex || '', cat:entry.cat,
+      hint:entry.hint, ex:entry.ex || '', cat:entry.cat, d:entry.d || 2,
       base:wordValue(word),
       tiles:tiles, order:order,
       answer:new Array(word.length).fill(null),
@@ -549,6 +560,9 @@
     if(!entry){ finish(); return; }
     S.round = makeRound(entry, rnd);
     S.locked = false;
+    el.board.classList.toggle('vs', S.mode === 'rival');
+    $('rivalbar').hidden = S.mode !== 'rival';
+    stopRival();
     S.timeLeft = S.roundTime || ROUND_TIME;
 
     el.hint.textContent = S.round.hint;
@@ -571,6 +585,7 @@
     render();
     stopTimer();
     if(S.round.timed) startTimer();
+    if(S.mode === 'rival') startRival();
     show('game');
   }
 
@@ -583,6 +598,10 @@
     if(m === 'daily'){
       el.gbLeft.innerHTML = 'Daily &middot; <span class="reveals">' + S.round.reveals + ' reveal' + (S.round.reveals === 1 ? '' : 's') + '</span>';
       el.gbProg.hidden = true; el.gbTimer.hidden = true;
+    } else if(m === 'rival'){
+      el.gbLeft.textContent = 'Vs ' + S.rival.name + ' · round ' + (S.qi + 1);
+      el.gbScore.textContent = 'You ' + S.rw + '\u2013' + S.rl;
+      el.gbProg.hidden = true; el.gbTimer.hidden = false;
     } else if(m === 'marathon'){
       el.gbLeft.textContent = 'Marathon · ' + (S.qi + 1);
       el.gbProg.hidden = true; el.gbTimer.hidden = false;
@@ -672,6 +691,7 @@
 
   /* ---------- scoring ---------- */
   function solveRound(){
+    if(S.mode === 'rival'){ rivalRound(true); return; }
     stopTimer();
     S.locked = true;
     Snd.solve();
@@ -704,6 +724,7 @@
 
   function failRound(reason){
     if(S.locked) return;
+    if(S.mode === 'rival'){ rivalRound(false, reason); return; }
     stopTimer();
     S.locked = true;
     Snd.wrong();
@@ -727,6 +748,13 @@
 
   function queueNext(){
     if(S.mode === 'daily'){ finish(); return; }
+    if(S.mode === 'rival'){
+      el.nextBtn.textContent = rivalDecided() ? 'See result' : 'Next word';
+      hideCoach();
+      hintBtn.disabled = true;
+      el.roundnext.classList.add('show');
+      return;
+    }
     var last = S.mode === 'marathon' && S.endedRun;
     var atEnd = (S.mode === 'category' || S.mode === 'stages') && S.qi + 1 >= S.queue.length;
     el.nextBtn.textContent = (last || atEnd)
@@ -738,6 +766,12 @@
   }
 
   function nextRound(){
+    if(S.mode === 'rival'){
+      if(rivalDecided() || S.qi + 1 >= S.queue.length){ finishRival(); return; }
+      S.qi++;
+      startRound();
+      return;
+    }
     if(S.mode === 'marathon' && S.endedRun){ finish(); return; }
     S.qi++;
     if(S.mode === 'stages' && S.qi >= S.queue.length){ finishStage(); return; }
@@ -767,6 +801,9 @@
     }
     else if(mode === 'stages'){
       renderStageSelect();
+    }
+    else if(mode === 'rival'){
+      renderRivalPick();
     }
     else {
       var cats = [];
@@ -947,6 +984,151 @@
       }
     }
   });
+
+  /* ---------- Rival mode: a computer opponent on a timer (no AI, never touches the leaderboard or prize) ---------- */
+  var RIVALS = [
+    { key:'tunde', name:'Tunde', tag:'Easy',   blurb:'Still learning the ropes. Good for a warm-up.', skill:0.7 },
+    { key:'amaka', name:'Amaka', tag:'Medium', blurb:'Sharp and steady. Keeps you honest.',           skill:1.0 },
+    { key:'chief', name:'Chief', tag:'Hard',   blurb:'Has seen every word before. Move fast.',       skill:1.45 }
+  ];
+  var RIVAL_WINS = 4;
+
+  function rivalRecord(){ var r = load('ns.rivals'); return (r && typeof r === 'object') ? r : {}; }
+  function rivalByKey(k){ for(var i = 0; i < RIVALS.length; i++){ if(RIVALS[i].key === k) return RIVALS[i]; } return RIVALS[1]; }
+  function rivalDecided(){ return S.rw >= RIVAL_WINS || S.rl >= RIVAL_WINS; }
+
+  function renderRivalPick(){
+    show('menu');
+    var rec = rivalRecord();
+    var cards = RIVALS.map(function(rv){
+      var x = rec[rv.key] || { w:0, l:0 };
+      return '<button class="mode-card" type="button" data-rival="' + rv.key + '">' +
+        '<span class="tag">' + rv.tag + '</span><h3>' + rv.name + '</h3><p>' + rv.blurb + '</p>' +
+        '<span class="rec">Your record: ' + x.w + '\u2013' + x.l + '</span></button>';
+    }).join('');
+    var pick = $('rivalpick');
+    pick.innerHTML =
+      '<p class="label" style="display:block;margin-top:26px;color:var(--clay)">Pick your rival</p>' +
+      '<div class="rivals">' + cards + '</div>' +
+      '<p class="rnote">Rivals are computer-controlled &mdash; there is no other player and no AI, just a bot racing on a timer. First to ' + RIVAL_WINS + ' rounds wins. Hints and reveals are off, and nothing here counts towards the leaderboard or the weekly prize.</p>';
+    Array.prototype.forEach.call(pick.querySelectorAll('[data-rival]'), function(b){
+      b.addEventListener('click', function(){ startRivalMatch(b.getAttribute('data-rival')); });
+    });
+    el.catpick.hidden = true;
+    el.stageselect.hidden = true;
+    pick.hidden = false;
+    pick.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+
+  function startRivalMatch(key){
+    var rv = rivalByKey(key), b = buckets(), q = [];
+    function take(list, n){ for(var i = 0; i < n && i < list.length; i++) q.push(list[i]); }
+    take(b[1], 2); take(b[2], 3); take(b[3], 2);
+    if(q.length < 7){
+      WORDS.forEach(function(x){ if(q.length < 7 && q.indexOf(x) === -1) q.push(x); });
+    }
+    S.mode = 'rival'; S.rival = rv;
+    S.rw = 0; S.rl = 0; S.qi = 0; S.score = 0; S.combo = 0; S.results = []; S.endedRun = false;
+    S.roundTime = 30;
+    S.queue = q;
+    $('rivalpick').hidden = true;
+    startRound();
+  }
+
+  function stopRival(){ if(S.rivalIv){ clearInterval(S.rivalIv); S.rivalIv = null; } }
+
+  /* Plan one race: how long the rival needs, and when each of its letters lands. */
+  function startRival(){
+    var r = S.round, rv = S.rival, len = r.word.length;
+    var base = 3.5 + len * 1.1 + r.d * 1.8;
+    var total = Math.min(26, Math.max(4, base / rv.skill * (0.8 + Math.random() * 0.45)));
+    var weights = [], sum = 0, i;
+    for(i = 0; i < len; i++){ var w = 0.5 + Math.random(); weights.push(w); sum += w; }
+    var times = [], acc = 0;
+    for(i = 0; i < len; i++){ acc += weights[i]; times.push(total * acc / sum); }
+    var pips = $('rivalPips');
+    pips.innerHTML = new Array(len + 1).join('<i></i>');
+    $('rivalName').textContent = rv.name;
+    $('rivalState').textContent = 'unscrambling\u2026';
+    var lit = 0, elapsed = 0, last = Date.now();
+    S.rivalIv = setInterval(function(){
+      var now = Date.now();
+      elapsed += Math.min(0.5, (now - last) / 1000);   // a backgrounded tab pauses the rival too
+      last = now;
+      if(S.locked){ stopRival(); return; }
+      while(lit < len && times[lit] <= elapsed){ pips.children[lit].className = 'on'; lit++; }
+      if(lit >= len){ stopRival(); rivalRound(false, 'rival'); }
+    }, 200);
+  }
+
+  function rivalRound(won, reason){
+    if(S.locked) return;
+    stopTimer(); stopRival();
+    S.locked = true;
+    var r = S.round, rv = S.rival;
+    if(won){
+      Snd.solve();
+      S.rw++;
+      el.board.classList.add('solved');
+      revealInExample(r, true);
+      el.feedback.textContent = 'You got it first. Round to you.';
+      el.feedback.className = 'feedback good';
+      $('rivalState').textContent = 'beaten';
+    } else {
+      Snd.wrong();
+      S.rl++;
+      var open = r.tiles.filter(function(t){ return !t.placed; });
+      for(var i = 0; i < r.answer.length; i++){
+        if(r.answer[i] === null){ var t = open.shift(); if(t){ r.answer[i] = t.id; t.placed = true; } }
+      }
+      render();
+      revealInExample(r, false);
+      var pips = $('rivalPips').children;
+      if(reason === 'rival') for(var k = 0; k < pips.length; k++) pips[k].className = 'on';
+      el.feedback.textContent = (reason === 'rival' ? rv.name + ' got it first' : reason === 'time' ? 'Time up' : 'You gave that one to ' + rv.name) + ' \u2014 it was ' + r.word + '.';
+      el.feedback.className = 'feedback bad';
+      $('rivalState').textContent = reason === 'rival' ? 'got it' : '';
+    }
+    markSeen(r.word);
+    S.results.push({ w:r.word, got:won });
+    updateBar();
+    queueNext();
+  }
+
+  function finishRival(){
+    var rv = S.rival, won = S.rw > S.rl;
+    var rec = rivalRecord(), x = rec[rv.key] || { w:0, l:0 };
+    if(won) x.w++; else x.l++;
+    rec[rv.key] = x;
+    store('ns.rivals', rec);
+
+    var grid = S.results.map(function(y){ return '<i class="' + (y.got ? 'got' : '') + '"></i>'; }).join('');
+    var rows = S.results.map(function(y){
+      return '<li><span>' + y.w + '</span><span class="' + (y.got ? 'pts' : 'miss') + '">' + (y.got ? 'You' : rv.name) + '</span></li>';
+    }).join('');
+    var share = 'Naija Scramble ' + FLAG + ' vs ' + rv.name + ' (computer)\n' +
+                (won ? 'Won ' : 'Lost ') + S.rw + '\u2013' + S.rl + '\n' +
+                gridText(S.results) + '\n' + SHARE_URL;
+    el.over.innerHTML =
+      '<div class="endscreen">' +
+        '<span class="label">' + (won ? 'You beat ' + rv.name : rv.name + ' took this one') + '</span>' +
+        '<div class="bigscore">' + S.rw + '\u2013' + S.rl + '<small>first to ' + RIVAL_WINS + ' &middot; your record vs ' + rv.name + ' ' + x.w + '\u2013' + x.l + '</small></div>' +
+        '<div class="result-grid" aria-hidden="true">' + grid + '</div>' +
+        '<ul class="scorelist">' + rows + '</ul>' +
+        '<pre class="share-card" id="shareText">' + share + '</pre>' +
+        '<p class="lb-hint">Practice mode &mdash; rival matches don&rsquo;t count towards the leaderboard or the weekly prize.</p>' +
+        '<div class="endactions">' +
+          '<button class="cta" id="copyBtn" type="button">Copy result</button>' +
+          '<button class="ghost" id="rematchBtn" type="button">Rematch</button>' +
+          '<button class="ghost" id="otherRivalBtn" type="button">Another rival</button>' +
+          '<button class="ghost" id="menuBtn" type="button">Back to modes</button>' +
+        '</div>' +
+      '</div>';
+    wireEnd(share);
+    $('rematchBtn').addEventListener('click', function(){ startRivalMatch(rv.key); });
+    $('otherRivalBtn').addEventListener('click', function(){ renderRivalPick(); });
+    show('over');
+  }
 
   /* ---------- Word Coach (AI via Cloudflare Worker; only a word, its category and hint are sent) ---------- */
   var COACH_URL = 'https://word-coach.betterdays-goalhub.workers.dev/';
@@ -1242,6 +1424,7 @@
     if(mb) mb.addEventListener('click', function(){
       el.catpick.hidden = true;
       el.stageselect.hidden = true;
+      $('rivalpick').hidden = true;
       S.combo = 0;
       show('menu');
     });
@@ -1257,7 +1440,7 @@
   }
 
   /* ---------- boot ---------- */
-  Array.prototype.forEach.call(document.querySelectorAll('.mode-card'), function(card){
+  Array.prototype.forEach.call(document.querySelectorAll('.mode-card[data-mode]'), function(card){
     card.addEventListener('click', function(){
       if(WORDS.length) chooseMode(card.getAttribute('data-mode'));
     });

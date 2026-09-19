@@ -695,3 +695,19 @@ footer .wrap{
 .coach p{margin:0;font-family:"Newsreader",Georgia,serif;font-size:1.02rem;line-height:1.5;max-width:60ch}
 .coach em{font-style:italic;color:var(--ink-soft)}
 .endscreen .coach{text-align:left}
+
+/* ---- Rival mode (computer opponent) ---- */
+.mode-card.wide{grid-column:1/-1}
+@media (min-width:560px){.mode-card.wide{flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:6px 18px}.mode-card.wide p{flex:1 1 320px}}
+.rivals{display:grid;gap:14px;margin-top:14px;grid-template-columns:1fr}
+@media (min-width:640px){.rivals{grid-template-columns:repeat(3,1fr)}}
+.mode-card .rec{margin-top:auto;font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.06em;color:var(--ink-soft)}
+.rnote{margin-top:16px;font-family:"IBM Plex Mono",monospace;font-size:.74rem;line-height:1.6;color:var(--ink-soft);max-width:64ch}
+.rivalbar{display:flex;align-items:center;gap:12px;margin:14px 0 4px;font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+.rivalbar[hidden]{display:none}
+.rivalbar .rname{color:var(--clay);font-weight:600;white-space:nowrap}
+.rivalbar .pips{flex:1;display:flex;gap:5px;min-width:0}
+.rivalbar .pips i{flex:1;height:8px;border-radius:99px;background:color-mix(in srgb,var(--ink) 12%,transparent);transition:background .25s ease}
+.rivalbar .pips i.on{background:var(--clay)}
+.rivalbar .rstate{min-width:9ch;text-align:right;white-space:nowrap;text-transform:none;letter-spacing:.04em}
+.board.vs #reveal,.board.vs #aiHint{display:none}
