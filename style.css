@@ -73,8 +73,9 @@ a{color:inherit}
 .masthead{border-bottom:1px solid var(--line)}
 .masthead .wrap{display:flex;align-items:center;justify-content:space-between;padding-top:18px;padding-bottom:18px}
 .mark{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:.02em;display:flex;gap:.5ch;text-decoration:none}
-.mark span:nth-child(3n){transform:translateY(-2px)}
-.mark span:nth-child(4n){transform:translateY(2px);color:var(--green)}
+.mark span{position:relative}
+.mark span:nth-child(3n){top:-2px}
+.mark span:nth-child(4n){top:2px;color:var(--green)}
 .mark .a2{color:var(--clay)}
 .nav{display:flex;align-items:center;gap:22px;font-family:"IBM Plex Mono",monospace;font-size:.78rem;text-transform:uppercase;letter-spacing:.12em}
 .nav a{text-decoration:none;color:var(--ink-soft)}
@@ -448,7 +449,10 @@ body::before{
 /* ---- masthead: floating glass capsule ---- */
 .masthead{border-bottom:0;padding:12px 12px 0}
 .masthead .wrap{
-  max-width:1060px;padding:9px 12px 9px 22px;border-radius:999px;
+  position:relative;max-width:1060px;padding:9px 12px 9px 22px;border-radius:999px;
+}
+.masthead .wrap::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;border-radius:inherit;
   background:var(--glass-bg);border:1px solid var(--glass-line);
   box-shadow:var(--glass-rim),var(--glass-drop);
   -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
