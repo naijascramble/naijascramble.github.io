@@ -671,3 +671,14 @@ footer .wrap{
   .tile .val{font-size:.7rem;right:6px;bottom:4px}
   .slots{min-height:0}
 }
+
+/* ---- Marathon "play & earn" callout ---- */
+.mode-card .earn{
+  margin-top:auto;padding:10px 12px;border-radius:16px;
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;line-height:1.5;letter-spacing:.02em;color:var(--ink);
+  background:linear-gradient(140deg,color-mix(in srgb,var(--green) 22%,rgba(255,255,255,.5)),color-mix(in srgb,var(--green) 8%,rgba(255,255,255,.15)));
+  border:1px solid color-mix(in srgb,var(--green) 40%,transparent);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55);
+}
+.mode-card .earn b{display:block;font-weight:600;text-transform:uppercase;letter-spacing:.14em;font-size:.66rem;color:var(--green);margin-bottom:2px}
+.mode-card.featured{border-color:color-mix(in srgb,var(--green) 55%,var(--glass-line));box-shadow:var(--glass-rim),0 18px 40px -16px color-mix(in srgb,var(--green) 55%,transparent),var(--glass-drop)}
