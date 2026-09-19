@@ -26,7 +26,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
-<link rel="stylesheet" href="style.css?v=14">
+<link rel="stylesheet" href="style.css?v=15">
 </head>
 <body>
 
@@ -111,12 +111,15 @@
           <button class="ghost" id="shuffle" type="button">Shuffle</button>
           <button class="ghost" id="clear" type="button">Clear</button>
           <button class="ghost reveal" id="reveal" type="button">Reveal &minus;4</button>
+          <button class="ghost reveal" id="aiHint" type="button">Pidgin hint &minus;4</button>
           <button class="ghost" id="skip" type="button">Give up</button>
           <span class="tally" id="tally"></span>
         </div>
         <p class="feedback" id="feedback" role="status">Tap a tile or use your keyboard.</p>
+        <div class="coach" id="coach" role="status" aria-live="polite" hidden></div>
         <div class="roundnext" id="roundnext">
           <button class="cta" id="nextBtn" type="button">Next word</button>
+          <button class="ghost coach-btn" id="coachBtn" type="button">Ask the Word Coach</button>
         </div>
       </div>
     </section>
@@ -562,6 +565,7 @@
     el.board.classList.remove('solved');
     el.roundnext.classList.remove('show');
     $('reveal').disabled = false;
+    resetCoach();
 
     updateBar();
     render();
@@ -728,6 +732,8 @@
     el.nextBtn.textContent = (last || atEnd)
       ? (S.mode === 'stages' ? 'Stage result' : 'See score')
       : 'Next word';
+    hideCoach();
+    hintBtn.disabled = true;
     el.roundnext.classList.add('show');
   }
 
@@ -942,6 +948,91 @@
     }
   });
 
+  /* ---------- Word Coach (AI via Cloudflare Worker; only a word, its category and hint are sent) ---------- */
+  var COACH_URL = 'https://word-coach.betterdays-goalhub.workers.dev/';
+  var HINT_LABEL = 'Pidgin hint −' + REVEAL_COST;
+  var coachBox = $('coach'), hintBtn = $('aiHint'), coachBtn = $('coachBtn'), coachBusy = false;
+
+  function askCoach(mode, r){
+    var ctl = typeof AbortController === 'function' ? new AbortController() : null;
+    var timer = setTimeout(function(){ if(ctl) ctl.abort(); }, 10000);
+    return fetch(COACH_URL, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      body:JSON.stringify({ mode:mode, word:r.word, cat:r.cat, hint:r.hint }),
+      signal:ctl ? ctl.signal : undefined
+    }).then(function(res){ return res.json(); })
+      .then(function(j){ clearTimeout(timer); return (j && j.ok && j.reply) ? String(j.reply) : null; })
+      .catch(function(){ clearTimeout(timer); return null; });
+  }
+
+  function coachHTML(s){
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/\*([^*\n]+)\*/g, '<em>$1</em>').replace(/\n+/g, '<br>');
+  }
+  function showCoach(label, text){
+    coachBox.innerHTML = '<span class="label">' + label + '</span><p>' + coachHTML(text) + '</p>';
+    coachBox.hidden = false;
+  }
+  function hideCoach(){ coachBox.hidden = true; coachBox.innerHTML = ''; }
+  function resetCoach(){
+    coachBusy = false;
+    hideCoach();
+    hintBtn.disabled = false;
+    hintBtn.textContent = HINT_LABEL;
+    coachBtn.disabled = false;
+    coachBtn.textContent = 'Ask the Word Coach';
+  }
+
+  hintBtn.addEventListener('click', function(){
+    if(S.locked || coachBusy) return;
+    var r = S.round;
+    if(r.aiHint){ showCoach('Pidgin hint', r.aiHint); return; }
+    coachBusy = true;
+    hintBtn.disabled = true;
+    hintBtn.textContent = 'Coach dey think…';
+    askCoach('hint', r).then(function(reply){
+      coachBusy = false;
+      if(S.round !== r || S.locked) return;   // moved on while waiting: no charge
+      hintBtn.disabled = false;
+      if(!reply){
+        hintBtn.textContent = HINT_LABEL;
+        el.feedback.textContent = 'The Coach no gree talk. No points lost — try Reveal.';
+        el.feedback.className = 'feedback bad';
+        return;
+      }
+      r.aiHint = reply;
+      r.reveals++;                            // counts like a Reveal: same cost, same Daily record
+      if(S.mode === 'daily') updateBar();
+      hintBtn.textContent = 'Show hint again';
+      showCoach('Pidgin hint', reply);
+      el.feedback.textContent = 'Hint used. That is ' + (r.reveals * REVEAL_COST) + ' off this word.';
+      el.feedback.className = 'feedback';
+    });
+  });
+
+  coachBtn.addEventListener('click', function(){
+    if(coachBusy || !S.round) return;
+    var r = S.round;
+    if(r.aiExplain){ showCoach('Word Coach · ' + r.word, r.aiExplain); return; }
+    coachBusy = true;
+    coachBtn.disabled = true;
+    coachBtn.textContent = 'Coach dey explain…';
+    askCoach('explain', r).then(function(reply){
+      coachBusy = false;
+      if(S.round !== r) return;
+      coachBtn.disabled = false;
+      if(!reply){
+        coachBtn.textContent = 'Ask the Word Coach';
+        showCoach('Word Coach', 'The Coach is not available right now. Try again in a minute.');
+        return;
+      }
+      r.aiExplain = reply;
+      coachBtn.textContent = 'Show explanation again';
+      showCoach('Word Coach · ' + r.word, reply);
+    });
+  });
+
   $('shuffle').addEventListener('click', function(){
     if(S.locked) return;
     shuffle(S.round.order);
@@ -1077,6 +1168,7 @@
   }
 
   function finishDaily(rec, already){
+    var dailyRound = (!already && S.round) ? S.round : null;
     var st = load('ns.streak') || { n:0 };
     var share = 'Naija Scramble ' + FLAG + ' Daily\n' +
                 fmtScore(rec.score) + ' pts · ' +
@@ -1092,11 +1184,27 @@
         '<pre class="share-card" id="shareText">' + share + '</pre>' +
         '<div class="endactions">' +
           '<button class="cta" id="copyBtn" type="button">Copy result</button>' +
+          (dailyRound ? '<button class="ghost" id="dailyCoachBtn" type="button">Ask the Word Coach</button>' : '') +
           '<button class="ghost" id="menuBtn" type="button">Back to modes</button>' +
         '</div>' +
+        '<div class="coach" id="dailyCoach" role="status" aria-live="polite" hidden></div>' +
         '<p class="ex" style="text-align:center;margin-top:20px">Come back tomorrow for a new word.</p>' +
       '</div>';
     wireEnd(share);
+    var dcb = $('dailyCoachBtn');
+    if(dcb) dcb.addEventListener('click', function(){
+      var box = $('dailyCoach');
+      if(dailyRound.aiExplain){ box.innerHTML = '<span class="label">Word Coach &middot; ' + dailyRound.word + '</span><p>' + coachHTML(dailyRound.aiExplain) + '</p>'; box.hidden = false; return; }
+      dcb.disabled = true; dcb.textContent = 'Coach dey explain\u2026';
+      askCoach('explain', dailyRound).then(function(reply){
+        dcb.disabled = false;
+        dcb.textContent = 'Ask the Word Coach';
+        if(reply) dailyRound.aiExplain = reply;
+        box.innerHTML = '<span class="label">Word Coach' + (reply ? ' &middot; ' + dailyRound.word : '') + '</span><p>' +
+          coachHTML(reply || 'The Coach is not available right now. Try again in a minute.') + '</p>';
+        box.hidden = false;
+      });
+    });
     show('over');
   }
 
