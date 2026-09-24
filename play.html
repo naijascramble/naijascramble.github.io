@@ -28,6 +28,55 @@
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
 <link rel="stylesheet" href="style.css?v=19">
+<style>
+  /* WhatsApp button & Slang Card styling */
+  .wa-btn {
+    background-color: #25D366 !important;
+    color: #ffffff !important;
+    border-color: #25D366 !important;
+    font-weight: 700 !important;
+    display: inline-flex !important;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    text-decoration: none;
+  }
+  .wa-btn:hover {
+    background-color: #1ebd56 !important;
+    border-color: #1ebd56 !important;
+  }
+  .daily-slang-card {
+    background: #ffffff;
+    border: 1.5px dashed #d4a373;
+    border-radius: 12px;
+    padding: 14px 16px;
+    margin: 16px 0;
+    text-align: left;
+  }
+  .daily-slang-card .dsc-badge {
+    display: inline-block;
+    font-size: 0.72rem;
+    font-weight: 800;
+    text-transform: uppercase;
+    background: #e6f4ea;
+    color: #0b7a3b;
+    padding: 3px 8px;
+    border-radius: 6px;
+    margin-bottom: 6px;
+  }
+  .daily-slang-card .dsc-word {
+    font-size: 1.35rem;
+    font-weight: 800;
+    letter-spacing: 0.8px;
+    margin-bottom: 4px;
+    color: #1f2937;
+  }
+  .daily-slang-card .dsc-hint {
+    font-size: 0.95rem;
+    color: #4b5563;
+    line-height: 1.4;
+  }
+</style>
 </head>
 <body>
 
@@ -121,7 +170,7 @@
         <div class="slots" id="slots" aria-label="Your word"></div>
         <div class="pool" id="pool" aria-label="Letter pool"></div>
         <div class="controls">
-          <button class="ghost" id="shuffle" type="button">Shuffle</button>
+          <button class="ghost" id="shuffle" type="button" title="Shortcut: Spacebar">Shuffle</button>
           <button class="ghost" id="clear" type="button">Clear</button>
           <button class="ghost reveal" id="reveal" type="button">Reveal &minus;4</button>
           <button class="ghost reveal" id="aiHint" type="button">Pidgin hint &minus;4</button>
@@ -161,31 +210,13 @@
 (function(){
   "use strict";
 
-  /* ============================================================
-     WORD SOURCE
-     ------------------------------------------------------------
-     SHEET_URL points at a published Google Sheet, read as CSV.
-     The sheet is "Naija Scramble Words" — tab "Words", columns:
-       w | cat | d | hint | ex | alt | status
-     Only rows with status = live are used. "alt" is other
-     accepted spellings, "|"-separated.
-
-     To use a different sheet: share it "Anyone with the link
-     (Viewer)", then set SHEET_URL to
-       https://docs.google.com/spreadsheets/d/<ID>/gviz/tq?tqx=out:csv&gid=<TAB_GID>
-     Set it to "" to run purely off the bundled words.js.
-     Edits in the sheet show up in the game within a few minutes.
-     If the sheet is unreachable or returns junk, the game falls
-     back to words.js automatically.
-     ============================================================ */
   var SHEET_URL = "https://docs.google.com/spreadsheets/d/1fFDew_yrq99BmdX82gqcoK-an5onREF7wHw5O2qUSyY/gviz/tq?tqx=out:csv&gid=0";
-  var SHEET_TIMEOUT = 5000;   // ms before we give up and use words.js
-  var MIN_LIVE_WORDS = 20;    // ignore a sheet that returns fewer than this
+  var SHEET_TIMEOUT = 5000;
+  var MIN_LIVE_WORDS = 20;
 
-  // Leaderboard: Marathon scores POST to a Google Form (see leaderboard.html for the read side).
   var LB_ENDPOINT = "https://docs.google.com/forms/d/e/1FAIpQLSeB5DXA9qbex4X3ZrcwchzudeAjzAR16_6x8dV_SiqwXu6WmQ/formResponse";
   var LB_FIELD = { name: "entry.240726504", score: "entry.1980824040", mode: "entry.1453484304", words: "entry.1506908293", secs: "entry.1143495746" };
-  var SCORE_CAP = 25000;   // runs above this can't be posted; leaderboard.html also drops them
+  var SCORE_CAP = 25000;
 
   var VAL = {A:1,B:3,C:3,D:2,E:1,F:4,G:2,H:4,I:1,J:8,K:5,L:1,M:3,N:1,O:1,P:3,Q:10,R:1,S:1,T:1,U:1,V:4,W:4,X:8,Y:4,Z:10};
   var ROUND_TIME = 30, REVEAL_COST = 4, COMBO = [1,1.2,1.5,2,2.5];
@@ -476,13 +507,13 @@
 
   var WORDS = normalize(window.NS_WORDS || []);
 
-  /* ---------- freshness: don't repeat a word until its pool is used up ---------- */
+  /* ---------- freshness ---------- */
   function seenSet(){ var a = load('ns.seen'); return Array.isArray(a) ? a : []; }
   function markSeen(w){
     if(S.mode === 'daily') return;
     var a = seenSet();
     if(a.indexOf(w) === -1) a.push(w);
-    if(a.length >= WORDS.length) a = [];   // whole bank cycled — start fresh
+    if(a.length >= WORDS.length) a = [];
     store('ns.seen', a);
   }
   function freshFirst(pool){
@@ -576,7 +607,7 @@
     el.ex.classList.remove('reveal-word');
     stopTally();
     el.tally.textContent = '';
-    el.feedback.textContent = 'Tap a tile or use your keyboard.';
+    el.feedback.textContent = 'Tap a tile, type, or press Space to shuffle.';
     el.feedback.className = 'feedback';
     el.board.classList.remove('solved');
     el.roundnext.classList.remove('show');
@@ -667,13 +698,32 @@
     var a = S.round.answer;
     for(var i = a.length - 1; i >= 0; i--){ if(a[i] !== null){ pull(i); return; } }
   }
+
+  // Keyboard support: Type letters, Backspace to delete, Spacebar to shuffle
   document.addEventListener('keydown', function(e){
     if(S.screen !== 'game') return;
     if(e.metaKey || e.ctrlKey || e.altKey) return;
     var k = e.key;
-    if(/^[a-zA-Z]$/.test(k)){ typeLetter(k.toUpperCase()); e.preventDefault(); }
-    else if(k === 'Backspace'){ backspace(); e.preventDefault(); }
-    else if(k === 'Enter' && el.roundnext.classList.contains('show')){ nextRound(); e.preventDefault(); }
+    if(/^[a-zA-Z]$/.test(k)){
+      typeLetter(k.toUpperCase());
+      e.preventDefault();
+    } else if(k === 'Backspace'){
+      backspace();
+      e.preventDefault();
+    } else if(k === ' ' || e.code === 'Space'){
+      // Spacebar shuffles the remaining pool
+      if(!S.locked && S.round){
+        shuffle(S.round.order);
+        render();
+        el.feedback.textContent = 'Shuffled.';
+        el.feedback.className = 'feedback';
+        if(SOUND.on) Snd.pull();
+      }
+      e.preventDefault();
+    } else if(k === 'Enter' && el.roundnext.classList.contains('show')){
+      nextRound();
+      e.preventDefault();
+    }
   });
 
   function check(){
@@ -939,8 +989,8 @@
     }
 
     var share = champion
-      ? 'Naija Scramble ' + FLAG + ' Stages\nAll 3 stages cleared · ' + fmtScore(S.score) + ' pts\n' + SHARE_URL
-      : 'Naija Scramble ' + FLAG + ' ' + sd.name + ' stage\n' + solved + '/' + sd.count + (cleared ? ' · cleared' : ' · missed') + '\n' + gridText(S.results) + '\n' + SHARE_URL;
+      ? 'Naija Scramble ' + FLAG + ' Stages\nAll 3 stages cleared · ' + fmtScore(S.score) + ' pts\nhttps://' + SHARE_URL
+      : 'Naija Scramble ' + FLAG + ' ' + sd.name + ' stage\n' + solved + '/' + sd.count + (cleared ? ' · cleared' : ' · missed') + '\n' + gridText(S.results) + '\nhttps://' + SHARE_URL;
 
     var actions = '';
     if(cleared && !champion){
@@ -948,6 +998,7 @@
     } else if(!cleared){
       actions += '<button class="cta" id="retryStageBtn" type="button">Retry ' + sd.name + '</button>';
     } else {
+      actions += '<button class="cta wa-btn" id="waBtn" type="button">Share on WhatsApp 💬</button>';
       actions += '<button class="cta" id="copyBtn" type="button">Copy result</button>';
     }
     actions += '<button class="ghost" id="stagesBtn" type="button">All stages</button>';
@@ -962,7 +1013,10 @@
         '<div class="endactions">' + actions + '</div>' +
       '</div>';
 
-    if(cleared) wireCopy(share);
+    if(cleared){
+      wireCopy(share);
+      var wb = $('waBtn'); if(wb) wb.addEventListener('click', function(){ openWhatsApp(share); });
+    }
     var nb = $('nextStageBtn'); if(nb) nb.addEventListener('click', function(){ startStage(S.stageIdx + 1, true); });
     var rb = $('retryStageBtn'); if(rb) rb.addEventListener('click', function(){ startStage(S.stageIdx, true); });
     $('stagesBtn').addEventListener('click', function(){ S.combo = 0; chooseMode('stages'); });
@@ -989,7 +1043,7 @@
     }
   });
 
-  /* ---------- Rival mode: a computer opponent on a timer (no AI, never touches the leaderboard or prize) ---------- */
+  /* ---------- Rival mode ---------- */
   var RIVALS = [
     { key:'tunde', name:'Tunde', tag:'Easy',   blurb:'Still learning the ropes. Good for a warm-up.', skill:0.7 },
     { key:'amaka', name:'Amaka', tag:'Medium', blurb:'Sharp and steady. Keeps you honest.',           skill:1.0 },
@@ -1041,7 +1095,6 @@
 
   function stopRival(){ if(S.rivalIv){ clearInterval(S.rivalIv); S.rivalIv = null; } }
 
-  /* Plan one race: how long the rival needs, and when each of its letters lands. */
   function startRival(){
     var r = S.round, rv = S.rival, len = r.word.length;
     var base = 3.5 + len * 1.1 + r.d * 1.8;
@@ -1057,7 +1110,7 @@
     var lit = 0, elapsed = 0, last = Date.now();
     S.rivalIv = setInterval(function(){
       var now = Date.now();
-      elapsed += Math.min(0.5, (now - last) / 1000);   // a backgrounded tab pauses the rival too
+      elapsed += Math.min(0.5, (now - last) / 1000);
       last = now;
       if(S.locked){ stopRival(); return; }
       while(lit < len && times[lit] <= elapsed){ pips.children[lit].className = 'on'; lit++; }
@@ -1112,7 +1165,7 @@
     }).join('');
     var share = 'Naija Scramble ' + FLAG + ' vs ' + rv.name + ' (computer)\n' +
                 (won ? 'Won ' : 'Lost ') + S.rw + '\u2013' + S.rl + '\n' +
-                gridText(S.results) + '\n' + SHARE_URL;
+                gridText(S.results) + '\nhttps://' + SHARE_URL;
     el.over.innerHTML =
       '<div class="endscreen">' +
         '<span class="label">' + (won ? 'You beat ' + rv.name : rv.name + ' took this one') + '</span>' +
@@ -1122,6 +1175,7 @@
         '<pre class="share-card" id="shareText">' + share + '</pre>' +
         '<p class="lb-hint">Practice mode &mdash; rival matches don&rsquo;t count towards the leaderboard or the weekly prize.</p>' +
         '<div class="endactions">' +
+          '<button class="cta wa-btn" id="waBtn" type="button">Share on WhatsApp 💬</button>' +
           '<button class="cta" id="copyBtn" type="button">Copy result</button>' +
           '<button class="ghost" id="rematchBtn" type="button">Rematch</button>' +
           '<button class="ghost" id="otherRivalBtn" type="button">Another rival</button>' +
@@ -1134,9 +1188,7 @@
     show('over');
   }
 
-  /* ---------- Friend challenges: a link that carries the words and the score to beat ----------
-     Nothing is stored on a server. The link holds the score, the word order and a name the sender typed.
-     Everything read back from a link is untrusted: strict pattern, sanitised name, capped score. */
+  /* ---------- Challenges ---------- */
   var CH_MAX_SCORE = 1500;
   function chEsc(v){ return String(v).replace(/[&<>"']/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]; }); }
   function chSanitizeName(v){
@@ -1196,7 +1248,7 @@
       store('ns.chname', name);
       var url = 'https://' + SHARE_URL + '/play?c=' + score + '.' + words.join('-') + '&n=' + encodeURIComponent(name) + '&k=' + encodeURIComponent(cat) + '&utm_source=challenge&utm_medium=whatsapp';
       var msg = name + ' scored ' + score + ' on ' + words.length + ' ' + cat + ' words in Naija Scramble ' + FLAG + '. Think you can beat it? ' + url;
-      function viaWhatsApp(){ window.open('https://wa.me/?text=' + encodeURIComponent(msg), '_blank', 'noopener'); }
+      function viaWhatsApp(){ window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(msg), '_blank', 'noopener'); }
       if(navigator.share){
         navigator.share({ text: msg }).catch(function(e){ if(!e || e.name !== 'AbortError') viaWhatsApp(); });
       } else {
@@ -1205,7 +1257,7 @@
     });
   }
 
-  /* ---------- Word Coach (AI via Cloudflare Worker; only a word, its category and hint are sent) ---------- */
+  /* ---------- Word Coach ---------- */
   var COACH_URL = 'https://word-coach.betterdays-goalhub.workers.dev/';
   var HINT_LABEL = 'Pidgin hint −' + REVEAL_COST;
   var coachBox = $('coach'), hintBtn = $('aiHint'), coachBtn = $('coachBtn'), coachBusy = false;
@@ -1250,7 +1302,7 @@
     hintBtn.textContent = 'Coach dey think…';
     askCoach('hint', r).then(function(reply){
       coachBusy = false;
-      if(S.round !== r || S.locked) return;   // moved on while waiting: no charge
+      if(S.round !== r || S.locked) return;
       hintBtn.disabled = false;
       if(!reply){
         hintBtn.textContent = HINT_LABEL;
@@ -1259,7 +1311,7 @@
         return;
       }
       r.aiHint = reply;
-      r.reveals++;                            // counts like a Reveal: same cost, same Daily record
+      r.reveals++;
       if(S.mode === 'daily') updateBar();
       hintBtn.textContent = 'Show hint again';
       showCoach('Pidgin hint', reply);
@@ -1319,6 +1371,10 @@
     return out.join('\n');
   }
 
+  function openWhatsApp(text){
+    window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(text), '_blank', 'noopener');
+  }
+
   /* ---------- end screens ---------- */
   function finish(){
     if(S.mode === 'daily'){
@@ -1369,7 +1425,7 @@
     var share = 'Naija Scramble ' + FLAG + ' ' + (S.mode === 'marathon' ? 'Marathon' : S.cat) + '\n' +
                 fmtScore(S.score) + ' pts · ' + solved + (S.mode === 'marathon' ? ' words' : '/' + S.queue.length) + '\n' +
                 (S.challenge ? 'vs ' + S.challenge.name + ' (' + S.challenge.score + ')\n' : '') +
-                gridText(S.results) + '\n' + SHARE_URL;
+                gridText(S.results) + '\nhttps://' + SHARE_URL;
 
     var chBlock = '';
     if(S.mode === 'category' && chWords().length >= 3){
@@ -1410,6 +1466,7 @@
         lbBlock +
         chBlock +
         '<div class="endactions">' +
+          '<button class="cta wa-btn" id="waBtn" type="button">Share on WhatsApp 💬</button>' +
           '<button class="' + (chBlock ? 'ghost' : 'cta') + '" id="copyBtn" type="button">Copy result</button>' +
           '<button class="ghost" id="menuBtn" type="button">Back to modes</button>' +
         '</div>' +
@@ -1433,7 +1490,6 @@
       body.append(LB_FIELD.name, nm);
       body.append(LB_FIELD.score, String(S.score));
       body.append(LB_FIELD.mode, 'Marathon');
-      // run details let the sheet flag scores that are impossible for the words solved / time taken
       var solvedN = S.results.filter(function(x){ return x.got; }).length;
       var runSecs = Math.max(1, Math.round(((S.runEnd || Date.now()) - (S.runStart || Date.now())) / 1000));
       body.append(LB_FIELD.words, String(solvedN));
@@ -1452,21 +1508,35 @@
   }
 
   function finishDaily(rec, already){
-    var dailyRound = (!already && S.round) ? S.round : null;
+    var key = dayKey();
+    var rnd = mulberry32(key);
+    var dWord = WORDS[Math.floor(rnd() * WORDS.length)] || S.round;
+    var dailyRound = (!already && S.round) ? S.round : (dWord ? { word: dWord.w, cat: dWord.cat, hint: dWord.hint } : null);
     var st = load('ns.streak') || { n:0 };
     var share = 'Naija Scramble ' + FLAG + ' Daily\n' +
                 fmtScore(rec.score) + ' pts · ' +
                 (rec.solved
                   ? (rec.reveals ? rec.reveals + ' reveal' + (rec.reveals === 1 ? '' : 's') : 'no reveals')
                   : 'missed') +
-                (st.n ? ' · ' + st.n + '-day streak' : '') + '\n' + SHARE_URL;
+                (st.n ? ' · ' + st.n + '-day streak' : '') + '\nhttps://' + SHARE_URL;
+
+    var slangCard = dWord ? (
+      '<div class="daily-slang-card">' +
+        '<span class="dsc-badge">' + (dWord.cat || 'Naija') + '</span>' +
+        '<h4 class="dsc-word">' + (dWord.w || dWord.word) + '</h4>' +
+        '<p class="dsc-hint">' + (dWord.hint || '') + '</p>' +
+      '</div>'
+    ) : '';
+
     el.over.innerHTML =
       '<div class="endscreen">' +
         '<span class="label">' + (already ? 'Already played today' : 'Daily done') + '</span>' +
         '<div class="bigscore">' + rec.score + '<small>' + (rec.reveals) + ' reveal' + (rec.reveals === 1 ? '' : 's') +
           ' · ' + (st.n || 1) + '-day streak</small></div>' +
+        slangCard +
         '<pre class="share-card" id="shareText">' + share + '</pre>' +
         '<div class="endactions">' +
+          '<button class="cta wa-btn" id="waBtn" type="button">Share on WhatsApp 💬</button>' +
           '<button class="cta" id="copyBtn" type="button">Copy result</button>' +
           (dailyRound ? '<button class="ghost" id="dailyCoachBtn" type="button">Ask the Word Coach</button>' : '') +
           '<button class="ghost" id="menuBtn" type="button">Back to modes</button>' +
@@ -1476,7 +1546,7 @@
       '</div>';
     wireEnd(share);
     var dcb = $('dailyCoachBtn');
-    if(dcb) dcb.addEventListener('click', function(){
+    if(dcb && dailyRound) dcb.addEventListener('click', function(){
       var box = $('dailyCoach');
       if(dailyRound.aiExplain){ box.innerHTML = '<span class="label">Word Coach &middot; ' + dailyRound.word + '</span><p>' + coachHTML(dailyRound.aiExplain) + '</p>'; box.hidden = false; return; }
       dcb.disabled = true; dcb.textContent = 'Coach dey explain\u2026';
@@ -1513,8 +1583,8 @@
     btn.addEventListener('click', function(){
       if(canShare){
         navigator.share({ title: 'Naija Scramble', text: shareText }).catch(function(err){
-          if(err && err.name === 'AbortError') return;   // user closed the share sheet
-          copyFallback();                                  // no share target — copy instead
+          if(err && err.name === 'AbortError') return;
+          copyFallback();
         });
         return;
       }
@@ -1529,6 +1599,10 @@
       $('rivalpick').hidden = true;
       S.combo = 0;
       show('menu');
+    });
+    var wb = $('waBtn');
+    if(wb) wb.addEventListener('click', function(){
+      openWhatsApp(shareText);
     });
     wireCopy(shareText);
   }
@@ -1551,8 +1625,6 @@
   var pendingChallenge = readChallenge();
   if(pendingChallenge) showChallengeCard(pendingChallenge);
 
-  // Playable straight away with the bundled bank; the Sheet (if set)
-  // swaps in the live list as soon as it arrives.
   loadWords().then(function(list){
     if(list && list.length) WORDS = list;
     if(!WORDS.length){
