@@ -1,47 +1,740 @@
 /* ============================================================
-   GLOBAL 3D WOODEN SCRABBLE TILES
+   Naija Scramble — shared stylesheet for index.html + play.html
    ============================================================ */
-.tile {
-  background: #fffdf7 !important;
-  border: 2px solid #d4a373 !important;
-  border-radius: 9px !important;
-  box-shadow: 0 5px 0 #b07d4b, 0 8px 14px rgba(0, 0, 0, 0.1) !important;
-  color: #2b1f14 !important;
-  font-weight: 800 !important;
-  position: relative !important;
-  transition: transform 0.08s ease, box-shadow 0.08s ease !important;
-  cursor: pointer !important;
+
+:root{
+  --paper:#FBF6EA;
+  --paper-2:#F3EAD4;
+  --ink:#18140C;
+  --ink-soft:#5E543F;
+  --green:#0B7A3B;
+  --green-deep:#08602E;
+  --clay:#BE3A11;
+  --indigo:#20304F;
+  --indigo-ink:#EFE7D2;
+  --tile:#EFE3C4;
+  --tile-edge:#D6C4998C;
+  --line:rgba(24,20,12,.14);
+  --shadow:rgba(24,20,12,.18);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --paper:#131009;
+    --paper-2:#1D1810;
+    --ink:#F4ECD7;
+    --ink-soft:#A99C7E;
+    --green:#33A868;
+    --green-deep:#2B8B56;
+    --clay:#E6592C;
+    --indigo:#243554;
+    --indigo-ink:#EFE7D2;
+    --tile:#2A2415;
+    --tile-edge:#463D26;
+    --line:rgba(244,236,215,.16);
+    --shadow:rgba(0,0,0,.5);
+  }
+}
+:root[data-theme="dark"]{
+  --paper:#131009;
+  --paper-2:#1D1810;
+  --ink:#F4ECD7;
+  --ink-soft:#A99C7E;
+  --green:#33A868;
+  --green-deep:#2B8B56;
+  --clay:#E6592C;
+  --indigo:#243554;
+  --indigo-ink:#EFE7D2;
+  --tile:#2A2415;
+  --tile-edge:#463D26;
+  --line:rgba(244,236,215,.16);
+  --shadow:rgba(0,0,0,.5);
 }
 
-.tile:active {
-  transform: translateY(3px) !important;
-  box-shadow: 0 2px 0 #b07d4b, 0 4px 6px rgba(0, 0, 0, 0.12) !important;
+*{box-sizing:border-box;margin:0}
+[hidden]{display:none!important}
+html{-webkit-text-size-adjust:100%}
+body{
+  background:var(--paper);
+  color:var(--ink);
+  font-family:"Newsreader",Georgia,serif;
+  font-size:17px;
+  line-height:1.65;
+  -webkit-font-smoothing:antialiased;
+}
+.wrap{max-width:1060px;margin:0 auto;padding:0 24px}
+.wrap.narrow{max-width:640px}
+h1,h2,h3{font-family:"Bricolage Grotesque","Trebuchet MS",sans-serif;font-weight:800;line-height:1.04;text-wrap:balance;letter-spacing:-.01em}
+.label{font-family:"IBM Plex Mono",ui-monospace,monospace;font-size:.72rem;font-weight:500;text-transform:uppercase;letter-spacing:.16em}
+:focus-visible{outline:2px solid var(--green);outline-offset:3px;border-radius:3px}
+button{font:inherit;color:inherit;border:0;background:none;cursor:pointer}
+a{color:inherit}
+
+/* ---- masthead ---- */
+.masthead{border-bottom:1px solid var(--line)}
+.masthead .wrap{display:flex;align-items:center;justify-content:space-between;padding-top:18px;padding-bottom:18px}
+.mark{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.05rem;letter-spacing:.02em;display:flex;gap:.5ch;text-decoration:none}
+.mark span{position:relative}
+.mark span:nth-child(3n){top:-2px}
+.mark span:nth-child(4n){top:2px;color:var(--green)}
+.mark .a2{color:var(--clay)}
+.nav{display:flex;align-items:center;gap:22px;font-family:"IBM Plex Mono",monospace;font-size:.78rem;text-transform:uppercase;letter-spacing:.12em}
+.nav a{text-decoration:none;color:var(--ink-soft)}
+.nav a:hover{color:var(--ink)}
+.nav .play{color:var(--paper);background:var(--green);padding:8px 16px;border-radius:4px;letter-spacing:.1em}
+.nav .play:hover{background:var(--green-deep);color:var(--paper)}
+@media (max-width:620px){.nav a:not(.play){display:none}}
+
+.soundbtn{display:inline-flex;align-items:center;justify-content:center;width:33px;height:33px;flex-shrink:0;border:1px solid var(--line);border-radius:8px;color:var(--ink-soft);background:transparent;cursor:pointer;padding:0}
+.soundbtn:hover{color:var(--ink);border-color:var(--ink-soft)}
+.soundbtn.off{color:var(--clay);border-color:color-mix(in srgb,var(--clay) 35%,var(--line))}
+.soundbtn svg{display:block}
+
+/* ---- shared buttons ---- */
+.cta{background:var(--ink);color:var(--paper);font-family:"IBM Plex Mono",monospace;font-size:.82rem;text-transform:uppercase;letter-spacing:.12em;padding:13px 22px;border-radius:5px;text-decoration:none;display:inline-block}
+.cta:hover{background:var(--green);color:var(--paper)}
+.ghost{border:1px solid var(--line);border-radius:5px;padding:9px 15px;font-family:"IBM Plex Mono",monospace;font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-soft)}
+.ghost:hover{color:var(--ink);border-color:var(--ink-soft)}
+.ghost:disabled{opacity:.4;cursor:default}
+
+/* ---- hero (index) ---- */
+.hero{padding:64px 0 56px}
+.hero .wrap{display:grid;grid-template-columns:1fr;gap:44px}
+@media (min-width:900px){.hero .wrap{grid-template-columns:0.92fr 1.08fr;align-items:center;gap:56px}}
+.eyebrow{color:var(--clay);margin-bottom:18px}
+.hero h1{font-size:clamp(2.3rem,5.4vw,3.7rem)}
+.hero h1 em{font-style:normal;color:var(--green);font-variant-numeric:lining-nums}
+.lede{margin-top:20px;max-width:34ch;color:var(--ink-soft);font-size:1.12rem}
+.hero-cta{margin-top:28px;display:inline-flex;align-items:center;gap:14px;flex-wrap:wrap}
+.hero-cta .note{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--ink-soft)}
+
+/* ---- board (shared: hero demo + full game) ---- */
+.board{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;padding:26px 24px 22px;box-shadow:0 18px 40px -28px var(--shadow)}
+.board-top{display:flex;align-items:baseline;justify-content:space-between;gap:12px;margin-bottom:18px}
+.board-top .hint{font-size:1.02rem;color:var(--ink)}
+.board-top .hint b{font-family:"IBM Plex Mono",monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.16em;color:var(--clay);display:block;margin-bottom:3px;font-weight:500}
+.board-top .cat{color:var(--ink-soft);white-space:nowrap}
+
+.slots,.pool{display:flex;flex-wrap:wrap;gap:9px}
+.slots{margin-bottom:16px;min-height:60px}
+.slot{width:52px;height:60px;border-radius:6px;border:1.5px dashed var(--tile-edge);display:grid;place-items:center;background:transparent}
+.pool{min-height:60px;padding-top:16px;border-top:1px solid var(--line)}
+
+.tile{
+  width:52px;height:60px;border-radius:6px;
+  background:var(--tile);
+  border:1px solid var(--tile-edge);
+  box-shadow:0 3px 0 var(--tile-edge), 0 6px 12px -6px var(--shadow);
+  font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:1.5rem;
+  color:var(--ink);
+  position:relative;display:grid;place-items:center;
+  transition:transform .12s ease, box-shadow .12s ease;
+  animation:drop .34s cubic-bezier(.2,.9,.3,1.2) both;
+}
+.pool .tile:hover{transform:translateY(-3px)}
+.pool .tile:active{transform:translateY(0)}
+.tile .val{position:absolute;right:5px;bottom:3px;font-family:"IBM Plex Mono",monospace;font-size:.6rem;font-weight:600;color:var(--clay)}
+.slot .tile{animation:none;box-shadow:0 2px 0 var(--tile-edge)}
+.board.solved .slot .tile{background:var(--green);border-color:var(--green-deep);color:var(--paper);box-shadow:0 3px 0 var(--green-deep)}
+.board.solved .slot .tile .val{color:var(--paper)}
+.slots.wrong{animation:shake .4s ease}
+
+@keyframes drop{from{opacity:0;transform:translateY(-16px) rotate(-5deg)}to{opacity:1;transform:none}}
+@keyframes shake{10%,90%{transform:translateX(-2px)}30%,70%{transform:translateX(4px)}50%{transform:translateX(-5px)}}
+@keyframes pulse{0%,100%{opacity:1}50%{opacity:.45}}
+
+.controls{display:flex;align-items:center;gap:12px;margin-top:20px;flex-wrap:wrap}
+.tally{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:.9rem;font-weight:600;color:var(--green);font-variant-numeric:tabular-nums}
+.feedback{margin-top:12px;min-height:1.5em;font-family:"IBM Plex Mono",monospace;font-size:.82rem;color:var(--ink-soft)}
+.feedback.good{color:var(--green)}
+.feedback.bad{color:var(--clay)}
+
+/* ---- categories band (index, adire) ---- */
+.band{background:var(--indigo);color:var(--indigo-ink);margin-top:8px;
+  background-image:radial-gradient(rgba(239,231,210,.14) 1.5px,transparent 1.6px),
+    repeating-linear-gradient(45deg,rgba(239,231,210,.05) 0 8px,transparent 8px 16px);
+  background-size:26px 26px,auto;}
+.band .wrap{padding:52px 24px}
+.band h2{font-size:1.15rem;color:var(--indigo-ink)}
+.band .label{color:rgba(239,231,210,.6);display:block;margin-bottom:8px}
+.cats{margin-top:26px;display:grid;gap:16px;grid-template-columns:repeat(auto-fit,minmax(180px,1fr))}
+.cat-card{border:1px solid rgba(239,231,210,.22);border-radius:10px;padding:16px 16px 18px;background:rgba(19,16,9,.16)}
+.cat-card h3{font-size:1.05rem;color:var(--indigo-ink);margin-bottom:8px}
+.cat-card p{font-family:"IBM Plex Mono",monospace;font-size:.76rem;line-height:1.9;color:rgba(239,231,210,.78);letter-spacing:.04em}
+
+/* ---- how a round plays (index) ---- */
+.how{padding:64px 0}
+.how .label{color:var(--clay);display:block;margin-bottom:10px}
+.how h2{font-size:clamp(1.6rem,3.4vw,2.1rem);max-width:16ch}
+.steps{margin-top:34px;display:grid;gap:28px;grid-template-columns:repeat(auto-fit,minmax(230px,1fr))}
+.step{padding-top:16px;border-top:2px solid var(--ink)}
+.step .n{font-family:"IBM Plex Mono",monospace;font-size:1.1rem;font-weight:600;color:var(--clay)}
+.step h3{margin:8px 0 6px;font-size:1.12rem}
+.step p{color:var(--ink-soft);font-size:1rem}
+
+/* ---- daily (index) ---- */
+.daily{padding:0 0 72px}
+.daily-card{background:var(--paper-2);border:1px solid var(--line);border-radius:14px;padding:32px;display:grid;gap:20px}
+@media (min-width:760px){.daily-card{grid-template-columns:1fr auto;align-items:center}}
+.daily-card .label{color:var(--clay);display:block;margin-bottom:10px}
+.daily-card h2{font-size:clamp(1.5rem,3vw,2rem)}
+.daily-card p{color:var(--ink-soft);margin-top:8px;max-width:44ch}
+.daily-meta{font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--ink-soft);margin-top:14px;letter-spacing:.06em}
+.daily-card .cta{justify-self:start}
+
+/* ---- game page (play) ---- */
+.play-main{padding:40px 0 72px}
+.play-intro{margin-bottom:22px}
+.play-intro .label{color:var(--clay);display:block;margin-bottom:8px}
+.play-intro h1{font-size:clamp(1.7rem,4vw,2.3rem)}
+
+.gamebar{display:grid;grid-template-columns:auto 1fr auto;gap:14px 18px;align-items:center;margin-bottom:16px;font-family:"IBM Plex Mono",monospace;font-size:.78rem;letter-spacing:.06em;color:var(--ink-soft)}
+.gamebar .rnd{white-space:nowrap;text-transform:uppercase}
+.gamebar .score{white-space:nowrap;color:var(--green);font-weight:600;font-variant-numeric:tabular-nums}
+.progress{height:6px;border-radius:99px;background:var(--line);overflow:hidden}
+.progress i{display:block;height:100%;background:var(--green);width:0;transition:width .35s ease}
+
+.timer{font-family:"IBM Plex Mono",monospace;font-variant-numeric:tabular-nums;font-weight:600;font-size:1rem;color:var(--ink);white-space:nowrap}
+.timer.low{color:var(--clay);animation:pulse 1s ease-in-out infinite}
+
+.roundnext{margin-top:18px;display:none}
+.roundnext.show{display:block}
+
+/* ---- end screen (play) ---- */
+.endscreen{text-align:center;padding:8px 0 4px}
+.endscreen .label{color:var(--clay);display:block;margin-bottom:12px}
+.bigscore{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(3rem,12vw,4.6rem);line-height:1;color:var(--green);font-variant-numeric:lining-nums}
+.bigscore small{display:block;font-size:.9rem;font-family:"IBM Plex Mono",monospace;font-weight:500;color:var(--ink-soft);letter-spacing:.1em;margin-top:8px;text-transform:uppercase}
+.result-grid{display:flex;flex-wrap:wrap;gap:7px;justify-content:center;margin:26px 0}
+.result-grid i{width:22px;height:22px;border-radius:5px;background:var(--line)}
+.result-grid i.got{background:var(--green)}
+.scorelist{list-style:none;padding:0;margin:22px auto 0;max-width:360px;text-align:left}
+.scorelist li{display:flex;justify-content:space-between;gap:16px;padding:9px 0;border-bottom:1px solid var(--line);font-family:"IBM Plex Mono",monospace;font-size:.82rem}
+.scorelist li span:first-child{letter-spacing:.14em}
+.scorelist li .miss{color:var(--ink-soft)}
+.scorelist li .pts{color:var(--green);font-weight:600}
+.endactions{display:flex;gap:12px;justify-content:center;flex-wrap:wrap;margin-top:28px}
+
+/* ---- footer ---- */
+footer{border-top:1px solid var(--line)}
+footer .wrap{padding:36px 24px;display:flex;flex-wrap:wrap;gap:16px 28px;align-items:center;justify-content:space-between}
+footer p{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--ink-soft);letter-spacing:.04em}
+footer nav{display:flex;flex-wrap:wrap;gap:20px;font-family:"IBM Plex Mono",monospace;font-size:.74rem;text-transform:uppercase;letter-spacing:.12em}
+footer nav a{color:var(--ink-soft);text-decoration:none}
+footer nav a:hover{color:var(--ink)}
+
+/* ---- mode menu (play) ---- */
+.modes{display:grid;gap:14px;margin-top:8px;grid-template-columns:1fr}
+@media (min-width:560px){.modes{grid-template-columns:repeat(2,1fr)}}
+@media (min-width:940px){.modes{grid-template-columns:repeat(4,1fr)}}
+.mode-card{text-align:left;border:1px solid var(--line);border-radius:12px;padding:20px 18px 22px;background:var(--paper-2);transition:transform .12s ease,border-color .12s ease;display:flex;flex-direction:column;gap:8px}
+.mode-card:hover{transform:translateY(-3px);border-color:var(--ink-soft)}
+.mode-card .tag{font-family:"IBM Plex Mono",monospace;font-size:.66rem;text-transform:uppercase;letter-spacing:.16em;color:var(--clay)}
+.mode-card h3{font-size:1.15rem}
+.mode-card p{font-size:.92rem;color:var(--ink-soft)}
+.catlist{display:flex;flex-wrap:wrap;gap:10px;margin-top:18px}
+.catlist button{border:1px solid var(--line);border-radius:99px;padding:9px 16px;font-family:"IBM Plex Mono",monospace;font-size:.78rem;letter-spacing:.08em;background:var(--paper-2)}
+.catlist button:hover{border-color:var(--ink-soft)}
+.backlink{margin-top:22px;display:inline-block;font-family:"IBM Plex Mono",monospace;font-size:.74rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-soft);text-decoration:none}
+.backlink:hover{color:var(--ink)}
+
+/* ---- stages campaign (play) ---- */
+.stagerow{display:flex;flex-direction:column;gap:12px;margin-top:16px}
+.stage-item{display:flex;align-items:center;gap:12px 16px;flex-wrap:wrap;text-align:left;border:1px solid var(--line);border-radius:12px;padding:16px 18px;background:var(--paper-2);transition:transform .12s ease,border-color .12s ease}
+.stage-item:not(.locked):hover{transform:translateY(-2px);border-color:var(--ink-soft)}
+.stage-item.locked{opacity:.5}
+.stage-item:disabled{cursor:default}
+.stage-item .stage-meta{font-family:"IBM Plex Mono",monospace;font-size:.75rem;color:var(--ink-soft);letter-spacing:.03em}
+.stage-item .stage-mark{margin-left:auto;font-family:"IBM Plex Mono",monospace;font-size:.66rem;letter-spacing:.16em;color:var(--ink-soft)}
+.stage-item.cleared .stage-mark{color:var(--green)}
+.stage-best{margin-top:14px;font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--ink-soft);letter-spacing:.04em}
+.badge{font-family:"IBM Plex Mono",monospace;font-size:.68rem;font-weight:600;text-transform:uppercase;letter-spacing:.12em;padding:4px 11px;border-radius:99px;border:1px solid currentColor}
+.badge.easy{color:var(--green)}
+.badge.diff{color:var(--clay)}
+.badge.hard{color:var(--paper);background:var(--clay);border-color:var(--clay)}
+
+/* ---- gamebar extras ---- */
+.gamebar .streak{justify-self:start;font-weight:600;color:var(--clay);background:color-mix(in srgb,var(--clay) 16%,transparent);padding:2px 9px;border-radius:99px;letter-spacing:.08em}
+.gamebar .reveals{color:var(--ink-soft)}
+
+/* ---- example-sentence hint ---- */
+.ex{margin:6px 0 16px;font-style:italic;color:var(--ink-soft);font-size:1rem;line-height:1.5}
+.ex b{font-style:normal;font-family:"IBM Plex Mono",monospace;font-size:.86em;letter-spacing:.14em;color:var(--ink);border-bottom:2px solid var(--clay);padding:0 .4ch}
+
+.controls .reveal{color:var(--clay);border-color:color-mix(in srgb,var(--clay) 35%,var(--line))}
+.controls .reveal:hover{border-color:var(--clay)}
+
+/* ---- share card (play, end) ---- */
+.share-card{font-family:"IBM Plex Mono",monospace;font-size:.8rem;line-height:1.7;background:var(--paper-2);border:1px solid var(--line);border-radius:10px;padding:16px 18px;margin:22px auto 0;max-width:340px;text-align:left;white-space:pre-wrap;letter-spacing:.06em}
+
+/* ---- suggest-a-word form ---- */
+.suggest{display:flex;flex-direction:column;gap:18px;margin-top:28px;max-width:440px}
+.suggest label{display:flex;flex-direction:column;gap:6px;font-family:"IBM Plex Mono",monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-soft)}
+.suggest .req{color:var(--clay)}
+.suggest .opt{opacity:.65}
+.suggest input,.suggest select{font-family:"Newsreader",Georgia,serif;font-size:1rem;text-transform:none;letter-spacing:0;color:var(--ink);background:var(--paper-2);border:1px solid var(--line);border-radius:8px;padding:11px 13px;width:100%}
+.suggest select{appearance:none;-webkit-appearance:none;background-image:linear-gradient(45deg,transparent 50%,var(--ink-soft) 50%),linear-gradient(135deg,var(--ink-soft) 50%,transparent 50%);background-position:calc(100% - 18px) calc(1em + 2px),calc(100% - 13px) calc(1em + 2px);background-size:5px 5px,5px 5px;background-repeat:no-repeat;padding-right:38px}
+.suggest input:focus,.suggest select:focus{outline:2px solid var(--green);outline-offset:1px;border-color:var(--green)}
+.suggest input[name="word"]{text-transform:uppercase;letter-spacing:.08em;font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:1.15rem}
+.suggest .cta{align-self:flex-start;border:0;cursor:pointer}
+.suggest .cta:disabled{opacity:.55;cursor:default}
+.form-note{min-height:1.3em;font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--ink-soft);letter-spacing:.03em}
+.form-note.bad{color:var(--clay)}
+.thanks{margin-top:28px;max-width:440px}
+.thanks h2{font-size:clamp(1.5rem,3.4vw,1.9rem)}
+.thanks p{color:var(--ink-soft);margin:12px 0 22px}
+
+/* ---- leaderboard: post block on the Marathon end screen ---- */
+.lb-post{display:flex;flex-direction:column;gap:10px;margin:22px auto 0;max-width:340px;text-align:left}
+.lb-post label{display:flex;flex-direction:column;gap:6px;font-family:"IBM Plex Mono",monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.12em;color:var(--ink-soft)}
+.lb-post input{font-family:"Newsreader",Georgia,serif;font-size:1rem;color:var(--ink);background:var(--paper-2);border:1px solid var(--line);border-radius:8px;padding:10px 12px}
+.lb-post input:focus{outline:2px solid var(--green);outline-offset:1px;border-color:var(--green)}
+.lb-post .cta{align-self:flex-start;border:0;cursor:pointer}
+.lb-post .cta:disabled{opacity:.55;cursor:default}
+.lb-note{font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--clay);min-height:1em}
+.lb-note.good{color:var(--green)}
+.lb-note a,.lb-list a{color:var(--green)}
+.lb-hint{font-family:"IBM Plex Mono",monospace;font-size:.76rem;color:var(--ink-soft);margin-top:22px}
+
+/* ---- leaderboard page ---- */
+.lb-list{list-style:none;padding:0;margin:26px 0 0;max-width:460px}
+.lb-list li{display:grid;grid-template-columns:2.4rem 1fr auto;gap:14px;align-items:baseline;padding:11px 0;border-bottom:1px solid var(--line);font-family:"IBM Plex Mono",monospace;font-size:.9rem}
+.lb-list .rk{color:var(--ink-soft);font-variant-numeric:tabular-nums}
+.lb-list li.top .rk{color:var(--clay);font-weight:600}
+.lb-list .nm{font-family:"Newsreader",Georgia,serif;font-size:1.05rem;color:var(--ink);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.lb-list .sc{color:var(--green);font-weight:600;font-variant-numeric:tabular-nums}
+.lb-list li.you{background:color-mix(in srgb,var(--green) 12%,transparent);border-radius:6px;margin:0 -10px;padding-left:10px;padding-right:10px}
+.lb-list li.lb-empty{display:block;border:0;color:var(--ink-soft)}
+.lb-meta{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--ink-soft);margin-top:16px;letter-spacing:.04em}
+
+/* ---- weekly airtime challenge ---- */
+.challenge{background:var(--indigo);color:var(--indigo-ink);border-radius:14px;padding:26px 28px;margin:24px 0}
+.challenge .label{color:#E8A15C;display:block;margin-bottom:10px}
+.challenge-lead{font-family:"Bricolage Grotesque",sans-serif;font-weight:700;font-size:1.15rem;line-height:1.4}
+.challenge-lead b{color:#FFD27D}
+.challenge-meta{font-family:"IBM Plex Mono",monospace;font-size:.75rem;color:var(--indigo-ink);opacity:.75;margin-top:10px;letter-spacing:.05em}
+.challenge-last{font-family:"IBM Plex Mono",monospace;font-size:.78rem;color:var(--indigo-ink);opacity:.9;margin-top:14px;padding-top:14px;border-top:1px solid color-mix(in srgb,var(--indigo-ink) 22%,transparent)}
+.challenge-last b{color:#FFD27D}
+.challenge-claim{display:inline-block;margin-top:16px;color:#FFD27D;border-color:color-mix(in srgb,#FFD27D 45%,transparent);text-decoration:none}
+.challenge-claim:hover{border-color:#FFD27D;color:#FFD27D;background:color-mix(in srgb,#FFD27D 14%,transparent)}
+.lb-tabs{display:flex;gap:8px;margin-top:4px}
+.lb-tab{font-family:"IBM Plex Mono",monospace;font-size:.74rem;text-transform:uppercase;letter-spacing:.1em;padding:8px 16px;border-radius:99px;border:1px solid var(--line);background:transparent;color:var(--ink-soft);cursor:pointer}
+.lb-tab.on{background:var(--green);border-color:var(--green);color:var(--paper);font-weight:600}
+.lb-tab:not(.on):hover{border-color:var(--ink-soft);color:var(--ink)}
+.lb-rules{font-family:"IBM Plex Mono",monospace;font-size:.72rem;color:var(--ink-soft);margin-top:24px;line-height:1.7;max-width:52ch}
+
+/* ---- site-wide promo bar (challenge callout) ---- */
+.promo-bar{display:block;background:var(--indigo);color:var(--indigo-ink);text-decoration:none;text-align:center;padding:11px 16px;font-family:"IBM Plex Mono",monospace;font-size:.76rem;letter-spacing:.03em;transition:background .12s ease}
+.promo-bar:hover{background:var(--green-deep)}
+.promo-bar b{color:#FFD27D;text-transform:uppercase;letter-spacing:.12em;font-weight:600;margin-right:8px}
+
+/* ---- solve payoff (play) ---- */
+.board.solved .slot .tile{animation:solvePop .34s cubic-bezier(.2,.9,.3,1.4) both}
+.board.solved .slot:nth-child(2) .tile{animation-delay:.04s}
+.board.solved .slot:nth-child(3) .tile{animation-delay:.08s}
+.board.solved .slot:nth-child(4) .tile{animation-delay:.12s}
+.board.solved .slot:nth-child(5) .tile{animation-delay:.16s}
+.board.solved .slot:nth-child(6) .tile{animation-delay:.20s}
+.board.solved .slot:nth-child(7) .tile{animation-delay:.24s}
+.board.solved .slot:nth-child(8) .tile{animation-delay:.28s}
+.board.solved .slot:nth-child(9) .tile{animation-delay:.32s}
+.board.solved .slot:nth-child(10) .tile{animation-delay:.36s}
+@keyframes solvePop{0%{transform:translateY(0) scale(1)}45%{transform:translateY(-8px) scale(1.09)}100%{transform:translateY(0) scale(1)}}
+.ex.reveal-word{font-style:normal;color:var(--ink)}
+.ex.reveal-word b{color:var(--green);border-bottom-color:var(--green)}
+.gamebar .streak.bump{animation:streakBump .4s ease}
+@keyframes streakBump{0%{transform:scale(1)}40%{transform:scale(1.35)}100%{transform:scale(1)}}
+
+/* ---- achievements (play) ---- */
+.ach-shelf{margin-top:26px;border-top:1px solid var(--line);padding-top:18px}
+.ach-head{font-family:"IBM Plex Mono",monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.16em;color:var(--clay);display:flex;justify-content:space-between;align-items:baseline}
+.ach-head span{color:var(--ink-soft);letter-spacing:.06em}
+.ach-grid{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px}
+.ach-chip{font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.06em;padding:6px 12px;border-radius:99px;border:1px solid var(--line);background:var(--paper-2);color:var(--ink-soft);cursor:pointer}
+.ach-chip.on{color:var(--green);border-color:color-mix(in srgb,var(--green) 45%,var(--line));background:color-mix(in srgb,var(--green) 10%,transparent);font-weight:600}
+.ach-chip:hover{border-color:var(--ink-soft)}
+.ach-tip{font-family:"IBM Plex Mono",monospace;font-size:.74rem;color:var(--ink-soft);margin-top:12px;min-height:1.1em;letter-spacing:.03em}
+.ach-toast{position:fixed;left:50%;transform:translate(-50%,140%);bottom:18px;z-index:60;background:var(--indigo);color:var(--indigo-ink);padding:12px 20px;border-radius:10px;box-shadow:0 10px 30px -8px var(--shadow);font-family:"IBM Plex Mono",monospace;font-size:.82rem;text-align:center;transition:transform .4s cubic-bezier(.2,.9,.3,1.2);pointer-events:none;max-width:80vw}
+.ach-toast b{display:block;font-size:.64rem;text-transform:uppercase;letter-spacing:.18em;opacity:.7;margin-bottom:3px;font-weight:500}
+.ach-toast.in{transform:translate(-50%,0)}
+
+@media (prefers-reduced-motion:reduce){
+  *{animation:none!important;transition:none!important}
+  .ach-toast{transition:none}
 }
 
-.tile .val {
-  position: absolute !important;
-  bottom: 3px !important;
-  right: 5px !important;
-  font-size: 0.65rem !important;
-  font-weight: 800 !important;
-  color: #8c6239 !important;
+/* ---- privacy policy ---- */
+.policy h2{font-family:"Bricolage Grotesque",sans-serif;font-size:1.06rem;font-weight:700;margin:30px 0 8px}
+.policy h2:first-of-type{margin-top:26px}
+.policy p{color:var(--ink-soft);line-height:1.6;max-width:62ch}
+.policy a{color:var(--green);text-decoration:underline;text-decoration-color:color-mix(in srgb,var(--green) 40%,transparent)}
+
+/* ============================================================
+   LIQUID GLASS LAYER (added 2026-09-19)
+   Translucent, frosted panels floating over a luminous backdrop.
+   Rules of thumb: blur only on big containers (cheap phones),
+   tiles/chips get glass *look* without backdrop-filter.
+   ============================================================ */
+
+:root{
+  --glass-base:#EAF2E6;
+  --glass-a:rgba(255,255,255,.66);
+  --glass-b:rgba(255,255,255,.26);
+  --glass-bg:linear-gradient(140deg,var(--glass-a) 0%,var(--glass-b) 58%,var(--glass-a) 135%);
+  --glass-solid:rgba(255,255,255,.85);
+  --glass-line:rgba(255,255,255,.78);
+  --glass-rim:inset 0 1px 0 rgba(255,255,255,.95),inset 0 -1px 0 rgba(255,255,255,.28),inset 1px 0 0 rgba(255,255,255,.4),inset -1px 0 0 rgba(255,255,255,.18);
+  --glass-drop:0 18px 40px -18px rgba(8,70,38,.34),0 3px 8px rgba(24,20,12,.06);
+  --glass-blur:blur(16px) saturate(1.7);
+  --glass-well:inset 0 2px 5px rgba(24,20,12,.10),inset 0 -1px 0 rgba(255,255,255,.7);
+  --dark-glass-a:rgba(24,34,58,.90);
+  --dark-glass-b:rgba(32,48,79,.82);
+  --glow-1:rgba(11,122,59,.34);
+  --glow-2:rgba(255,205,110,.58);
+  --glow-3:rgba(32,48,79,.30);
+  --glow-4:rgba(214,84,38,.24);
+  --orb:rgba(255,255,255,.27);
+}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]){
+    --glass-base:#08120D;
+    --glass-a:rgba(255,255,255,.15);
+    --glass-b:rgba(255,255,255,.04);
+    --glass-solid:rgba(26,38,32,.92);
+    --glass-line:rgba(255,255,255,.20);
+    --glass-rim:inset 0 1px 0 rgba(255,255,255,.30),inset 0 -1px 0 rgba(255,255,255,.05),inset 1px 0 0 rgba(255,255,255,.10),inset -1px 0 0 rgba(255,255,255,.04);
+    --glass-drop:0 22px 46px -20px rgba(0,0,0,.65),0 3px 10px rgba(0,0,0,.30);
+    --glass-well:inset 0 2px 6px rgba(0,0,0,.45),inset 0 -1px 0 rgba(255,255,255,.07);
+    --dark-glass-a:rgba(20,30,52,.82);
+    --dark-glass-b:rgba(28,44,78,.56);
+    --glow-1:rgba(38,170,96,.34);
+    --glow-2:rgba(214,160,60,.20);
+    --glow-3:rgba(70,100,190,.30);
+    --glow-4:rgba(230,89,44,.22);
+    --orb:rgba(255,255,255,.07);
+  }
+}
+:root[data-theme="dark"]{
+  --glass-base:#08120D;
+  --glass-a:rgba(255,255,255,.15);
+  --glass-b:rgba(255,255,255,.04);
+  --glass-solid:rgba(26,38,32,.92);
+  --glass-line:rgba(255,255,255,.20);
+  --glass-rim:inset 0 1px 0 rgba(255,255,255,.30),inset 0 -1px 0 rgba(255,255,255,.05),inset 1px 0 0 rgba(255,255,255,.10),inset -1px 0 0 rgba(255,255,255,.04);
+  --glass-drop:0 22px 46px -20px rgba(0,0,0,.65),0 3px 10px rgba(0,0,0,.30);
+  --glass-well:inset 0 2px 6px rgba(0,0,0,.45),inset 0 -1px 0 rgba(255,255,255,.07);
+  --dark-glass-a:rgba(20,30,52,.82);
+  --dark-glass-b:rgba(28,44,78,.56);
+  --glow-1:rgba(38,170,96,.34);
+  --glow-2:rgba(214,160,60,.20);
+  --glow-3:rgba(70,100,190,.30);
+  --glow-4:rgba(230,89,44,.22);
+  --orb:rgba(255,255,255,.07);
 }
 
-.board.solved .tile,
-.solved .tile {
-  background: #0B7A3B !important;
-  border-color: #075227 !important;
-  box-shadow: 0 5px 0 #04381a, 0 8px 14px rgba(11, 122, 59, 0.25) !important;
-  color: #ffffff !important;
+/* ---- luminous backdrop the glass refracts ---- */
+html{background:var(--glass-base)}
+body{background:transparent;position:relative;min-height:100vh}
+body::before{
+  content:"";position:fixed;inset:0;z-index:-1;pointer-events:none;
+  background:
+    radial-gradient(circle at 16% 22%,var(--orb) 0 11vmax,transparent 11.2vmax),
+    radial-gradient(circle at 84% 34%,var(--orb) 0 8vmax,transparent 8.2vmax),
+    radial-gradient(circle at 62% 84%,var(--orb) 0 13vmax,transparent 13.2vmax),
+    radial-gradient(64vmax 64vmax at 6% 4%,var(--glow-1),transparent 62%),
+    radial-gradient(56vmax 56vmax at 98% 10%,var(--glow-2),transparent 62%),
+    radial-gradient(60vmax 60vmax at 90% 98%,var(--glow-3),transparent 64%),
+    radial-gradient(50vmax 50vmax at 2% 92%,var(--glow-4),transparent 64%);
 }
 
-.board.solved .tile .val,
-.solved .tile .val {
-  color: rgba(255, 255, 255, 0.75) !important;
+/* ---- masthead: floating glass capsule ---- */
+.masthead{border-bottom:0;padding:12px 12px 0}
+.masthead .wrap{
+  position:relative;max-width:1060px;padding:9px 12px 9px 22px;border-radius:999px;
+}
+.masthead .wrap::before{
+  content:"";position:absolute;inset:0;z-index:-1;pointer-events:none;border-radius:inherit;
+  background:var(--glass-bg);border:1px solid var(--glass-line);
+  box-shadow:var(--glass-rim),var(--glass-drop);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+}
+.nav .play{
+  color:#fff;border-radius:999px;padding:9px 20px;
+  background:linear-gradient(180deg,#22a15a 0%,var(--green-deep) 100%);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.45),inset 0 -1px 0 rgba(0,0,0,.18),0 6px 14px -6px rgba(8,96,46,.6);
+}
+.nav .play:hover{background:linear-gradient(180deg,#2bb468 0%,var(--green) 100%);color:#fff}
+.soundbtn{border-radius:999px;background:var(--glass-bg);border-color:var(--glass-line);box-shadow:var(--glass-rim)}
+
+/* ---- promo bar: tinted glass strip ---- */
+.promo-bar{
+  width:calc(100% - 24px);max-width:1060px;margin:10px auto 0;border-radius:999px;
+  background:linear-gradient(140deg,var(--dark-glass-a),var(--dark-glass-b));
+  border:1px solid rgba(255,255,255,.22);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 12px 28px -14px rgba(20,30,52,.6);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+}
+.promo-bar:hover{background:linear-gradient(140deg,rgba(8,96,46,.92),rgba(11,122,59,.66))}
+
+/* ---- buttons ---- */
+.cta{
+  border-radius:999px;padding:13px 26px;color:#fff;
+  background:linear-gradient(180deg,rgba(44,38,28,.94),rgba(18,14,8,.92));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),inset 0 -1px 0 rgba(0,0,0,.35),0 10px 22px -10px rgba(24,20,12,.55);
+}
+.cta:hover{background:linear-gradient(180deg,#22a15a,var(--green-deep));color:#fff}
+.ghost{
+  border-radius:999px;background:var(--glass-bg);border:1px solid var(--glass-line);
+  box-shadow:var(--glass-rim);
+}
+.ghost:hover{border-color:#fff;background:linear-gradient(140deg,rgba(255,255,255,.85),rgba(255,255,255,.4))}
+
+/* ---- hero + board (the main event) ---- */
+.hero h1 em{color:var(--green)}
+.board{
+  border-radius:30px;padding:28px 24px 24px;
+  background:var(--glass-bg);border:1px solid var(--glass-line);
+  box-shadow:var(--glass-rim),var(--glass-drop);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+}
+.pool{border-top:1px solid var(--glass-line)}
+.slot{
+  border-radius:16px;border:1.5px dashed color-mix(in srgb,var(--ink) 22%,transparent);
+  background:color-mix(in srgb,var(--ink) 4%,transparent);box-shadow:var(--glass-well);
+}
+.tile{
+  border-radius:16px;
+  background:linear-gradient(155deg,rgba(255,252,240,.96) 0%,rgba(244,232,196,.72) 55%,rgba(255,246,214,.84) 100%);
+  border:1px solid rgba(255,255,255,.85);
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.98),inset 0 -2px 4px rgba(190,150,60,.18),0 8px 16px -8px rgba(60,44,10,.38),0 2px 3px rgba(60,44,10,.10);
+  color:#18140C;
+}
+.pool .tile:hover{transform:translateY(-4px) scale(1.03)}
+.slot .tile{box-shadow:inset 0 1.5px 0 rgba(255,255,255,.98),inset 0 -2px 4px rgba(190,150,60,.18),0 3px 6px -3px rgba(60,44,10,.3)}
+.board.solved .slot .tile{
+  background:linear-gradient(155deg,rgba(72,200,120,.98) 0%,rgba(16,138,70,.94) 60%,rgba(8,96,46,.98) 100%);
+  border-color:rgba(255,255,255,.55);color:#fff;
+  box-shadow:inset 0 1.5px 0 rgba(255,255,255,.6),inset 0 -2px 5px rgba(0,60,25,.35),0 10px 18px -8px rgba(8,96,46,.65);
+}
+.board.solved .slot .tile .val{color:rgba(255,255,255,.9)}
+
+/* ---- categories band: big tinted glass slab ---- */
+.band{
+  margin:14px 12px 0;border-radius:36px;overflow:hidden;
+  background-color:transparent;
+  background-image:linear-gradient(140deg,var(--dark-glass-a),var(--dark-glass-b)),
+    radial-gradient(rgba(255,255,255,.10) 1.4px,transparent 1.6px);
+  background-size:auto,26px 26px;
+  border:1px solid rgba(255,255,255,.20);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.28),0 24px 50px -24px rgba(20,30,52,.65);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+}
+.cat-card{
+  border-radius:22px;border:1px solid rgba(255,255,255,.22);
+  background:linear-gradient(145deg,rgba(255,255,255,.16),rgba(255,255,255,.05));
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.26);
 }
 
-.slots .slot {
-  border: 2px dashed #cbd5e1 !important;
-  border-radius: 9px !important;
-  background: rgba(0, 0, 0, 0.02) !important;
+/* ---- how it plays: glass step cards ---- */
+.step{
+  padding:20px 20px 22px;border-top:0;border-radius:26px;
+  background:var(--glass-bg);border:1px solid var(--glass-line);
+  box-shadow:var(--glass-rim),var(--glass-drop);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
 }
+
+/* ---- daily card / mode cards / stages ---- */
+.daily-card{
+  border-radius:34px;background:var(--glass-bg);border:1px solid var(--glass-line);
+  box-shadow:var(--glass-rim),var(--glass-drop);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+}
+.mode-card,.stage-item{
+  border-radius:26px;background:var(--glass-bg);border:1px solid var(--glass-line);
+  box-shadow:var(--glass-rim),var(--glass-drop);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+}
+.mode-card:hover,.stage-item:not(.locked):hover{transform:translateY(-4px);border-color:#fff}
+.catlist button{
+  background:var(--glass-bg);border:1px solid var(--glass-line);box-shadow:var(--glass-rim);
+}
+.catlist button:hover{border-color:#fff}
+.badge{background:rgba(255,255,255,.35);border-color:color-mix(in srgb,currentColor 55%,transparent);box-shadow:var(--glass-rim)}
+.badge.hard{background:linear-gradient(180deg,#e26a3a,var(--clay));color:#fff}
+.progress{background:color-mix(in srgb,var(--ink) 10%,transparent);box-shadow:var(--glass-well)}
+.progress i{background:linear-gradient(90deg,#2bb468,var(--green))}
+.gamebar .streak{background:rgba(255,255,255,.4);box-shadow:var(--glass-rim)}
+
+/* ---- results + share ---- */
+.result-grid i{border-radius:7px;background:color-mix(in srgb,var(--ink) 10%,transparent);box-shadow:var(--glass-well)}
+.result-grid i.got{background:linear-gradient(160deg,#48c878,var(--green-deep));box-shadow:inset 0 1px 0 rgba(255,255,255,.5)}
+.scorelist li{border-bottom-color:var(--glass-line)}
+.share-card{
+  border-radius:22px;background:var(--glass-bg);border:1px solid var(--glass-line);
+  box-shadow:var(--glass-rim),var(--glass-drop);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+}
+
+/* ---- forms: frosted inset fields ---- */
+.suggest input,.suggest select,.lb-post input{
+  border-radius:16px;background:rgba(255,255,255,.5);border:1px solid var(--glass-line);
+  box-shadow:var(--glass-well);
+}
+:root[data-theme="dark"] .suggest input,:root[data-theme="dark"] .suggest select,:root[data-theme="dark"] .lb-post input{background:rgba(255,255,255,.07)}
+@media (prefers-color-scheme:dark){
+  :root:not([data-theme="light"]) .suggest input,:root:not([data-theme="light"]) .suggest select,:root:not([data-theme="light"]) .lb-post input{background:rgba(255,255,255,.07)}
+}
+.suggest input:focus,.suggest select:focus,.lb-post input:focus{
+  outline:0;border-color:var(--green);
+  box-shadow:var(--glass-well),0 0 0 3px color-mix(in srgb,var(--green) 28%,transparent);
+}
+
+/* ---- leaderboard ---- */
+.lb-list{
+  padding:8px 20px;border-radius:28px;background:var(--glass-bg);border:1px solid var(--glass-line);
+  box-shadow:var(--glass-rim),var(--glass-drop);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+}
+.lb-list li:last-child{border-bottom:0}
+.lb-list li{border-bottom-color:var(--glass-line)}
+.lb-list li.you{background:color-mix(in srgb,var(--green) 16%,transparent);border-radius:14px;margin:0 -12px;padding-left:12px;padding-right:12px}
+.lb-tab{background:var(--glass-bg);border-color:var(--glass-line);box-shadow:var(--glass-rim)}
+.lb-tab.on{background:linear-gradient(180deg,#22a15a,var(--green-deep));border-color:rgba(255,255,255,.4);color:#fff;box-shadow:inset 0 1px 0 rgba(255,255,255,.45),0 6px 14px -6px rgba(8,96,46,.6)}
+
+/* ---- weekly challenge: tinted glass with specular sheen ---- */
+.challenge{
+  position:relative;overflow:hidden;border-radius:32px;padding:28px 30px;
+  background:linear-gradient(140deg,var(--dark-glass-a),var(--dark-glass-b));
+  border:1px solid rgba(255,255,255,.24);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.34),inset 0 -1px 0 rgba(255,255,255,.06),0 26px 50px -24px rgba(20,30,52,.7);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+}
+.challenge::before{
+  content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;
+  background:radial-gradient(120% 85% at 0% 0%,rgba(255,255,255,.20) 0%,rgba(255,255,255,.06) 42%,transparent 66%);
+}
+.challenge>*{position:relative}
+.challenge-claim{border-radius:999px;background:rgba(255,255,255,.08)}
+
+/* ---- achievements ---- */
+.ach-shelf{border-top-color:var(--glass-line)}
+.ach-chip{background:var(--glass-bg);border-color:var(--glass-line);box-shadow:var(--glass-rim)}
+.ach-chip.on{background:linear-gradient(140deg,color-mix(in srgb,var(--green) 26%,rgba(255,255,255,.55)),color-mix(in srgb,var(--green) 10%,rgba(255,255,255,.2)))}
+.ach-toast{
+  border-radius:999px;padding:13px 26px;
+  background:linear-gradient(140deg,var(--dark-glass-a),var(--dark-glass-b));
+  border:1px solid rgba(255,255,255,.26);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.32),0 18px 36px -14px rgba(20,30,52,.7);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+}
+
+/* ---- footer + privacy: glass slabs ---- */
+footer{border-top:0;padding:24px 12px 14px}
+footer .wrap{
+  max-width:1060px;padding:24px 28px;border-radius:30px;
+  background:var(--glass-bg);border:1px solid var(--glass-line);
+  box-shadow:var(--glass-rim),var(--glass-drop);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+}
+.policy{
+  padding:8px 30px 30px;border-radius:32px;
+  background:var(--glass-bg);border:1px solid var(--glass-line);
+  box-shadow:var(--glass-rim),var(--glass-drop);
+  -webkit-backdrop-filter:var(--glass-blur);backdrop-filter:var(--glass-blur);
+}
+.policy .play-intro{padding-top:22px}
+
+/* ---- fallbacks ---- */
+@supports not ((backdrop-filter:blur(1px)) or (-webkit-backdrop-filter:blur(1px))){
+  :root,:root:not([data-theme="light"]),:root[data-theme="dark"]{
+    --glass-a:var(--glass-solid);--glass-b:var(--glass-solid);
+    --dark-glass-a:rgba(24,34,58,.97);--dark-glass-b:rgba(32,48,79,.94);
+  }
+}
+@media (prefers-reduced-transparency:reduce){
+  :root,:root:not([data-theme="light"]),:root[data-theme="dark"]{
+    --glass-blur:none;--glass-a:var(--glass-solid);--glass-b:var(--glass-solid);
+    --dark-glass-a:rgba(24,34,58,.98);--dark-glass-b:rgba(32,48,79,.98);
+  }
+}
+@media (max-width:620px){
+  .masthead .wrap{padding:8px 10px 8px 16px}
+  .board{padding:22px 18px 20px;border-radius:26px}
+  .band{margin:12px 8px 0;border-radius:28px}
+  .challenge{padding:24px 22px}
+  .policy{padding:6px 20px 24px}
+}
+
+/* ---- phones: bigger, thumb-friendly tiles (5 per row, fluid) ---- */
+@media (max-width:620px){
+  .play-main .wrap,.hero .wrap{padding-left:10px;padding-right:10px}
+  .board{padding:22px 12px 20px}
+  .slots,.pool{gap:7px}
+  .slot,.pool .tile{flex:0 0 calc((100% - 28px)/5);width:auto;height:auto;aspect-ratio:52/60}
+  .slot .tile{width:100%;height:100%;aspect-ratio:auto}
+  .tile{font-size:clamp(1.75rem,8.4vw,2.2rem)}
+  .tile .val{font-size:.7rem;right:6px;bottom:4px}
+  .slots{min-height:0}
+}
+
+/* ---- Marathon "play & earn" callout ---- */
+.mode-card .earn{
+  margin-top:auto;padding:10px 12px;border-radius:16px;
+  font-family:"IBM Plex Mono",monospace;font-size:.72rem;line-height:1.5;letter-spacing:.02em;color:var(--ink);
+  background:linear-gradient(140deg,color-mix(in srgb,var(--green) 22%,rgba(255,255,255,.5)),color-mix(in srgb,var(--green) 8%,rgba(255,255,255,.15)));
+  border:1px solid color-mix(in srgb,var(--green) 40%,transparent);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.55);
+}
+.mode-card .earn b{display:block;font-weight:600;text-transform:uppercase;letter-spacing:.14em;font-size:.66rem;color:var(--green);margin-bottom:2px}
+.mode-card.featured{border-color:color-mix(in srgb,var(--green) 55%,var(--glass-line));box-shadow:var(--glass-rim),0 18px 40px -16px color-mix(in srgb,var(--green) 55%,transparent),var(--glass-drop)}
+
+/* ---- Word Coach (AI) ---- */
+.roundnext.show{display:flex;flex-wrap:wrap;align-items:center;gap:12px}
+.coach{
+  margin-top:14px;padding:14px 16px;border-radius:18px;
+  background:var(--glass-bg);border:1px solid var(--glass-line);box-shadow:var(--glass-rim);
+  color:var(--ink);
+}
+.coach[hidden]{display:none}
+.coach .label{display:block;margin-bottom:6px;color:var(--green)}
+.coach p{margin:0;font-family:"Newsreader",Georgia,serif;font-size:1.02rem;line-height:1.5;max-width:60ch}
+.coach em{font-style:italic;color:var(--ink-soft)}
+.endscreen .coach{text-align:left}
+
+/* ---- Rival mode (computer opponent) ---- */
+.mode-card.wide{grid-column:1/-1}
+@media (min-width:560px){.mode-card.wide{flex-direction:row;flex-wrap:wrap;align-items:baseline;gap:6px 18px}.mode-card.wide p{flex:1 1 320px}}
+.rivals{display:grid;gap:14px;margin-top:14px;grid-template-columns:1fr}
+@media (min-width:640px){.rivals{grid-template-columns:repeat(3,1fr)}}
+.mode-card .rec{margin-top:auto;font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.06em;color:var(--ink-soft)}
+.rnote{margin-top:16px;font-family:"IBM Plex Mono",monospace;font-size:.74rem;line-height:1.6;color:var(--ink-soft);max-width:64ch}
+.rivalbar{display:flex;align-items:center;gap:12px;margin:14px 0 4px;font-family:"IBM Plex Mono",monospace;font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-soft)}
+.rivalbar[hidden]{display:none}
+.rivalbar .rname{color:var(--clay);font-weight:600;white-space:nowrap}
+.rivalbar .pips{flex:1;display:flex;gap:5px;min-width:0}
+.rivalbar .pips i{flex:1;height:8px;border-radius:99px;background:color-mix(in srgb,var(--ink) 12%,transparent);transition:background .25s ease}
+.rivalbar .pips i.on{background:var(--clay)}
+.rivalbar .rstate{min-width:9ch;text-align:right;white-space:nowrap;text-transform:none;letter-spacing:.04em}
+.board.vs #reveal,.board.vs #aiHint{display:none}
+
+/* ---- Friend challenges ---- */
+.challenge-card{
+  margin:0 0 26px;padding:18px 18px 20px;border-radius:22px;display:flex;flex-direction:column;align-items:flex-start;gap:8px;
+  background:var(--glass-bg);color:var(--ink);
+  border:1px solid color-mix(in srgb,var(--green) 50%,var(--glass-line));
+  box-shadow:var(--glass-rim),0 18px 40px -18px color-mix(in srgb,var(--green) 55%,transparent);
+}
+.challenge-card[hidden]{display:none}
+.challenge-card .tag{font-family:"IBM Plex Mono",monospace;font-size:.68rem;text-transform:uppercase;letter-spacing:.16em;color:var(--clay)}
+.challenge-card h3{font-size:1.5rem;line-height:1.1;margin:0}
+.challenge-card p{margin:0;color:var(--ink-soft);max-width:52ch}
+.challenge-card .cta{margin-top:6px;border:0;cursor:pointer}
+.ch-send{margin-top:26px}
+.ch-send label{line-height:1.5}
+
+/* ---- iOS home-screen width diagnosis: fix.js adds html.hf1..hf5 one at a time (cumulative) if the installed
+   app opens zoomed out. Each rule switches off one suspect. Remove with fix.js once the cause is known. ---- */
+html.hf1 body::before{display:none}
+html.hf2 *,html.hf2 *::before,html.hf2 *::after{-webkit-backdrop-filter:none!important;backdrop-filter:none!important}
+html.hf3 body{position:static!important;min-height:0!important}
+html.hf4 *{transform:none!important;animation:none!important}
+html.hf5,html.hf5 body{overflow-x:hidden!important;max-width:100%!important}
