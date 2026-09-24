@@ -1,0 +1,448 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Naija Scramble — Round Component</title>
+  <style>
+    :root {
+      --primary: #008751;       /* Naija Green */
+      --primary-dark: #005a36;
+      --accent: #f5a623;        /* Warm Gold */
+      --bg: #f8faf7;
+      --card-bg: #ffffff;
+      --tile-bg: #fffbf0;
+      --tile-border: #d4a373;
+      --tile-text: #2c2523;
+      --text: #1f2937;
+      --muted: #6b7280;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: system-ui, -apple-system, sans-serif; }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      padding: 1rem;
+    }
+
+    .game-card {
+      background: var(--card-bg);
+      border-radius: 18px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+      width: 100%;
+      max-width: 480px;
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+      border: 1px solid #e5e7eb;
+    }
+
+    /* Header Bar */
+    .round-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .category-badge {
+      background: #e6f4ea;
+      color: var(--primary-dark);
+      font-weight: 700;
+      font-size: 0.8rem;
+      padding: 0.35rem 0.75rem;
+      border-radius: 20px;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .timer {
+      font-weight: 800;
+      font-size: 1.1rem;
+      color: #b91c1c;
+    }
+
+    .hint-box {
+      background: #fdf6ec;
+      border-left: 4px solid var(--accent);
+      padding: 0.75rem;
+      border-radius: 6px;
+      font-size: 0.95rem;
+    }
+    .hint-box strong { color: #854d0e; }
+
+    /* Tile Areas */
+    .slot-row, .rack-row {
+      display: flex;
+      justify-content: center;
+      gap: 0.5rem;
+      min-height: 56px;
+      flex-wrap: wrap;
+    }
+
+    .slot {
+      width: 52px;
+      height: 56px;
+      border-bottom: 3px solid #d1d5db;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    /* Scrabble Tile Style */
+    .tile {
+      width: 52px;
+      height: 56px;
+      background: var(--tile-bg);
+      border: 2px solid var(--tile-border);
+      border-radius: 8px;
+      box-shadow: 0 4px 0 var(--tile-border);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      font-size: 1.5rem;
+      font-weight: 800;
+      color: var(--tile-text);
+      position: relative;
+      cursor: pointer;
+      user-select: none;
+      transition: transform 0.08s ease;
+    }
+
+    .tile:active {
+      transform: translateY(2px);
+      box-shadow: 0 2px 0 var(--tile-border);
+    }
+
+    .tile .pts {
+      position: absolute;
+      bottom: 2px;
+      right: 4px;
+      font-size: 0.65rem;
+      font-weight: 700;
+      color: #78716c;
+    }
+
+    /* Action Controls */
+    .controls {
+      display: flex;
+      gap: 0.5rem;
+      justify-content: center;
+    }
+
+    .btn {
+      flex: 1;
+      padding: 0.65rem 1rem;
+      border: 1px solid #d1d5db;
+      background: #f3f4f6;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+    .btn:hover { background: #e5e7eb; }
+
+    /* Slangpedia Modal Card */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.6);
+      display: none;
+      justify-content: center;
+      align-items: center;
+      padding: 1rem;
+    }
+
+    .modal-overlay.active { display: flex; }
+
+    .modal-card {
+      background: #fff;
+      padding: 1.75rem;
+      border-radius: 16px;
+      max-width: 400px;
+      width: 100%;
+      text-align: center;
+      animation: popIn 0.25s ease-out;
+    }
+
+    @keyframes popIn {
+      from { transform: scale(0.9); opacity: 0; }
+      to { transform: scale(1); opacity: 1; }
+    }
+
+    .slangpedia {
+      background: #f9fafb;
+      border: 1px dashed #d1d5db;
+      padding: 1rem;
+      border-radius: 8px;
+      margin: 1rem 0;
+      text-align: left;
+    }
+
+    .share-btn {
+      background: #25d366;
+      color: #fff;
+      border: none;
+      width: 100%;
+      padding: 0.8rem;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 1rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      text-decoration: none;
+    }
+    .share-btn:hover { background: #1ebd56; }
+  </style>
+</head>
+<body>
+
+  <div class="game-card">
+    <div class="round-header">
+      <span class="category-badge" id="category">Chop</span>
+      <span class="timer" id="timer">30s</span>
+    </div>
+
+    <div class="hint-box">
+      <strong>Hint:</strong> <span id="hint">The rice that starts party arguments.</span>
+    </div>
+
+    <!-- Answer rack: where selected tiles go -->
+    <div class="slot-row" id="answer-row"></div>
+
+    <!-- Letter pool: available letters -->
+    <div class="rack-row" id="rack-row"></div>
+
+    <div class="controls">
+      <button class="btn" id="shuffle-btn" title="Shortcut: Spacebar">
+        🔀 Shuffle
+      </button>
+      <button class="btn" id="backspace-btn" title="Shortcut: Backspace">
+        ⌫ Delete
+      </button>
+      <button class="btn" id="clear-btn">
+        Clear All
+      </button>
+    </div>
+  </div>
+
+  <!-- Slangpedia / Completion Popup -->
+  <div class="modal-overlay" id="win-modal">
+    <div class="modal-card">
+      <h2>Correct Guy! 🎉</h2>
+      <p style="color: var(--muted); margin-top: 0.25rem;">You nailed the word in <strong id="solve-time">8</strong>s</p>
+
+      <div class="slangpedia">
+        <h4 id="fact-word">JOLLOF</h4>
+        <p id="fact-meaning" style="font-size: 0.9rem; color: #4b5563; margin-top: 0.25rem;">
+          Smoky party staple. Origin of eternal transatlantic Twitter/X disputes between Nigeria and Ghana.
+        </p>
+      </div>
+
+      <a id="whatsapp-share" class="share-btn" target="_blank" rel="noopener">
+        <span>Share to WhatsApp Status</span> 💬
+      </a>
+    </div>
+  </div>
+
+  <script>
+    // Scrabble letter points mapping
+    const LETTER_POINTS = {
+      A: 1, B: 3, C: 3, D: 2, E: 1, F: 4, G: 2, H: 4, I: 1,
+      J: 8, K: 5, L: 1, M: 3, N: 1, O: 1, P: 3, Q: 10, R: 1,
+      S: 1, T: 1, U: 1, V: 4, W: 4, X: 8, Y: 4, Z: 10
+    };
+
+    // Current puzzle data
+    const CURRENT_PUZZLE = {
+      word: "JOLLOF",
+      category: "Chop",
+      hint: "The rice that starts party arguments.",
+      meaning: "Smoky party staple. Origin of eternal transatlantic Twitter/X banter between Nigeria and Ghana."
+    };
+
+    // State
+    let availableTiles = []; // Tiles currently in pool
+    let answerTiles = [];    // Tiles placed in answer
+    let timeLeft = 30;
+    let timerInterval = null;
+
+    const answerRow = document.getElementById("answer-row");
+    const rackRow = document.getElementById("rack-row");
+    const shuffleBtn = document.getElementById("shuffle-btn");
+    const backspaceBtn = document.getElementById("backspace-btn");
+    const clearBtn = document.getElementById("clear-btn");
+    const modal = document.getElementById("win-modal");
+
+    // Initialize round
+    function initRound() {
+      // Create tile objects with unique IDs (handles duplicate letters like 'L' or 'O')
+      availableTiles = CURRENT_PUZZLE.word.split('').map((char, index) => ({
+        id: `${char}-${index}`,
+        char: char.toUpperCase(),
+        pts: LETTER_POINTS[char.toUpperCase()] || 1
+      }));
+
+      // Shuffle initially
+      shuffleArray(availableTiles);
+
+      render();
+      startTimer();
+    }
+
+    function shuffleArray(arr) {
+      for (let i = arr.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [arr[i], arr[j]] = [arr[j], arr[i]];
+      }
+    }
+
+    // Render Tiles into DOM
+    function render() {
+      // 1. Render Answer Row
+      answerRow.innerHTML = "";
+      for (let i = 0; i < CURRENT_PUZZLE.word.length; i++) {
+        const tile = answerTiles[i];
+        if (tile) {
+          const el = createTileElement(tile, () => removeLetterFromAnswer(i));
+          answerRow.appendChild(el);
+        } else {
+          const slot = document.createElement("div");
+          slot.className = "slot";
+          answerRow.appendChild(slot);
+        }
+      }
+
+      // 2. Render Letter Rack
+      rackRow.innerHTML = "";
+      availableTiles.forEach((tile, index) => {
+        const el = createTileElement(tile, () => addLetterToAnswer(index));
+        rackRow.appendChild(el);
+      });
+    }
+
+    function createTileElement(tile, onClick) {
+      const div = document.createElement("div");
+      div.className = "tile";
+      div.innerHTML = `${tile.char}<span class="pts">${tile.pts}</span>`;
+      div.addEventListener("click", onClick);
+      return div;
+    }
+
+    // Letter manipulations
+    function addLetterToAnswer(rackIndex) {
+      const tile = availableTiles.splice(rackIndex, 1)[0];
+      answerTiles.push(tile);
+      render();
+      checkWinCondition();
+    }
+
+    function removeLetterFromAnswer(answerIndex) {
+      const tile = answerTiles.splice(answerIndex, 1)[0];
+      availableTiles.push(tile);
+      render();
+    }
+
+    function backspace() {
+      if (answerTiles.length > 0) {
+        const tile = answerTiles.pop();
+        availableTiles.push(tile);
+        render();
+      }
+    }
+
+    function clearAll() {
+      availableTiles = [...availableTiles, ...answerTiles];
+      answerTiles = [];
+      render();
+    }
+
+    function shufflePool() {
+      shuffleArray(availableTiles);
+      render();
+    }
+
+    // Physical Keyboard Listener
+    window.addEventListener("keydown", (e) => {
+      // Ignore if modal is open
+      if (modal.classList.contains("active")) return;
+
+      if (e.key === "Backspace") {
+        e.preventDefault();
+        backspace();
+      } else if (e.key === " " || e.code === "Space") {
+        e.preventDefault();
+        shufflePool();
+      } else {
+        const pressedChar = e.key.toUpperCase();
+        const availableIndex = availableTiles.findIndex(t => t.char === pressedChar);
+        if (availableIndex !== -1) {
+          addLetterToAnswer(availableIndex);
+        }
+      }
+    });
+
+    // Check Win Condition
+    function checkWinCondition() {
+      const currentWord = answerTiles.map(t => t.char).join('');
+      if (currentWord === CURRENT_PUZZLE.word) {
+        clearInterval(timerInterval);
+        setTimeout(showWinModal, 200);
+      }
+    }
+
+    // Modal & WhatsApp share formatting
+    function showWinModal() {
+      const secondsUsed = 30 - timeLeft;
+      document.getElementById("solve-time").innerText = secondsUsed;
+      document.getElementById("fact-word").innerText = CURRENT_PUZZLE.word;
+      document.getElementById("fact-meaning").innerText = CURRENT_PUZZLE.meaning;
+
+      // WhatsApp text payload
+      const shareText = 
+`Naija Scramble 🇳🇬
+I just solved today's word: ${CURRENT_PUZZLE.word}!
+⏱️ Time: ${secondsUsed}s | Category: ${CURRENT_PUZZLE.category}
+Can you beat my speed?
+Play here: https://naijascramble.github.io/`;
+
+      const waLink = document.getElementById("whatsapp-share");
+      waLink.href = `https://api.whatsapp.com/send?text=${encodeURIComponent(shareText)}`;
+
+      modal.classList.add("active");
+    }
+
+    function startTimer() {
+      const timerEl = document.getElementById("timer");
+      timerInterval = setInterval(() => {
+        timeLeft--;
+        timerEl.innerText = `${timeLeft}s`;
+        if (timeLeft <= 0) {
+          clearInterval(timerInterval);
+          alert("Time's up! Wahala dey o.");
+        }
+      }, 1000);
+    }
+
+    // Button event listeners
+    shuffleBtn.addEventListener("click", shufflePool);
+    backspaceBtn.addEventListener("click", backspace);
+    clearBtn.addEventListener("click", clearAll);
+
+    // Boot
+    initRound();
+  </script>
+</body>
+</html>
