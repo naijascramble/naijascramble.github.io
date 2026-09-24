@@ -1,3 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, minimum-scale=1.0">
+<script src="fix.js?v=2"></script>
+<title>Naija Scramble — Play</title>
+<meta name="description" content="Nigerian word-scramble: a Stages campaign plus Daily, Marathon, Category and Rival modes.">
+<link rel="icon" href="data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%2032%2032'%3E%3Crect%20width='32'%20height='32'%20rx='6'%20fill='%230B7A3B'/%3E%3Ctext%20x='16'%20y='23'%20font-family='Georgia,serif'%20font-size='20'%20font-weight='bold'%20text-anchor='middle'%20fill='%23FBF6EA'%3EN%3C/text%3E%3C/svg%3E">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Naija Scramble">
+<meta property="og:title" content="Naija Scramble — Play">
+<meta property="og:description" content="A Stages campaign plus Daily, Marathon and Category modes.">
+<meta property="og:url" content="https://naijascramble.github.io/play">
+<meta property="og:image" content="https://naijascramble.github.io/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Naija Scramble — Play">
+<meta name="twitter:description" content="A Stages campaign plus Daily, Marathon and Category modes.">
+<meta name="twitter:image" content="https://naijascramble.github.io/og.png">
+<link rel="manifest" href="/manifest.json">
+<meta name="theme-color" content="#0B7A3B">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Naija Scramble">
+<link rel="apple-touch-icon" href="/icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,700;12..96,800&family=IBM+Plex+Mono:wght@400;500;600&family=Newsreader:ital,opsz,wght@0,6..72,400;0,6..72,500;1,6..72,400&display=swap">
+<link rel="stylesheet" href="style.css?v=19">
 <style>
   /* --- 3D WOODEN SCRABBLE TILES --- */
   .tile {
@@ -12,13 +42,11 @@
     cursor: pointer !important;
   }
 
-  /* Press effect when tapped or clicked */
   .tile:active {
     transform: translateY(3px) !important;
     box-shadow: 0 2px 0 #b07d4b, 0 4px 6px rgba(0, 0, 0, 0.12) !important;
   }
 
-  /* Scrabble point value badge */
   .tile .val {
     position: absolute !important;
     bottom: 3px !important;
@@ -28,7 +56,6 @@
     color: #8c6239 !important;
   }
 
-  /* Solved state: Rich Green wooden tiles */
   .board.solved .tile {
     background: #0B7A3B !important;
     border-color: #075227 !important;
@@ -40,7 +67,6 @@
     color: rgba(255, 255, 255, 0.75) !important;
   }
 
-  /* Recessed slot outlines */
   .slots .slot {
     border: 2px dashed #cbd5e1 !important;
     border-radius: 9px !important;
@@ -100,3 +126,1579 @@
     line-height: 1.4;
   }
 </style>
+</head>
+<body>
+
+<header class="masthead">
+  <div class="wrap">
+    <a class="mark" href="/" aria-label="Naija Scramble — home">
+      <span>N</span><span>A</span><span>I</span><span>J</span><span>A</span>
+      <span class="a2" style="width:.6ch"></span>
+      <span>S</span><span>C</span><span>R</span><span>A</span><span>M</span><span>B</span><span>L</span><span>E</span>
+    </a>
+    <nav class="nav">
+      <button id="soundBtn" class="soundbtn" type="button" aria-label="Toggle sound"></button>
+      <a href="/#how">How to play</a>
+      <a href="/leaderboard">Leaderboard</a>
+      <a href="/suggest">Suggest a word</a>
+      <a href="/claim">Claim prize</a>
+      <a href="/">Home</a>
+    </nav>
+  </div>
+</header>
+<a class="promo-bar" href="/leaderboard"><b>This week</b>Top Marathon score wins &#8358;3,000 cash — see who&rsquo;s leading &rarr;</a>
+
+<main class="play-main">
+  <div class="wrap narrow">
+
+    <!-- ============ MENU ============ -->
+    <section id="menu">
+      <div class="challenge-card" id="challengeCard" hidden></div>
+      <div class="play-intro">
+        <span class="label">Pick a mode</span>
+        <h1>Five ways to play.</h1>
+      </div>
+      <div class="modes">
+        <button class="mode-card" type="button" data-mode="stages">
+          <span class="tag">Campaign</span>
+          <h3>Stages</h3>
+          <p>Easy, then Difficult, then Hard. Clear a stage to unlock the next. Progress is saved.</p>
+        </button>
+        <button class="mode-card" type="button" data-mode="daily">
+          <span class="tag">One a day</span>
+          <h3>Daily</h3>
+          <p>One word, same for everyone. No timer. Fewer reveals, better score. Build a day streak.</p>
+        </button>
+        <button class="mode-card featured" type="button" data-mode="marathon">
+          <span class="tag">Survival</span>
+          <h3>Marathon</h3>
+          <p>Keep solving. 30 seconds a word, and it gets harder. One miss ends the run.</p>
+          <span class="earn"><b>Play &amp; earn</b>Top score each week wins &#8358;3,000 cash.</span>
+        </button>
+        <button class="mode-card" type="button" data-mode="category">
+          <span class="tag">Ten rounds</span>
+          <h3>Category</h3>
+          <p>Pick Chop, Pidgin, Owambe&hellip; ten words from that world, timed, misses just score zero.</p>
+        </button>
+        <button class="mode-card wide" type="button" data-mode="rival">
+          <span class="tag">Head to head</span>
+          <h3>Rival</h3>
+          <p>Race a computer rival on the same word. First to unscramble it wins the round; first to four rounds wins the match. Practice only &mdash; no prize, no leaderboard.</p>
+        </button>
+      </div>
+      <div id="rivalpick" hidden></div>
+      <div id="catpick" hidden>
+        <p class="label" style="display:block;margin-top:26px;color:var(--clay)">Choose a category</p>
+        <div class="catlist" id="catlist"></div>
+      </div>
+      <div id="stageselect" hidden></div>
+      <div class="ach-shelf" id="achShelf" hidden></div>
+    </section>
+
+    <!-- ============ GAME ============ -->
+    <section id="game" hidden>
+      <div class="gamebar">
+        <span class="rnd" id="gbLeft">&mdash;</span>
+        <span class="streak" id="gbStreak" hidden>&times;2</span>
+        <span class="progress" id="gbProg"><i id="gbFill"></i></span>
+        <span class="timer" id="gbTimer" hidden>0:30</span>
+        <span class="score" id="gbScore">0 pts</span>
+      </div>
+
+      <div class="board" id="board" aria-label="Current round">
+        <div class="board-top">
+          <p class="hint"><b>Hint</b> <span id="hint">&hellip;</span></p>
+          <p class="cat label" id="cat">&mdash;</p>
+        </div>
+        <p class="ex" id="ex"></p>
+        <div class="rivalbar" id="rivalbar" aria-hidden="true" hidden>
+          <span class="rname" id="rivalName">Rival</span>
+          <span class="pips" id="rivalPips"></span>
+          <span class="rstate" id="rivalState"></span>
+        </div>
+        <div class="slots" id="slots" aria-label="Your word"></div>
+        <div class="pool" id="pool" aria-label="Letter pool"></div>
+        <div class="controls">
+          <button class="ghost" id="shuffle" type="button" title="Shortcut: Spacebar">Shuffle</button>
+          <button class="ghost" id="clear" type="button">Clear</button>
+          <button class="ghost reveal" id="reveal" type="button">Reveal &minus;4</button>
+          <button class="ghost reveal" id="aiHint" type="button">Pidgin hint &minus;4</button>
+          <button class="ghost" id="skip" type="button">Give up</button>
+          <span class="tally" id="tally"></span>
+        </div>
+        <p class="feedback" id="feedback" role="status">Tap a tile or use your keyboard.</p>
+        <div class="coach" id="coach" role="status" aria-live="polite" hidden></div>
+        <div class="roundnext" id="roundnext">
+          <button class="cta" id="nextBtn" type="button">Next word</button>
+          <button class="ghost coach-btn" id="coachBtn" type="button">Ask the Word Coach</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- ============ OVER ============ -->
+    <section id="over" hidden></section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>New words added regularly. No dulling.</p>
+    <nav>
+      <a href="/leaderboard">Leaderboard</a>
+      <a href="/suggest">Suggest a word</a>
+      <a href="/install">Install app</a>
+      <a href="/privacy">Privacy</a>
+      <a href="/">Home</a>
+    </nav>
+  </div>
+</footer>
+
+<script src="words.js"></script>
+<script>
+(function(){
+  "use strict";
+
+  var SHEET_URL = "https://docs.google.com/spreadsheets/d/1fFDew_yrq99BmdX82gqcoK-an5onREF7wHw5O2qUSyY/gviz/tq?tqx=out:csv&gid=0";
+  var SHEET_TIMEOUT = 5000;
+  var MIN_LIVE_WORDS = 20;
+
+  var LB_ENDPOINT = "https://docs.google.com/forms/d/e/1FAIpQLSeB5DXA9qbex4X3ZrcwchzudeAjzAR16_6x8dV_SiqwXu6WmQ/formResponse";
+  var LB_FIELD = { name: "entry.240726504", score: "entry.1980824040", mode: "entry.1453484304", words: "entry.1506908293", secs: "entry.1143495746" };
+  var SCORE_CAP = 25000;
+
+  var VAL = {A:1,B:3,C:3,D:2,E:1,F:4,G:2,H:4,I:1,J:8,K:5,L:1,M:3,N:1,O:1,P:3,Q:10,R:1,S:1,T:1,U:1,V:4,W:4,X:8,Y:4,Z:10};
+  var ROUND_TIME = 30, REVEAL_COST = 4, COMBO = [1,1.2,1.5,2,2.5];
+
+  var $ = function(id){ return document.getElementById(id); };
+  var el = {
+    menu:$('menu'), game:$('game'), over:$('over'), catpick:$('catpick'), catlist:$('catlist'),
+    stageselect:$('stageselect'),
+    board:$('board'), slots:$('slots'), pool:$('pool'), hint:$('hint'), cat:$('cat'), ex:$('ex'),
+    feedback:$('feedback'), tally:$('tally'), roundnext:$('roundnext'), nextBtn:$('nextBtn'),
+    gbLeft:$('gbLeft'), gbStreak:$('gbStreak'), gbProg:$('gbProg'), gbFill:$('gbFill'),
+    gbTimer:$('gbTimer'), gbScore:$('gbScore')
+  };
+
+  /* ---------- sound + haptics ---------- */
+  var SOUND = { on: true, ctx: null };
+  try { SOUND.on = localStorage.getItem('ns.muted') !== '1'; } catch(e){}
+
+  function audioCtx(){
+    if(!SOUND.ctx){
+      var AC = window.AudioContext || window.webkitAudioContext;
+      try { SOUND.ctx = AC ? new AC() : null; } catch(e){ SOUND.ctx = null; }
+    }
+    if(SOUND.ctx && SOUND.ctx.state === 'suspended'){ SOUND.ctx.resume(); }
+    return SOUND.ctx;
+  }
+  function blip(freq, dur, type, vol, delay){
+    if(!SOUND.on) return;
+    var c = audioCtx(); if(!c) return;
+    var t = c.currentTime + (delay || 0);
+    var o = c.createOscillator(), g = c.createGain();
+    o.type = type || 'sine';
+    o.frequency.setValueAtTime(freq, t);
+    g.gain.setValueAtTime(0.0001, t);
+    g.gain.exponentialRampToValueAtTime(vol || 0.14, t + 0.008);
+    g.gain.exponentialRampToValueAtTime(0.0001, t + (dur || 0.08));
+    o.connect(g); g.connect(c.destination);
+    o.start(t); o.stop(t + (dur || 0.08) + 0.03);
+  }
+  function buzz(pattern){
+    if(!SOUND.on || !navigator.vibrate) return;
+    try { navigator.vibrate(pattern); } catch(e){}
+  }
+  var Snd = {
+    place: function(){ blip(300 + Math.random() * 50, 0.055, 'triangle', 0.11); buzz(8); },
+    pull:  function(){ blip(200, 0.045, 'sine', 0.07); },
+    solve: function(){ [523, 659, 784].forEach(function(f, i){ blip(f, 0.16, 'sine', 0.15, i * 0.07); }); buzz([10, 26, 10, 26]); },
+    wrong: function(){ blip(120, 0.16, 'sawtooth', 0.11); buzz(28); },
+    low:   function(){ blip(900, 0.035, 'square', 0.05); }
+  };
+
+  (function initSoundBtn(){
+    var btn = $('soundBtn');
+    if(!btn) return;
+    var ON  = '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><path d="M16 8.5a4 4 0 0 1 0 7"/><path d="M19 5.5a8 8 0 0 1 0 13"/></svg>';
+    var OFF = '<svg viewBox="0 0 24 24" width="17" height="17" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M4 9v6h4l5 4V5L8 9H4z"/><line x1="16" y1="9" x2="22" y2="15"/><line x1="22" y1="9" x2="16" y2="15"/></svg>';
+    function paint(){
+      btn.innerHTML = SOUND.on ? ON : OFF;
+      btn.classList.toggle('off', !SOUND.on);
+      btn.setAttribute('aria-label', SOUND.on ? 'Sound on' : 'Sound off');
+    }
+    btn.addEventListener('click', function(){
+      SOUND.on = !SOUND.on;
+      try { localStorage.setItem('ns.muted', SOUND.on ? '0' : '1'); } catch(e){}
+      if(SOUND.on){ audioCtx(); blip(660, 0.06, 'sine', 0.12); }
+      paint();
+    });
+    paint();
+  })();
+
+  var STAGES = [
+    { key:'easy', name:'Easy',      d:1, time:45, count:6, need:4, ex:true,  bonus:25 },
+    { key:'diff', name:'Difficult', d:2, time:32, count:7, need:5, ex:true,  bonus:45 },
+    { key:'hard', name:'Hard',      d:3, time:24, count:7, need:5, ex:false, bonus:80 }
+  ];
+
+  var S = {
+    screen:'menu', mode:null, cat:null,
+    queue:[], qi:0, round:null,
+    score:0, combo:0, results:[],
+    ticker:null, timeLeft:0, locked:false, endedRun:false,
+    stageIdx:0, roundTime:30, stageEx:true, stageStartScore:0
+  };
+
+  /* ---------- helpers ---------- */
+  function mulberry32(a){
+    return function(){
+      a |= 0; a = a + 0x6D2B79F5 | 0;
+      var t = Math.imul(a ^ a >>> 15, 1 | a);
+      t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+      return ((t ^ t >>> 14) >>> 0) / 4294967296;
+    };
+  }
+  function shuffle(arr, rnd){
+    rnd = rnd || Math.random;
+    for(var i = arr.length - 1; i > 0; i--){
+      var j = Math.floor(rnd() * (i + 1));
+      var t = arr[i]; arr[i] = arr[j]; arr[j] = t;
+    }
+    return arr;
+  }
+  function wordValue(w){ return w.split('').reduce(function(a,c){ return a + (VAL[c] || 0); }, 0); }
+  function dayKey(d){ d = d || new Date(); return d.getFullYear() * 10000 + (d.getMonth() + 1) * 100 + d.getDate(); }
+  function comboMult(c){ return COMBO[Math.min(c, COMBO.length - 1)]; }
+  function store(k, v){ try{ localStorage.setItem(k, JSON.stringify(v)); }catch(e){} }
+  function load(k){ try{ return JSON.parse(localStorage.getItem(k)); }catch(e){ return null; } }
+  var REDUCED = !!(window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches);
+
+  /* ---------- solve payoff ---------- */
+  function stopTally(){ if(S.tallyIv){ clearInterval(S.tallyIv); S.tallyIv = null; } }
+  function countTally(target, mult){
+    stopTally();
+    var suffix = mult > 1 ? '  ×' + mult : '';
+    if(REDUCED || target <= 2){ el.tally.textContent = '+' + target + suffix; return; }
+    var n = 0, step = Math.max(1, Math.ceil(target / 18));
+    S.tallyIv = setInterval(function(){
+      n = Math.min(target, n + step);
+      el.tally.textContent = '+' + n + suffix;
+      if(n >= target) stopTally();
+    }, 24);
+  }
+  function revealInExample(r, good){
+    if(r.ex && r.ex.indexOf('___') !== -1){
+      el.ex.innerHTML = '&ldquo;' + r.ex.replace('___', '<b>' + r.word + '</b>') + '&rdquo;';
+    } else {
+      el.ex.innerHTML = '<b>' + r.word + '</b> &mdash; ' + r.hint;
+    }
+    el.ex.classList.toggle('reveal-word', !!good);
+  }
+
+  /* ---------- achievements ---------- */
+  var ACH = [
+    { id:'first',   name:'First Word',   how:'Solve your first word' },
+    { id:'ten',     name:'Getting Warm', how:'Solve 10 words' },
+    { id:'fifty',   name:'Regular',      how:'Solve 50 words' },
+    { id:'hundred', name:'Century',      how:'Solve 100 words' },
+    { id:'rare',    name:'Rare Letters', how:'Solve a word with J, Q, X or Z' },
+    { id:'combo',   name:'On Fire',      how:'Reach a ×2.5 combo' },
+    { id:'clean',   name:'Clean Daily',  how:'Solve the Daily with no reveals' },
+    { id:'streak7', name:'Seven Days',   how:'Keep a 7-day Daily streak' },
+    { id:'grind',   name:'Marathoner',   how:'Solve 15 words in one Marathon run' },
+    { id:'hard',    name:'Hard Cleared', how:'Clear the Hard stage' },
+    { id:'naija',   name:'All of Naija', how:'Play a round in every category' },
+    { id:'jollof',  name:'Jollof',       how:'Solve JOLLOF' }
+  ];
+  function achState(){
+    var a = load('ns.ach') || {};
+    if(!Array.isArray(a.badges)) a.badges = [];
+    if(typeof a.solved !== 'number') a.solved = 0;
+    if(!Array.isArray(a.cats)) a.cats = [];
+    return a;
+  }
+  function grant(ids){
+    var a = achState(), fresh = [];
+    (Array.isArray(ids) ? ids : [ids]).forEach(function(id){
+      if(a.badges.indexOf(id) === -1){ a.badges.push(id); fresh.push(id); }
+    });
+    if(fresh.length){ store('ns.ach', a); fresh.forEach(achToast); renderAchShelf(); }
+  }
+  function bumpStats(r, mult){
+    var a = achState();
+    a.solved++;
+    if(a.cats.indexOf(r.cat) === -1) a.cats.push(r.cat);
+    a.lastWord = r.word;
+    a.lastMult = mult || 1;
+    store('ns.ach', a);
+  }
+  function checkAch(ctx){
+    ctx = ctx || {};
+    var a = achState(), win = [];
+    if(a.solved >= 1)   win.push('first');
+    if(a.solved >= 10)  win.push('ten');
+    if(a.solved >= 50)  win.push('fifty');
+    if(a.solved >= 100) win.push('hundred');
+    if(a.lastWord && /[JQXZ]/.test(a.lastWord)) win.push('rare');
+    if(a.lastWord === 'JOLLOF') win.push('jollof');
+    if(a.lastMult >= 2.5) win.push('combo');
+    if(a.cats.length >= 14) win.push('naija');
+    var stk = load('ns.streak'); if(stk && stk.n >= 7) win.push('streak7');
+    var stg = load('ns.stages'); if(stg && stg.cleared && stg.cleared[2]) win.push('hard');
+    if(ctx.cleanDaily) win.push('clean');
+    if(ctx.marathonSolved >= 15) win.push('grind');
+    grant(win);
+  }
+  function achToast(id){
+    var m = null;
+    for(var i = 0; i < ACH.length; i++){ if(ACH[i].id === id){ m = ACH[i]; break; } }
+    if(!m) return;
+    var t = document.createElement('div');
+    t.className = 'ach-toast';
+    t.style.bottom = (18 + document.querySelectorAll('.ach-toast').length * 62) + 'px';
+    t.innerHTML = '<b>Badge unlocked</b>' + m.name;
+    document.body.appendChild(t);
+    requestAnimationFrame(function(){ t.classList.add('in'); });
+    setTimeout(function(){
+      t.classList.remove('in');
+      setTimeout(function(){ if(t.parentNode) t.parentNode.removeChild(t); }, 450);
+    }, 3200);
+  }
+  function renderAchShelf(){
+    var host = $('achShelf');
+    if(!host) return;
+    var a = achState();
+    host.hidden = false;
+    host.innerHTML =
+      '<p class="ach-head">Badges <span>' + a.badges.length + ' / ' + ACH.length + '</span></p>' +
+      '<div class="ach-grid">' + ACH.map(function(m){
+        var on = a.badges.indexOf(m.id) !== -1;
+        return '<button type="button" class="ach-chip' + (on ? ' on' : '') + '">' +
+               (on ? m.name : '• • •') + '</button>';
+      }).join('') + '</div>' +
+      '<p class="ach-tip" id="achTip">Tap a badge to see how to earn it.</p>';
+    Array.prototype.forEach.call(host.querySelectorAll('.ach-chip'), function(btn, i){
+      btn.addEventListener('click', function(){
+        var m = ACH[i], on = achState().badges.indexOf(m.id) !== -1;
+        $('achTip').textContent = m.name + ' — ' + m.how + (on ? '  ✓' : '');
+      });
+    });
+  }
+
+  /* ---------- word source ---------- */
+  function cleanWord(s){ return String(s == null ? '' : s).toUpperCase().replace(/[^A-Z]/g, ''); }
+  function normalize(rows){
+    var arr = Array.isArray(rows) ? rows : (rows && (rows.words || rows.data)) || [];
+    return arr.map(function(r){
+      var alt = Array.isArray(r.alt) ? r.alt : String(r.alt == null ? '' : r.alt).split(/[|,]/);
+      return {
+        w: cleanWord(r.w),
+        cat: String(r.cat == null || r.cat === '' ? 'Naija' : r.cat).trim(),
+        d: Math.max(1, Math.min(3, parseInt(r.d, 10) || 2)),
+        hint: String(r.hint == null ? '' : r.hint).trim(),
+        ex: String(r.ex == null ? '' : r.ex).trim(),
+        alt: alt.map(cleanWord).filter(Boolean)
+      };
+    }).filter(function(x){ return /^[A-Z]{4,10}$/.test(x.w) && x.hint; });
+  }
+  function parseDelimited(text){
+    var rows = [], row = [], field = '', i = 0, q = false, c;
+    for(; i < text.length; i++){
+      c = text[i];
+      if(q){
+        if(c === '"'){ if(text[i + 1] === '"'){ field += '"'; i++; } else q = false; }
+        else field += c;
+      }
+      else if(c === '"'){ q = true; }
+      else if(c === ',' || c === '\t'){ row.push(field); field = ''; }
+      else if(c === '\n'){ row.push(field); rows.push(row); row = []; field = ''; }
+      else if(c !== '\r'){ field += c; }
+    }
+    if(field.length || row.length){ row.push(field); rows.push(row); }
+    return rows;
+  }
+  function rowsToObjects(text){
+    var rows = parseDelimited(text);
+    if(rows.length < 2) return [];
+    var head = rows.shift().map(function(h){ return String(h).trim().toLowerCase(); });
+    return rows.filter(function(r){ return r.join('').trim(); }).map(function(r){
+      var o = {};
+      head.forEach(function(h, i){ o[h] = r[i] != null ? r[i] : ''; });
+      return o;
+    });
+  }
+  function loadWords(){
+    var local = normalize(window.NS_WORDS || []);
+    if(!SHEET_URL) return Promise.resolve(local);
+    var url = SHEET_URL + (SHEET_URL.indexOf('?') < 0 ? '?' : '&') + 'v=' + Date.now();
+    var ctrl = ('AbortController' in window) ? new AbortController() : null;
+    var timer = ctrl ? setTimeout(function(){ ctrl.abort(); }, SHEET_TIMEOUT) : null;
+    return fetch(url, ctrl ? { signal: ctrl.signal } : undefined)
+      .then(function(res){ return res.ok ? res.text() : null; })
+      .then(function(text){
+        if(timer) clearTimeout(timer);
+        if(!text) return local;
+        var rows;
+        try { rows = JSON.parse(text); }
+        catch(e){ rows = rowsToObjects(text); }
+        if(Array.isArray(rows)){
+          rows = rows.filter(function(r){
+            var s = String(r.status == null ? 'live' : r.status).trim().toLowerCase();
+            return s === '' || s === 'live';
+          });
+        }
+        var live = normalize(rows);
+        return live.length >= MIN_LIVE_WORDS ? live : local;
+      })
+      .catch(function(){ if(timer) clearTimeout(timer); return local; });
+  }
+
+  var WORDS = normalize(window.NS_WORDS || []);
+
+  /* ---------- freshness ---------- */
+  function seenSet(){ var a = load('ns.seen'); return Array.isArray(a) ? a : []; }
+  function markSeen(w){
+    if(S.mode === 'daily') return;
+    var a = seenSet();
+    if(a.indexOf(w) === -1) a.push(w);
+    if(a.length >= WORDS.length) a = [];
+    store('ns.seen', a);
+  }
+  function freshFirst(pool){
+    var seen = seenSet(), unseen = [], old = [];
+    pool.forEach(function(x){ (seen.indexOf(x.w) === -1 ? unseen : old).push(x); });
+    shuffle(unseen); shuffle(old);
+    return unseen.concat(old);
+  }
+
+  function show(section){
+    el.menu.hidden = section !== 'menu';
+    el.game.hidden = section !== 'game';
+    el.over.hidden = section !== 'over';
+    S.screen = section;
+    if(section === 'menu') renderAchShelf();
+  }
+
+  /* ---------- tiles ---------- */
+  function makeTile(t, delay){
+    var b = document.createElement('button');
+    b.type = 'button';
+    b.className = 'tile';
+    b.setAttribute('aria-label', t.ch + ', ' + VAL[t.ch] + ' points');
+    if(delay != null) b.style.animationDelay = delay + 'ms';
+    b.innerHTML = '<span class="face">' + t.ch + '</span><span class="val">' + VAL[t.ch] + '</span>';
+    return b;
+  }
+  function tileById(id){
+    var r = S.round;
+    for(var i = 0; i < r.tiles.length; i++){ if(r.tiles[i].id === id) return r.tiles[i]; }
+    return null;
+  }
+  function render(){
+    var r = S.round;
+    el.pool.innerHTML = '';
+    r.order.forEach(function(id, i){
+      var t = tileById(id);
+      if(t.placed) return;
+      var b = makeTile(t, i * 40);
+      b.addEventListener('click', function(){ place(id); });
+      el.pool.appendChild(b);
+    });
+    el.slots.innerHTML = '';
+    for(var s = 0; s < r.word.length; s++){
+      var cell = document.createElement('div');
+      cell.className = 'slot';
+      var id = r.answer[s];
+      if(id !== null && id !== undefined){
+        var bb = makeTile(tileById(id), null);
+        (function(si){ bb.addEventListener('click', function(){ pull(si); }); })(s);
+        cell.appendChild(bb);
+      }
+      el.slots.appendChild(cell);
+    }
+  }
+
+  /* ---------- round lifecycle ---------- */
+  function makeRound(entry, rnd){
+    var word = entry.w;
+    var tiles = word.split('').map(function(ch, i){ return { id:i, ch:ch, placed:false }; });
+    var order = tiles.map(function(t){ return t.id; });
+    do { shuffle(order, rnd); }
+    while(order.map(function(id){ return tiles[id].ch; }).join('') === word && word.length > 1);
+    return {
+      word:word,
+      accept:[word].concat(entry.alt || []),
+      hint:entry.hint, ex:entry.ex || '', cat:entry.cat, d:entry.d || 2,
+      base:wordValue(word),
+      tiles:tiles, order:order,
+      answer:new Array(word.length).fill(null),
+      reveals:0, timed:(S.mode !== 'daily')
+    };
+  }
+
+  function startRound(rnd){
+    var entry = S.queue[S.qi];
+    if(!entry){ finish(); return; }
+    S.round = makeRound(entry, rnd);
+    S.locked = false;
+    el.board.classList.toggle('vs', S.mode === 'rival');
+    $('rivalbar').hidden = S.mode !== 'rival';
+    stopRival();
+    S.timeLeft = S.roundTime || ROUND_TIME;
+
+    el.hint.textContent = S.round.hint;
+    el.cat.textContent = S.round.cat;
+    var showEx = S.round.ex && !(S.mode === 'stages' && !S.stageEx);
+    el.ex.innerHTML = showEx
+      ? '&ldquo;' + S.round.ex.replace('___', '<b>' + '&nbsp;'.repeat(S.round.word.length) + '</b>') + '&rdquo;'
+      : '';
+    el.ex.classList.remove('reveal-word');
+    stopTally();
+    el.tally.textContent = '';
+    el.feedback.textContent = 'Tap a tile, type, or press Space to shuffle.';
+    el.feedback.className = 'feedback';
+    el.board.classList.remove('solved');
+    el.roundnext.classList.remove('show');
+    $('reveal').disabled = false;
+    resetCoach();
+
+    updateBar();
+    render();
+    stopTimer();
+    if(S.round.timed) startTimer();
+    if(S.mode === 'rival') startRival();
+    show('game');
+  }
+
+  function updateBar(){
+    var m = S.mode;
+    el.gbScore.textContent = S.score + ' pts';
+    el.gbStreak.hidden = S.combo < 2;
+    el.gbStreak.innerHTML = '&times;' + comboMult(S.combo);
+
+    if(m === 'daily'){
+      el.gbLeft.innerHTML = 'Daily &middot; <span class="reveals">' + S.round.reveals + ' reveal' + (S.round.reveals === 1 ? '' : 's') + '</span>';
+      el.gbProg.hidden = true; el.gbTimer.hidden = true;
+    } else if(m === 'rival'){
+      el.gbLeft.textContent = 'Vs ' + S.rival.name + ' · round ' + (S.qi + 1);
+      el.gbScore.textContent = 'You ' + S.rw + '\u2013' + S.rl;
+      el.gbProg.hidden = true; el.gbTimer.hidden = false;
+    } else if(m === 'marathon'){
+      el.gbLeft.textContent = 'Marathon · ' + (S.qi + 1);
+      el.gbProg.hidden = true; el.gbTimer.hidden = false;
+    } else if(m === 'stages'){
+      el.gbLeft.textContent = STAGES[S.stageIdx].name + ' · ' + (S.qi + 1) + '/' + S.queue.length;
+      el.gbProg.hidden = false; el.gbTimer.hidden = false;
+      el.gbFill.style.width = (S.qi / S.queue.length * 100) + '%';
+    } else {
+      el.gbLeft.textContent = S.cat + ' · ' + (S.qi + 1) + '/' + S.queue.length;
+      el.gbProg.hidden = false; el.gbTimer.hidden = false;
+      el.gbFill.style.width = (S.qi / S.queue.length * 100) + '%';
+    }
+  }
+
+  function fmt(s){ return '0:' + (s < 10 ? '0' : '') + Math.max(0, s); }
+  function stopTimer(){ clearInterval(S.ticker); S.ticker = null; el.gbTimer.classList.remove('low'); }
+  function startTimer(){
+    stopTimer();
+    el.gbTimer.textContent = fmt(S.timeLeft);
+    S.ticker = setInterval(function(){
+      S.timeLeft--;
+      el.gbTimer.textContent = fmt(S.timeLeft);
+      if(S.timeLeft <= 8) el.gbTimer.classList.add('low');
+      if(S.timeLeft <= 5 && S.timeLeft > 0) Snd.low();
+      if(S.timeLeft <= 0){ stopTimer(); failRound('time'); }
+    }, 1000);
+  }
+
+  /* ---------- input ---------- */
+  function place(id){
+    if(S.locked) return;
+    var free = S.round.answer.indexOf(null);
+    if(free === -1) return;
+    S.round.answer[free] = id;
+    tileById(id).placed = true;
+    Snd.place();
+    render();
+    check();
+  }
+  function pull(si){
+    if(S.locked) return;
+    var id = S.round.answer[si];
+    if(id === null || id === undefined) return;
+    S.round.answer[si] = null;
+    tileById(id).placed = false;
+    Snd.pull();
+    el.feedback.textContent = 'Keep going.';
+    el.feedback.className = 'feedback';
+    render();
+  }
+  function typeLetter(ch){
+    if(S.locked) return;
+    var r = S.round;
+    for(var i = 0; i < r.order.length; i++){
+      var t = tileById(r.order[i]);
+      if(!t.placed && t.ch === ch){ place(t.id); return; }
+    }
+  }
+  function backspace(){
+    if(S.locked) return;
+    var a = S.round.answer;
+    for(var i = a.length - 1; i >= 0; i--){ if(a[i] !== null){ pull(i); return; } }
+  }
+
+  document.addEventListener('keydown', function(e){
+    if(S.screen !== 'game') return;
+    if(e.metaKey || e.ctrlKey || e.altKey) return;
+    var k = e.key;
+    if(/^[a-zA-Z]$/.test(k)){
+      typeLetter(k.toUpperCase());
+      e.preventDefault();
+    } else if(k === 'Backspace'){
+      backspace();
+      e.preventDefault();
+    } else if(k === ' ' || e.code === 'Space'){
+      if(!S.locked && S.round){
+        shuffle(S.round.order);
+        render();
+        el.feedback.textContent = 'Shuffled.';
+        el.feedback.className = 'feedback';
+        if(SOUND.on) Snd.pull();
+      }
+      e.preventDefault();
+    } else if(k === 'Enter' && el.roundnext.classList.contains('show')){
+      nextRound();
+      e.preventDefault();
+    }
+  });
+
+  function check(){
+    var r = S.round;
+    if(r.answer.indexOf(null) !== -1) return;
+    var guess = r.answer.map(function(id){ return tileById(id).ch; }).join('');
+    if(r.accept.indexOf(guess) !== -1){ solveRound(); }
+    else {
+      Snd.wrong();
+      el.feedback.textContent = 'Not it. Pull a tile and try again.';
+      el.feedback.className = 'feedback bad';
+      el.slots.classList.remove('wrong');
+      void el.slots.offsetWidth;
+      el.slots.classList.add('wrong');
+    }
+  }
+
+  /* ---------- scoring ---------- */
+  function solveRound(){
+    if(S.mode === 'rival'){ rivalRound(true); return; }
+    stopTimer();
+    S.locked = true;
+    Snd.solve();
+    var r = S.round;
+    var mult = comboMult(S.combo);
+    var timeBonus = r.timed ? Math.max(0, S.timeLeft) : 0;
+    var pts = Math.max(1, Math.round((r.base - r.reveals * REVEAL_COST) * mult) + timeBonus);
+    S.score += pts;
+    S.combo++;
+    markSeen(r.word);
+    S.results.push({ w:r.word, got:true, pts:pts });
+
+    el.board.classList.add('solved');
+    countTally(pts, mult);
+    revealInExample(r, true);
+    el.feedback.textContent = r.timed
+      ? 'Correct. ' + r.base + ' for letters' + (timeBonus ? ', ' + timeBonus + ' for the clock' : '') + '.'
+      : 'Correct.';
+    el.feedback.className = 'feedback good';
+    updateBar();
+    if(mult > 1){
+      el.gbStreak.classList.remove('bump');
+      void el.gbStreak.offsetWidth;
+      el.gbStreak.classList.add('bump');
+    }
+    bumpStats(r, mult);
+    checkAch();
+    queueNext();
+  }
+
+  function failRound(reason){
+    if(S.locked) return;
+    if(S.mode === 'rival'){ rivalRound(false, reason); return; }
+    stopTimer();
+    S.locked = true;
+    Snd.wrong();
+    var r = S.round;
+    var open = r.tiles.filter(function(t){ return !t.placed; });
+    for(var s = 0; s < r.answer.length; s++){
+      if(r.answer[s] === null){ var t = open.shift(); if(t){ r.answer[s] = t.id; t.placed = true; } }
+    }
+    render();
+    S.combo = 0;
+    markSeen(r.word);
+    S.results.push({ w:r.word, got:false, pts:0 });
+    revealInExample(r, false);
+    el.feedback.textContent = (reason === 'time' ? 'Time up — it was ' : 'Gave up — it was ') + r.word + '.';
+    el.feedback.className = 'feedback bad';
+    updateBar();
+
+    if(S.mode === 'marathon'){ S.endedRun = true; S.runEnd = Date.now(); }
+    queueNext();
+  }
+
+  function queueNext(){
+    if(S.mode === 'daily'){ finish(); return; }
+    if(S.mode === 'rival'){
+      el.nextBtn.textContent = rivalDecided() ? 'See result' : 'Next word';
+      hideCoach();
+      hintBtn.disabled = true;
+      el.roundnext.classList.add('show');
+      return;
+    }
+    var last = S.mode === 'marathon' && S.endedRun;
+    var atEnd = (S.mode === 'category' || S.mode === 'stages') && S.qi + 1 >= S.queue.length;
+    el.nextBtn.textContent = (last || atEnd)
+      ? (S.mode === 'stages' ? 'Stage result' : 'See score')
+      : 'Next word';
+    hideCoach();
+    hintBtn.disabled = true;
+    el.roundnext.classList.add('show');
+  }
+
+  function nextRound(){
+    if(S.mode === 'rival'){
+      if(rivalDecided() || S.qi + 1 >= S.queue.length){ finishRival(); return; }
+      S.qi++;
+      startRound();
+      return;
+    }
+    if(S.mode === 'marathon' && S.endedRun){ finish(); return; }
+    S.qi++;
+    if(S.mode === 'stages' && S.qi >= S.queue.length){ finishStage(); return; }
+    if(S.mode === 'category' && S.qi >= S.queue.length){ finish(); return; }
+    if(S.mode === 'marathon' && S.qi >= S.queue.length){ extendMarathon(); }
+    startRound();
+  }
+
+  /* ---------- modes ---------- */
+  function chooseMode(mode){
+    S.mode = mode;
+    S.challenge = null;
+    S.score = 0; S.combo = 0; S.qi = 0; S.results = []; S.endedRun = false;
+    S.roundTime = 30;
+
+    if(mode === 'daily'){
+      var key = dayKey();
+      var done = load('ns.daily');
+      if(done && done.date === key){ finishDaily(done, true); return; }
+      var rnd = mulberry32(key);
+      var pick = WORDS[Math.floor(rnd() * WORDS.length)];
+      S.queue = [pick];
+      startRound(mulberry32(key + 1));
+    }
+    else if(mode === 'marathon'){
+      buildMarathon();
+      S.runStart = Date.now(); S.runEnd = 0;
+      startRound();
+    }
+    else if(mode === 'stages'){
+      renderStageSelect();
+    }
+    else if(mode === 'rival'){
+      renderRivalPick();
+    }
+    else {
+      var cats = [];
+      WORDS.forEach(function(x){ if(cats.indexOf(x.cat) === -1) cats.push(x.cat); });
+      el.catlist.innerHTML = '';
+      cats.forEach(function(c){
+        var b = document.createElement('button');
+        b.type = 'button';
+        b.textContent = c;
+        b.addEventListener('click', function(){ startCategory(c); });
+        el.catlist.appendChild(b);
+      });
+      el.catpick.hidden = false;
+      el.catpick.scrollIntoView({ behavior:'smooth', block:'nearest' });
+    }
+  }
+
+  function buckets(){
+    var b = { 1:[], 2:[], 3:[] };
+    WORDS.forEach(function(x){ (b[x.d] || b[2]).push(x); });
+    b[1] = freshFirst(b[1]); b[2] = freshFirst(b[2]); b[3] = freshFirst(b[3]);
+    return b;
+  }
+  function buildMarathon(){
+    var b = buckets();
+    S.queue = b[1].slice(0, 4).concat(b[2].slice(0, 6)).concat(b[3]);
+    if(S.queue.length < 6) S.queue = WORDS.slice();
+  }
+  function extendMarathon(){
+    var b = buckets();
+    S.queue = S.queue.concat(b[3], b[2], b[1]);
+  }
+  function startCategory(c){
+    S.cat = c;
+    var pool = freshFirst(WORDS.filter(function(x){ return x.cat === c; }));
+    S.queue = pool.slice(0, 10);
+    el.catpick.hidden = true;
+    startRound();
+  }
+
+  /* ---------- stages campaign ---------- */
+  function stageState(){
+    var s = load('ns.stages');
+    if(!s || typeof s.unlocked !== 'number') s = { unlocked:0, cleared:[false, false, false], best:0 };
+    if(!Array.isArray(s.cleared)) s.cleared = [false, false, false];
+    return s;
+  }
+
+  function renderStageSelect(){
+    show('menu');
+    el.catpick.hidden = true;
+    var st = stageState();
+    var html = '<p class="label" style="display:block;margin-top:26px;color:var(--clay)">Clear a stage to open the next</p>' +
+               '<div class="stagerow">';
+    STAGES.forEach(function(sd, i){
+      var open = st.unlocked >= i;
+      var done = !!st.cleared[i];
+      html += '<button class="stage-item ' + sd.key + (open ? '' : ' locked') + (done ? ' cleared' : '') + '" type="button" ' +
+                'data-stage="' + i + '"' + (open ? '' : ' disabled') + '>' +
+                '<span class="badge ' + sd.key + '">' + sd.name + '</span>' +
+                '<span class="stage-meta">' + sd.count + ' words &middot; ' + sd.time + 's each &middot; pass ' + sd.need + '</span>' +
+                '<span class="stage-mark">' + (done ? 'CLEARED' : (open ? 'PLAY' : 'LOCKED')) + '</span>' +
+              '</button>';
+    });
+    html += '</div>';
+    if(st.best) html += '<p class="stage-best">Campaign best: ' + st.best + ' pts</p>';
+    el.stageselect.innerHTML = html;
+    Array.prototype.forEach.call(el.stageselect.querySelectorAll('.stage-item'), function(btn){
+      if(btn.disabled) return;
+      btn.addEventListener('click', function(){ startStage(+btn.getAttribute('data-stage')); });
+    });
+    el.stageselect.hidden = false;
+    el.stageselect.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+
+  function startStage(i, cumulative){
+    var sd = STAGES[i];
+    S.mode = 'stages';
+    S.stageIdx = i;
+    if(!cumulative) S.score = 0;
+    S.stageStartScore = S.score;
+    S.combo = 0; S.qi = 0; S.results = []; S.endedRun = false;
+    S.roundTime = sd.time;
+    S.stageEx = sd.ex;
+    var pool = freshFirst(WORDS.filter(function(x){ return x.d === sd.d; }));
+    S.queue = pool.slice(0, sd.count);
+    if(S.queue.length < 3){
+      var extra = freshFirst(WORDS.slice());
+      S.queue = S.queue.concat(extra).slice(0, sd.count);
+    }
+    el.stageselect.hidden = true;
+    startRound();
+  }
+
+  function finishStage(){
+    stopTimer();
+    var sd = STAGES[S.stageIdx];
+    var solved = S.results.filter(function(x){ return x.got; }).length;
+    var cleared = solved >= sd.need;
+    var champion = cleared && S.stageIdx === STAGES.length - 1;
+    var st = stageState();
+
+    if(cleared){
+      S.score += sd.bonus;
+      st.cleared[S.stageIdx] = true;
+      if(st.unlocked < S.stageIdx + 1) st.unlocked = Math.min(STAGES.length, S.stageIdx + 1);
+    } else {
+      S.score = S.stageStartScore;
+    }
+    if(champion && S.score > (st.best || 0)) st.best = S.score;
+    store('ns.stages', st);
+    checkAch();
+
+    var grid = S.results.map(function(x){ return '<i class="' + (x.got ? 'got' : '') + '"></i>'; }).join('');
+    var rows = S.results.map(function(x){
+      return '<li><span>' + x.w + '</span><span class="' + (x.got ? 'pts' : 'miss') + '">' +
+             (x.got ? '+' + x.pts : 'missed') + '</span></li>';
+    }).join('');
+    var head, sub;
+    if(champion){
+      head = 'Champion';
+      sub = 'all three stages cleared';
+    } else if(cleared){
+      head = sd.name + ' cleared';
+      sub = solved + ' of ' + sd.count + ' · +' + sd.bonus + ' stage bonus';
+    } else {
+      head = sd.name + ' — not yet';
+      sub = solved + ' of ' + sd.count + ' · need ' + sd.need + ' to clear';
+    }
+
+    var share = champion
+      ? 'Naija Scramble ' + FLAG + ' Stages\nAll 3 stages cleared · ' + fmtScore(S.score) + ' pts\nhttps://' + SHARE_URL
+      : 'Naija Scramble ' + FLAG + ' ' + sd.name + ' stage\n' + solved + '/' + sd.count + (cleared ? ' · cleared' : ' · missed') + '\n' + gridText(S.results) + '\nhttps://' + SHARE_URL;
+
+    var actions = '';
+    if(cleared && !champion){
+      actions += '<button class="cta" id="nextStageBtn" type="button">Next stage: ' + STAGES[S.stageIdx + 1].name + '</button>';
+    } else if(!cleared){
+      actions += '<button class="cta" id="retryStageBtn" type="button">Retry ' + sd.name + '</button>';
+    } else {
+      actions += '<button class="cta wa-btn" id="waBtn" type="button">Share on WhatsApp 💬</button>';
+      actions += '<button class="cta" id="copyBtn" type="button">Copy result</button>';
+    }
+    actions += '<button class="ghost" id="stagesBtn" type="button">All stages</button>';
+
+    el.over.innerHTML =
+      '<div class="endscreen">' +
+        '<span class="label">' + head + '</span>' +
+        '<div class="bigscore">' + S.score + '<small>' + sub + '</small></div>' +
+        '<div class="result-grid" aria-hidden="true">' + grid + '</div>' +
+        '<ul class="scorelist">' + rows + '</ul>' +
+        (cleared ? '<pre class="share-card" id="shareText">' + share + '</pre>' : '') +
+        '<div class="endactions">' + actions + '</div>' +
+      '</div>';
+
+    if(cleared){
+      wireCopy(share);
+      var wb = $('waBtn'); if(wb) wb.addEventListener('click', function(){ openWhatsApp(share); });
+    }
+    var nb = $('nextStageBtn'); if(nb) nb.addEventListener('click', function(){ startStage(S.stageIdx + 1, true); });
+    var rb = $('retryStageBtn'); if(rb) rb.addEventListener('click', function(){ startStage(S.stageIdx, true); });
+    $('stagesBtn').addEventListener('click', function(){ S.combo = 0; chooseMode('stages'); });
+    show('over');
+  }
+
+  /* ---------- reveal ---------- */
+  $('reveal').addEventListener('click', function(){
+    if(S.locked) return;
+    var r = S.round;
+    var free = r.answer.indexOf(null);
+    if(free === -1) return;
+    var want = r.word[free];
+    for(var i = 0; i < r.order.length; i++){
+      var t = tileById(r.order[i]);
+      if(!t.placed && t.ch === want){
+        r.reveals++;
+        place(t.id);
+        if(S.mode === 'daily') updateBar();
+        el.feedback.textContent = 'Revealed one. That is ' + (r.reveals * REVEAL_COST) + ' off this word.';
+        el.feedback.className = 'feedback';
+        return;
+      }
+    }
+  });
+
+  /* ---------- Rival mode ---------- */
+  var RIVALS = [
+    { key:'tunde', name:'Tunde', tag:'Easy',   blurb:'Still learning the ropes. Good for a warm-up.', skill:0.7 },
+    { key:'amaka', name:'Amaka', tag:'Medium', blurb:'Sharp and steady. Keeps you honest.',           skill:1.0 },
+    { key:'chief', name:'Chief', tag:'Hard',   blurb:'Has seen every word before. Move fast.',       skill:1.45 }
+  ];
+  var RIVAL_WINS = 4;
+
+  function rivalRecord(){ var r = load('ns.rivals'); return (r && typeof r === 'object') ? r : {}; }
+  function rivalByKey(k){ for(var i = 0; i < RIVALS.length; i++){ if(RIVALS[i].key === k) return RIVALS[i]; } return RIVALS[1]; }
+  function rivalDecided(){ return S.rw >= RIVAL_WINS || S.rl >= RIVAL_WINS; }
+
+  function renderRivalPick(){
+    show('menu');
+    var rec = rivalRecord();
+    var cards = RIVALS.map(function(rv){
+      var x = rec[rv.key] || { w:0, l:0 };
+      return '<button class="mode-card" type="button" data-rival="' + rv.key + '">' +
+        '<span class="tag">' + rv.tag + '</span><h3>' + rv.name + '</h3><p>' + rv.blurb + '</p>' +
+        '<span class="rec">Your record: ' + x.w + '\u2013' + x.l + '</span></button>';
+    }).join('');
+    var pick = $('rivalpick');
+    pick.innerHTML =
+      '<p class="label" style="display:block;margin-top:26px;color:var(--clay)">Pick your rival</p>' +
+      '<div class="rivals">' + cards + '</div>' +
+      '<p class="rnote">Rivals are computer-controlled &mdash; there is no other player and no AI, just a bot racing on a timer. First to ' + RIVAL_WINS + ' rounds wins. Hints and reveals are off, and nothing here counts towards the leaderboard or the weekly prize.</p>';
+    Array.prototype.forEach.call(pick.querySelectorAll('[data-rival]'), function(b){
+      b.addEventListener('click', function(){ startRivalMatch(b.getAttribute('data-rival')); });
+    });
+    el.catpick.hidden = true;
+    el.stageselect.hidden = true;
+    pick.hidden = false;
+    pick.scrollIntoView({ behavior:'smooth', block:'nearest' });
+  }
+
+  function startRivalMatch(key){
+    var rv = rivalByKey(key), b = buckets(), q = [];
+    function take(list, n){ for(var i = 0; i < n && i < list.length; i++) q.push(list[i]); }
+    take(b[1], 2); take(b[2], 3); take(b[3], 2);
+    if(q.length < 7){
+      WORDS.forEach(function(x){ if(q.length < 7 && q.indexOf(x) === -1) q.push(x); });
+    }
+    S.mode = 'rival'; S.rival = rv;
+    S.rw = 0; S.rl = 0; S.qi = 0; S.score = 0; S.combo = 0; S.results = []; S.endedRun = false;
+    S.roundTime = 30;
+    S.queue = q;
+    $('rivalpick').hidden = true;
+    startRound();
+  }
+
+  function stopRival(){ if(S.rivalIv){ clearInterval(S.rivalIv); S.rivalIv = null; } }
+
+  function startRival(){
+    var r = S.round, rv = S.rival, len = r.word.length;
+    var base = 3.5 + len * 1.1 + r.d * 1.8;
+    var total = Math.min(26, Math.max(4, base / rv.skill * (0.8 + Math.random() * 0.45)));
+    var weights = [], sum = 0, i;
+    for(i = 0; i < len; i++){ var w = 0.5 + Math.random(); weights.push(w); sum += w; }
+    var times = [], acc = 0;
+    for(i = 0; i < len; i++){ acc += weights[i]; times.push(total * acc / sum); }
+    var pips = $('rivalPips');
+    pips.innerHTML = new Array(len + 1).join('<i></i>');
+    $('rivalName').textContent = rv.name;
+    $('rivalState').textContent = 'unscrambling\u2026';
+    var lit = 0, elapsed = 0, last = Date.now();
+    S.rivalIv = setInterval(function(){
+      var now = Date.now();
+      elapsed += Math.min(0.5, (now - last) / 1000);
+      last = now;
+      if(S.locked){ stopRival(); return; }
+      while(lit < len && times[lit] <= elapsed){ pips.children[lit].className = 'on'; lit++; }
+      if(lit >= len){ stopRival(); rivalRound(false, 'rival'); }
+    }, 200);
+  }
+
+  function rivalRound(won, reason){
+    if(S.locked) return;
+    stopTimer(); stopRival();
+    S.locked = true;
+    var r = S.round, rv = S.rival;
+    if(won){
+      Snd.solve();
+      S.rw++;
+      el.board.classList.add('solved');
+      revealInExample(r, true);
+      el.feedback.textContent = 'You got it first. Round to you.';
+      el.feedback.className = 'feedback good';
+      $('rivalState').textContent = 'beaten';
+    } else {
+      Snd.wrong();
+      S.rl++;
+      var open = r.tiles.filter(function(t){ return !t.placed; });
+      for(var i = 0; i < r.answer.length; i++){
+        if(r.answer[i] === null){ var t = open.shift(); if(t){ r.answer[i] = t.id; t.placed = true; } }
+      }
+      render();
+      revealInExample(r, false);
+      var pips = $('rivalPips').children;
+      if(reason === 'rival') for(var k = 0; k < pips.length; k++) pips[k].className = 'on';
+      el.feedback.textContent = (reason === 'rival' ? rv.name + ' got it first' : reason === 'time' ? 'Time up' : 'You gave that one to ' + rv.name) + ' \u2014 it was ' + r.word + '.';
+      el.feedback.className = 'feedback bad';
+      $('rivalState').textContent = reason === 'rival' ? 'got it' : '';
+    }
+    markSeen(r.word);
+    S.results.push({ w:r.word, got:won });
+    updateBar();
+    queueNext();
+  }
+
+  function finishRival(){
+    var rv = S.rival, won = S.rw > S.rl;
+    var rec = rivalRecord(), x = rec[rv.key] || { w:0, l:0 };
+    if(won) x.w++; else x.l++;
+    rec[rv.key] = x;
+    store('ns.rivals', rec);
+
+    var grid = S.results.map(function(y){ return '<i class="' + (y.got ? 'got' : '') + '"></i>'; }).join('');
+    var rows = S.results.map(function(y){
+      return '<li><span>' + y.w + '</span><span class="' + (y.got ? 'pts' : 'miss') + '">' + (y.got ? 'You' : rv.name) + '</span></li>';
+    }).join('');
+    var share = 'Naija Scramble ' + FLAG + ' vs ' + rv.name + ' (computer)\n' +
+                (won ? 'Won ' : 'Lost ') + S.rw + '\u2013' + S.rl + '\n' +
+                gridText(S.results) + '\nhttps://' + SHARE_URL;
+    el.over.innerHTML =
+      '<div class="endscreen">' +
+        '<span class="label">' + (won ? 'You beat ' + rv.name : rv.name + ' took this one') + '</span>' +
+        '<div class="bigscore">' + S.rw + '\u2013' + S.rl + '<small>first to ' + RIVAL_WINS + ' &middot; your record vs ' + rv.name + ' ' + x.w + '\u2013' + x.l + '</small></div>' +
+        '<div class="result-grid" aria-hidden="true">' + grid + '</div>' +
+        '<ul class="scorelist">' + rows + '</ul>' +
+        '<pre class="share-card" id="shareText">' + share + '</pre>' +
+        '<p class="lb-hint">Practice mode &mdash; rival matches don&rsquo;t count towards the leaderboard or the weekly prize.</p>' +
+        '<div class="endactions">' +
+          '<button class="cta wa-btn" id="waBtn" type="button">Share on WhatsApp 💬</button>' +
+          '<button class="cta" id="copyBtn" type="button">Copy result</button>' +
+          '<button class="ghost" id="rematchBtn" type="button">Rematch</button>' +
+          '<button class="ghost" id="otherRivalBtn" type="button">Another rival</button>' +
+          '<button class="ghost" id="menuBtn" type="button">Back to modes</button>' +
+        '</div>' +
+      '</div>';
+    wireEnd(share);
+    $('rematchBtn').addEventListener('click', function(){ startRivalMatch(rv.key); });
+    $('otherRivalBtn').addEventListener('click', function(){ renderRivalPick(); });
+    show('over');
+  }
+
+  /* ---------- Challenges ---------- */
+  var CH_MAX_SCORE = 1500;
+  function chEsc(v){ return String(v).replace(/[&<>"']/g, function(c){ return { '&':'&amp;', '<':'&lt;', '>':'&gt;', '"':'&quot;', "'":'&#39;' }[c]; }); }
+  function chSanitizeName(v){
+    return String(v == null ? '' : v).replace(/[^A-Za-z0-9\u00C0-\u024F\u1E00-\u1EFF ._'\-]/g, '').replace(/\s+/g, ' ').trim().slice(0, 16);
+  }
+  function chWords(){
+    return (S.queue || []).map(function(x){ return x.w; }).filter(function(w){ return /^[A-Z]{3,10}$/.test(w); });
+  }
+  function readChallenge(){
+    try{
+      var q = new URLSearchParams(location.search), c = q.get('c');
+      if(!c) return null;
+      var m = c.match(/^(\d{1,4})\.([A-Z]{3,10}(?:-[A-Z]{3,10}){2,9})$/);
+      if(!m) return null;
+      var score = parseInt(m[1], 10);
+      if(score > CH_MAX_SCORE) return null;
+      return {
+        score: score,
+        words: m[2].split('-'),
+        name: chSanitizeName(q.get('n')) || 'A friend',
+        cat: String(q.get('k') || '').replace(/[^A-Za-z ]/g, '').trim().slice(0, 12)
+      };
+    }catch(e){ return null; }
+  }
+  function showChallengeCard(ch){
+    var card = $('challengeCard');
+    card.innerHTML =
+      '<span class="tag">Challenge from a friend</span>' +
+      '<h3>' + chEsc(ch.name) + ' scored ' + ch.score + '</h3>' +
+      '<p>' + ch.words.length + (ch.cat ? ' ' + chEsc(ch.cat) : '') + ' words, 30 seconds each, the same for both of you. Beat ' + ch.score + ' and it is yours.</p>' +
+      '<button class="cta" id="chAccept" type="button">Play the challenge</button>' +
+      '<span class="lb-note" id="chErr"></span>';
+    card.hidden = false;
+    $('chAccept').addEventListener('click', function(){ startChallenge(ch); });
+  }
+  function startChallenge(ch){
+    var byWord = {};
+    WORDS.forEach(function(x){ byWord[x.w] = x; });
+    var queue = ch.words.map(function(w){ return byWord[w]; }).filter(Boolean);
+    if(queue.length < 3){
+      $('chErr').textContent = 'This challenge uses words that are no longer in the game. Pick a mode below.';
+      return;
+    }
+    S.mode = 'category'; S.cat = ch.cat || 'Challenge';
+    S.score = 0; S.combo = 0; S.qi = 0; S.results = []; S.endedRun = false;
+    S.roundTime = 30; S.queue = queue; S.challenge = ch;
+    $('challengeCard').hidden = true;
+    el.catpick.hidden = true;
+    startRound();
+  }
+  function wireChallengeSend(){
+    var btn = $('chBtn');
+    if(!btn) return;
+    var words = chWords(), cat = String(S.cat || 'Challenge').replace(/[^A-Za-z ]/g, '').trim().slice(0, 12) || 'Challenge', score = S.score;
+    btn.addEventListener('click', function(){
+      var name = chSanitizeName($('chName').value) || 'A friend';
+      store('ns.chname', name);
+      var url = 'https://' + SHARE_URL + '/play?c=' + score + '.' + words.join('-') + '&n=' + encodeURIComponent(name) + '&k=' + encodeURIComponent(cat) + '&utm_source=challenge&utm_medium=whatsapp';
+      var msg = name + ' scored ' + score + ' on ' + words.length + ' ' + cat + ' words in Naija Scramble ' + FLAG + '. Think you can beat it? ' + url;
+      function viaWhatsApp(){ window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(msg), '_blank', 'noopener'); }
+      if(navigator.share){
+        navigator.share({ text: msg }).catch(function(e){ if(!e || e.name !== 'AbortError') viaWhatsApp(); });
+      } else {
+        viaWhatsApp();
+      }
+    });
+  }
+
+  /* ---------- Word Coach ---------- */
+  var COACH_URL = 'https://word-coach.betterdays-goalhub.workers.dev/';
+  var HINT_LABEL = 'Pidgin hint −' + REVEAL_COST;
+  var coachBox = $('coach'), hintBtn = $('aiHint'), coachBtn = $('coachBtn'), coachBusy = false;
+
+  function askCoach(mode, r){
+    var ctl = typeof AbortController === 'function' ? new AbortController() : null;
+    var timer = setTimeout(function(){ if(ctl) ctl.abort(); }, 10000);
+    return fetch(COACH_URL, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      body:JSON.stringify({ mode:mode, word:r.word, cat:r.cat, hint:r.hint }),
+      signal:ctl ? ctl.signal : undefined
+    }).then(function(res){ return res.json(); })
+      .then(function(j){ clearTimeout(timer); return (j && j.ok && j.reply) ? String(j.reply) : null; })
+      .catch(function(){ clearTimeout(timer); return null; });
+  }
+
+  function coachHTML(s){
+    return s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+            .replace(/\*([^*\n]+)\*/g, '<em>$1</em>').replace(/\n+/g, '<br>');
+  }
+  function showCoach(label, text){
+    coachBox.innerHTML = '<span class="label">' + label + '</span><p>' + coachHTML(text) + '</p>';
+    coachBox.hidden = false;
+  }
+  function hideCoach(){ coachBox.hidden = true; coachBox.innerHTML = ''; }
+  function resetCoach(){
+    coachBusy = false;
+    hideCoach();
+    hintBtn.disabled = false;
+    hintBtn.textContent = HINT_LABEL;
+    coachBtn.disabled = false;
+    coachBtn.textContent = 'Ask the Word Coach';
+  }
+
+  hintBtn.addEventListener('click', function(){
+    if(S.locked || coachBusy) return;
+    var r = S.round;
+    if(r.aiHint){ showCoach('Pidgin hint', r.aiHint); return; }
+    coachBusy = true;
+    hintBtn.disabled = true;
+    hintBtn.textContent = 'Coach dey think…';
+    askCoach('hint', r).then(function(reply){
+      coachBusy = false;
+      if(S.round !== r || S.locked) return;
+      hintBtn.disabled = false;
+      if(!reply){
+        hintBtn.textContent = HINT_LABEL;
+        el.feedback.textContent = 'The Coach no gree talk. No points lost — try Reveal.';
+        el.feedback.className = 'feedback bad';
+        return;
+      }
+      r.aiHint = reply;
+      r.reveals++;
+      if(S.mode === 'daily') updateBar();
+      hintBtn.textContent = 'Show hint again';
+      showCoach('Pidgin hint', reply);
+      el.feedback.textContent = 'Hint used. That is ' + (r.reveals * REVEAL_COST) + ' off this word.';
+      el.feedback.className = 'feedback';
+    });
+  });
+
+  coachBtn.addEventListener('click', function(){
+    if(coachBusy || !S.round) return;
+    var r = S.round;
+    if(r.aiExplain){ showCoach('Word Coach · ' + r.word, r.aiExplain); return; }
+    coachBusy = true;
+    coachBtn.disabled = true;
+    coachBtn.textContent = 'Coach dey explain…';
+    askCoach('explain', r).then(function(reply){
+      coachBusy = false;
+      if(S.round !== r) return;
+      coachBtn.disabled = false;
+      if(!reply){
+        coachBtn.textContent = 'Ask the Word Coach';
+        showCoach('Word Coach', 'The Coach is not available right now. Try again in a minute.');
+        return;
+      }
+      r.aiExplain = reply;
+      coachBtn.textContent = 'Show explanation again';
+      showCoach('Word Coach · ' + r.word, reply);
+    });
+  });
+
+  $('shuffle').addEventListener('click', function(){
+    if(S.locked) return;
+    shuffle(S.round.order);
+    render();
+    el.feedback.textContent = 'Shuffled.';
+    el.feedback.className = 'feedback';
+  });
+  $('clear').addEventListener('click', function(){
+    if(S.locked) return;
+    S.round.answer = new Array(S.round.word.length).fill(null);
+    S.round.tiles.forEach(function(t){ t.placed = false; });
+    render();
+    el.feedback.textContent = 'Cleared.';
+    el.feedback.className = 'feedback';
+  });
+  $('skip').addEventListener('click', function(){ failRound('skip'); });
+  el.nextBtn.addEventListener('click', nextRound);
+
+  /* ---------- share helpers ---------- */
+  var SHARE_URL = 'naijascramble.github.io';
+  var FLAG = '🇳🇬';
+  function fmtScore(n){ return Number(n).toLocaleString('en-US'); }
+  function gridText(results){
+    var sq = results.map(function(x){ return x.got ? '🟩' : '⬜'; });
+    var out = [];
+    for(var i = 0; i < sq.length; i += 10) out.push(sq.slice(i, i + 10).join(''));
+    return out.join('\n');
+  }
+
+  function openWhatsApp(text){
+    window.open('https://api.whatsapp.com/send?text=' + encodeURIComponent(text), '_blank', 'noopener');
+  }
+
+  /* ---------- end screens ---------- */
+  function finish(){
+    if(S.mode === 'daily'){
+      var r = S.round, key = dayKey();
+      var rec = { date:key, score:S.score, reveals:r.reveals, solved:S.results[0] && S.results[0].got };
+      store('ns.daily', rec);
+      try{ if('clearAppBadge' in navigator) navigator.clearAppBadge().catch(function(){}); }catch(e){}
+
+      var st = load('ns.streak') || { last:0, n:0 };
+      if(rec.solved){
+        if(st.last === key - 1 || st.last === key) st.n = (st.last === key ? st.n : st.n + 1);
+        else st.n = 1;
+        st.last = key;
+        store('ns.streak', st);
+      }
+      checkAch({ cleanDaily: rec.solved && rec.reveals === 0 });
+      finishDaily(rec, false);
+      return;
+    }
+
+    var solved = S.results.filter(function(x){ return x.got; }).length;
+    checkAch({ marathonSolved: S.mode === 'marathon' ? solved : 0 });
+    var head, sub, isNewBest = false;
+    if(S.mode === 'marathon'){
+      var prevBest = load('ns.best.marathon') || 0;
+      isNewBest = S.score > prevBest;
+      var best = isNewBest ? S.score : prevBest;
+      if(isNewBest) store('ns.best.marathon', best);
+      head = 'Run over';
+      sub = solved + ' solved · best ' + best;
+    } else {
+      head = S.cat + ' run';
+      sub = solved + ' of ' + S.queue.length + ' solved';
+      if(S.challenge){
+        var diff = S.score - S.challenge.score;
+        head = 'Challenge from ' + S.challenge.name;
+        sub = (diff > 0 ? 'You beat ' + S.challenge.name + ' by ' + diff + ' pts'
+             : diff < 0 ? S.challenge.name + ' wins by ' + (-diff) + ' pts'
+             : 'Tied with ' + S.challenge.name) + ' \u00B7 ' + solved + '/' + S.queue.length;
+      }
+    }
+
+    var grid = S.results.map(function(x){ return '<i class="' + (x.got ? 'got' : '') + '"></i>'; }).join('');
+    var rows = S.results.map(function(x){
+      return '<li><span>' + x.w + '</span><span class="' + (x.got ? 'pts' : 'miss') + '">' +
+             (x.got ? '+' + x.pts : 'missed') + '</span></li>';
+    }).join('');
+    var share = 'Naija Scramble ' + FLAG + ' ' + (S.mode === 'marathon' ? 'Marathon' : S.cat) + '\n' +
+                fmtScore(S.score) + ' pts · ' + solved + (S.mode === 'marathon' ? ' words' : '/' + S.queue.length) + '\n' +
+                (S.challenge ? 'vs ' + S.challenge.name + ' (' + S.challenge.score + ')\n' : '') +
+                gridText(S.results) + '\nhttps://' + SHARE_URL;
+
+    var chBlock = '';
+    if(S.mode === 'category' && chWords().length >= 3){
+      chBlock =
+        '<div class="lb-post ch-send">' +
+          '<label>Dare a friend &mdash; same words, beat ' + S.score + '. Your name for the challenge' +
+            '<input id="chName" maxlength="16" autocomplete="off" placeholder="Your name" value="' + chEsc(load('ns.chname') || load('ns.name') || '') + '">' +
+          '</label>' +
+          '<button class="cta" id="chBtn" type="button">Challenge a friend</button>' +
+          '<span class="lb-note" id="chNote"></span>' +
+        '</div>';
+    }
+
+    var lbBlock = '';
+    if(S.mode === 'marathon' && S.score > 0 && S.score <= SCORE_CAP){
+      if(isNewBest){
+        var savedName = String(load('ns.name') || '').replace(/[<>"&]/g, '');
+        lbBlock =
+          '<form class="lb-post" id="lbForm">' +
+            '<label>New best! Post to the leaderboard &mdash; top score this week wins ₦3,000 cash' +
+              '<input id="lbName" maxlength="16" autocomplete="off" placeholder="Your name" value="' + savedName + '">' +
+            '</label>' +
+            '<button class="cta" id="lbBtn" type="submit">Post score</button>' +
+            '<span class="lb-note" id="lbNote"></span>' +
+          '</form>';
+      } else {
+        lbBlock = '<p class="lb-hint">Beat your best of ' + fmtScore(best) + ' pts to post a new score to the leaderboard.</p>';
+      }
+    }
+
+    el.over.innerHTML =
+      '<div class="endscreen">' +
+        '<span class="label">' + head + '</span>' +
+        '<div class="bigscore">' + S.score + '<small>' + sub + '</small></div>' +
+        '<div class="result-grid" aria-hidden="true">' + grid + '</div>' +
+        '<ul class="scorelist">' + rows + '</ul>' +
+        '<pre class="share-card" id="shareText">' + share + '</pre>' +
+        lbBlock +
+        chBlock +
+        '<div class="endactions">' +
+          '<button class="cta wa-btn" id="waBtn" type="button">Share on WhatsApp 💬</button>' +
+          '<button class="' + (chBlock ? 'ghost' : 'cta') + '" id="copyBtn" type="button">Copy result</button>' +
+          '<button class="ghost" id="menuBtn" type="button">Back to modes</button>' +
+        '</div>' +
+      '</div>';
+    wireEnd(share);
+    wireLeaderboard();
+    wireChallengeSend();
+    show('over');
+  }
+
+  function wireLeaderboard(){
+    var lbForm = $('lbForm');
+    if(!lbForm) return;
+    lbForm.addEventListener('submit', function(e){
+      e.preventDefault();
+      var note = $('lbNote'), btn = $('lbBtn');
+      var nm = $('lbName').value.trim().replace(/\s+/g, ' ').slice(0, 16);
+      if(nm.length < 2){ note.textContent = 'Name needs at least 2 letters.'; note.className = 'lb-note'; return; }
+      store('ns.name', nm);
+      var body = new URLSearchParams();
+      body.append(LB_FIELD.name, nm);
+      body.append(LB_FIELD.score, String(S.score));
+      body.append(LB_FIELD.mode, 'Marathon');
+      var solvedN = S.results.filter(function(x){ return x.got; }).length;
+      var runSecs = Math.max(1, Math.round(((S.runEnd || Date.now()) - (S.runStart || Date.now())) / 1000));
+      body.append(LB_FIELD.words, String(solvedN));
+      body.append(LB_FIELD.secs, String(runSecs));
+      btn.disabled = true; btn.textContent = 'Posting…';
+      note.textContent = '';
+      var done = false;
+      function posted(){
+        if(done) return;
+        done = true;
+        lbForm.innerHTML = '<span class="lb-note good">Posted. <a href="/leaderboard">See the board &rarr;</a></span>';
+      }
+      fetch(LB_ENDPOINT, { method: 'POST', mode: 'no-cors', body: body }).then(posted, posted);
+      setTimeout(posted, 2500);
+    });
+  }
+
+  function finishDaily(rec, already){
+    var key = dayKey();
+    var rnd = mulberry32(key);
+    var dWord = WORDS[Math.floor(rnd() * WORDS.length)] || S.round;
+    var dailyRound = (!already && S.round) ? S.round : (dWord ? { word: dWord.w, cat: dWord.cat, hint: dWord.hint } : null);
+    var st = load('ns.streak') || { n:0 };
+    var share = 'Naija Scramble ' + FLAG + ' Daily\n' +
+                fmtScore(rec.score) + ' pts · ' +
+                (rec.solved
+                  ? (rec.reveals ? rec.reveals + ' reveal' + (rec.reveals === 1 ? '' : 's') : 'no reveals')
+                  : 'missed') +
+                (st.n ? ' · ' + st.n + '-day streak' : '') + '\nhttps://' + SHARE_URL;
+
+    var slangCard = dWord ? (
+      '<div class="daily-slang-card">' +
+        '<span class="dsc-badge">' + (dWord.cat || 'Naija') + '</span>' +
+        '<h4 class="dsc-word">' + (dWord.w || dWord.word) + '</h4>' +
+        '<p class="dsc-hint">' + (dWord.hint || '') + '</p>' +
+      '</div>'
+    ) : '';
+
+    el.over.innerHTML =
+      '<div class="endscreen">' +
+        '<span class="label">' + (already ? 'Already played today' : 'Daily done') + '</span>' +
+        '<div class="bigscore">' + rec.score + '<small>' + (rec.reveals) + ' reveal' + (rec.reveals === 1 ? '' : 's') +
+          ' · ' + (st.n || 1) + '-day streak</small></div>' +
+        slangCard +
+        '<pre class="share-card" id="shareText">' + share + '</pre>' +
+        '<div class="endactions">' +
+          '<button class="cta wa-btn" id="waBtn" type="button">Share on WhatsApp 💬</button>' +
+          '<button class="cta" id="copyBtn" type="button">Copy result</button>' +
+          (dailyRound ? '<button class="ghost" id="dailyCoachBtn" type="button">Ask the Word Coach</button>' : '') +
+          '<button class="ghost" id="menuBtn" type="button">Back to modes</button>' +
+        '</div>' +
+        '<div class="coach" id="dailyCoach" role="status" aria-live="polite" hidden></div>' +
+        '<p class="ex" style="text-align:center;margin-top:20px">Come back tomorrow for a new word.</p>' +
+      '</div>';
+    wireEnd(share);
+    var dcb = $('dailyCoachBtn');
+    if(dcb && dailyRound) dcb.addEventListener('click', function(){
+      var box = $('dailyCoach');
+      if(dailyRound.aiExplain){ box.innerHTML = '<span class="label">Word Coach &middot; ' + dailyRound.word + '</span><p>' + coachHTML(dailyRound.aiExplain) + '</p>'; box.hidden = false; return; }
+      dcb.disabled = true; dcb.textContent = 'Coach dey explain\u2026';
+      askCoach('explain', dailyRound).then(function(reply){
+        dcb.disabled = false;
+        dcb.textContent = 'Ask the Word Coach';
+        if(reply) dailyRound.aiExplain = reply;
+        box.innerHTML = '<span class="label">Word Coach' + (reply ? ' &middot; ' + dailyRound.word : '') + '</span><p>' +
+          coachHTML(reply || 'The Coach is not available right now. Try again in a minute.') + '</p>';
+        box.hidden = false;
+      });
+    });
+    show('over');
+  }
+
+  function wireCopy(shareText){
+    var btn = $('copyBtn');
+    if(!btn) return;
+    var canShare = typeof navigator.share === 'function';
+    btn.textContent = canShare ? 'Share result' : 'Copy result';
+
+    function copyFallback(){
+      if(navigator.clipboard && navigator.clipboard.writeText){
+        navigator.clipboard.writeText(shareText).then(
+          function(){ btn.textContent = 'Copied'; },
+          function(){ btn.textContent = 'Press to select, then copy'; selectEl($('shareText')); }
+        );
+      } else {
+        selectEl($('shareText'));
+        btn.textContent = 'Selected — copy now';
+      }
+    }
+
+    btn.addEventListener('click', function(){
+      if(canShare){
+        navigator.share({ title: 'Naija Scramble', text: shareText }).catch(function(err){
+          if(err && err.name === 'AbortError') return;
+          copyFallback();
+        });
+        return;
+      }
+      copyFallback();
+    });
+  }
+  function wireEnd(shareText){
+    var mb = $('menuBtn');
+    if(mb) mb.addEventListener('click', function(){
+      el.catpick.hidden = true;
+      el.stageselect.hidden = true;
+      $('rivalpick').hidden = true;
+      S.combo = 0;
+      show('menu');
+    });
+    var wb = $('waBtn');
+    if(wb) wb.addEventListener('click', function(){
+      openWhatsApp(shareText);
+    });
+    wireCopy(shareText);
+  }
+  function selectEl(node){
+    if(!node) return;
+    var range = document.createRange();
+    range.selectNodeContents(node);
+    var sel = window.getSelection();
+    sel.removeAllRanges();
+    sel.addRange(range);
+  }
+
+  /* ---------- boot ---------- */
+  Array.prototype.forEach.call(document.querySelectorAll('.mode-card[data-mode]'), function(card){
+    card.addEventListener('click', function(){
+      if(WORDS.length) chooseMode(card.getAttribute('data-mode'));
+    });
+  });
+  renderAchShelf();
+  var pendingChallenge = readChallenge();
+  if(pendingChallenge) showChallengeCard(pendingChallenge);
+
+  loadWords().then(function(list){
+    if(list && list.length) WORDS = list;
+    if(!WORDS.length){
+      el.menu.innerHTML = '<p class="ex">No words loaded. Put <b>words.js</b> next to this page' +
+        (SHEET_URL ? ', or check that your Sheet URL is reachable' : '') + '.</p>';
+    }
+  });
+})();
+</script>
+<script>
+/* pageview ping -> "Naija Scramble - Traffic" Google Form -> linked sheet */
+(function(){
+  try{
+    var qs = new URLSearchParams(location.search);
+    var src = qs.get('utm_source'), med = qs.get('utm_medium');
+    if(src){ try{ sessionStorage.setItem('ns.utm', src + '/' + (med || '-')); }catch(e){} }
+    var utm = '-';
+    try{ utm = sessionStorage.getItem('ns.utm') || '-'; }catch(e){}
+    var r = document.referrer, ref = 'direct';
+    if(r){ try{ var h = new URL(r).hostname; ref = h ? (h.indexOf('naijascramble') > -1 ? 'internal' : h) : 'direct'; }catch(e){} }
+    var pwa = ((window.matchMedia && window.matchMedia('(display-mode: standalone)').matches) || navigator.standalone) ? 'pwa' : 'web';
+    var b = new URLSearchParams();
+    b.append('entry.1993350770', location.pathname + ' | ' + ref + ' | ' + pwa + ' | ' + (window.innerWidth || 0) + ' | ' + utm);
+    fetch('https://docs.google.com/forms/d/e/1FAIpQLSe9BkaRhteedIggqd-wz5INQ8XGNVgiDG2wSappw1GyS-TIbQ/formResponse', { method:'POST', mode:'no-cors', body:b });
+  }catch(e){}
+})();
+</script>
+<script>if("serviceWorker" in navigator){window.addEventListener("load",function(){navigator.serviceWorker.register("/sw.js").catch(function(){});});}</script>
+</body>
+</html>
