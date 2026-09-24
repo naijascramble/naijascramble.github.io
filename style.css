@@ -1,5 +1,5 @@
 /* ============================================================
-   GLOBAL 3D WOODEN SCRABBLE TILES (Home + Play)
+   GLOBAL 3D WOODEN SCRABBLE TILES
    ============================================================ */
 .tile {
   background: #fffdf7 !important;
@@ -13,13 +13,11 @@
   cursor: pointer !important;
 }
 
-/* Press effect when tapped or clicked */
 .tile:active {
   transform: translateY(3px) !important;
   box-shadow: 0 2px 0 #b07d4b, 0 4px 6px rgba(0, 0, 0, 0.12) !important;
 }
 
-/* Tile point value */
 .tile .val {
   position: absolute !important;
   bottom: 3px !important;
@@ -29,7 +27,6 @@
   color: #8c6239 !important;
 }
 
-/* Solved state: Rich Green wooden tiles */
 .board.solved .tile,
 .solved .tile {
   background: #0B7A3B !important;
@@ -43,7 +40,6 @@
   color: rgba(255, 255, 255, 0.75) !important;
 }
 
-/* Underline-style empty slots */
 .slots .slot {
   border: 2px dashed #cbd5e1 !important;
   border-radius: 9px !important;
