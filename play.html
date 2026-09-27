@@ -126,6 +126,18 @@
     line-height: 1.4;
   }
 </style>
+<style>
+  /* --- LIVE 1v1 (friend duel) --- */
+  .duel-code{font-family:"IBM Plex Mono",monospace;font-weight:600;font-size:clamp(2.2rem,11vw,3.6rem);letter-spacing:.3em;margin:14px 0 0;color:var(--green);padding-left:.3em}
+  .duel-count{font-family:"Bricolage Grotesque",sans-serif;font-weight:800;font-size:clamp(5rem,30vw,9rem);line-height:1;color:var(--green);margin:22px 0 10px;font-variant-numeric:tabular-nums}
+  .duel-banner{position:fixed;left:50%;transform:translateX(-50%);top:calc(env(safe-area-inset-top,0px) + 10px);z-index:90;max-width:calc(100% - 24px);text-align:center;background:var(--clay);color:#fff;font-family:"IBM Plex Mono",monospace;font-size:.76rem;letter-spacing:.04em;padding:9px 16px;border-radius:999px;box-shadow:0 10px 24px -10px rgba(0,0,0,.5)}
+  .duel-banner[hidden]{display:none}
+  .duel-join{display:flex;flex-direction:column;gap:6px;align-self:stretch;max-width:340px;font-family:"IBM Plex Mono",monospace;font-size:.72rem;text-transform:uppercase;letter-spacing:.1em;color:var(--ink-soft)}
+  .duel-join input{font-family:"Newsreader",Georgia,serif;font-size:1rem;text-transform:none;letter-spacing:0;color:var(--ink);background:color-mix(in srgb,var(--ink) 5%,transparent);border:1px solid var(--line);border-radius:12px;padding:11px 14px}
+  .duel-join input:focus{outline:2px solid var(--green);outline-offset:1px}
+  .duel-panel .lb-post{margin-left:auto;margin-right:auto}
+  .duel-panel .lb-post input[readonly]{font-family:"IBM Plex Mono",monospace;font-size:.78rem}
+</style>
 </head>
 <body>
 
@@ -154,9 +166,10 @@
     <!-- ============ MENU ============ -->
     <section id="menu">
       <div class="challenge-card" id="challengeCard" hidden></div>
+      <div class="challenge-card" id="duelInvite" hidden></div>
       <div class="play-intro">
         <span class="label">Pick a mode</span>
-        <h1>Five ways to play.</h1>
+        <h1>Six ways to play.</h1>
       </div>
       <div class="modes">
         <button class="mode-card" type="button" data-mode="stages">
@@ -184,6 +197,11 @@
           <span class="tag">Head to head</span>
           <h3>Rival</h3>
           <p>Race a computer rival on the same word. First to unscramble it wins the round; first to four rounds wins the match. Practice only &mdash; no prize, no leaderboard.</p>
+        </button>
+        <button class="mode-card wide" type="button" data-mode="duel">
+          <span class="tag">Live &middot; 1 v 1</span>
+          <h3>Play a friend</h3>
+          <p>Send a link. When your friend opens it you both get the same words at the same time. First to unscramble a word wins the round; first to four rounds wins. Bragging rights only &mdash; no prize, no leaderboard.</p>
         </button>
       </div>
       <div id="rivalpick" hidden></div>
@@ -617,6 +635,7 @@
       }
       el.slots.appendChild(cell);
     }
+    if(S.mode === 'duel') duelProgress();
   }
 
   /* ---------- round lifecycle ---------- */
@@ -642,8 +661,8 @@
     if(!entry){ finish(); return; }
     S.round = makeRound(entry, rnd);
     S.locked = false;
-    el.board.classList.toggle('vs', S.mode === 'rival');
-    $('rivalbar').hidden = S.mode !== 'rival';
+    el.board.classList.toggle('vs', S.mode === 'rival' || S.mode === 'duel');
+    $('rivalbar').hidden = !(S.mode === 'rival' || S.mode === 'duel');
     stopRival();
     S.timeLeft = S.roundTime || ROUND_TIME;
 
@@ -668,6 +687,7 @@
     stopTimer();
     if(S.round.timed) startTimer();
     if(S.mode === 'rival') startRival();
+    if(S.mode === 'duel') duelRoundReady();
     show('game');
   }
 
@@ -680,6 +700,10 @@
     if(m === 'daily'){
       el.gbLeft.innerHTML = 'Daily &middot; <span class="reveals">' + S.round.reveals + ' reveal' + (S.round.reveals === 1 ? '' : 's') + '</span>';
       el.gbProg.hidden = true; el.gbTimer.hidden = true;
+    } else if(m === 'duel'){
+      el.gbLeft.textContent = 'Vs ' + D.oppName + ' · round ' + (S.qi + 1);
+      el.gbScore.textContent = 'You ' + S.rw + '\u2013' + S.rl;
+      el.gbProg.hidden = true; el.gbTimer.hidden = false;
     } else if(m === 'rival'){
       el.gbLeft.textContent = 'Vs ' + S.rival.name + ' · round ' + (S.qi + 1);
       el.gbScore.textContent = 'You ' + S.rw + '\u2013' + S.rl;
@@ -791,6 +815,7 @@
   /* ---------- scoring ---------- */
   function solveRound(){
     if(S.mode === 'rival'){ rivalRound(true); return; }
+    if(S.mode === 'duel'){ duelSolved(); return; }
     stopTimer();
     S.locked = true;
     Snd.solve();
@@ -824,6 +849,7 @@
   function failRound(reason){
     if(S.locked) return;
     if(S.mode === 'rival'){ rivalRound(false, reason); return; }
+    if(S.mode === 'duel'){ duelFail(reason); return; }
     stopTimer();
     S.locked = true;
     Snd.wrong();
@@ -905,6 +931,9 @@
     }
     else if(mode === 'rival'){
       renderRivalPick();
+    }
+    else if(mode === 'duel'){
+      duelMenu();
     }
     else {
       var cats = [];
@@ -1304,6 +1333,401 @@
     });
   }
 
+  /* ---------- Live 1v1: a Cloudflare Durable Object room referees the match ----------
+     The server decides who solved a round first, keeps the score and relays each player's letter count.
+     Only a display name, the word list and the moves travel through it; the room deletes itself afterwards.
+     Everything received from the server or from an invite link is untrusted (strict patterns, escaped output). */
+  var DUEL_HTTP = 'https://scramble-duel.betterdays-goalhub.workers.dev';
+  var DUEL_WS = 'wss://scramble-duel.betterdays-goalhub.workers.dev';
+  var DUEL_CODE_RE = /^[A-HJKMNP-Z2-9]{5}$/;
+  var D = null;   // the live match, or null
+
+  function duelPid(){
+    var p = null;
+    try{ p = sessionStorage.getItem('ns.duel.pid'); }catch(e){}
+    if(!p || !/^[A-Za-z0-9]{8,32}$/.test(p)){
+      var a = new Uint8Array(12);
+      if(window.crypto && crypto.getRandomValues) crypto.getRandomValues(a);
+      else for(var i = 0; i < a.length; i++) a[i] = Math.floor(Math.random() * 256);
+      p = Array.prototype.map.call(a, function(x){ return (x < 16 ? '0' : '') + x.toString(16); }).join('');
+      try{ sessionStorage.setItem('ns.duel.pid', p); }catch(e){}
+    }
+    return p;
+  }
+  function duelBanner(t){
+    var b = $('duelBanner');
+    if(!b){
+      if(!t) return;
+      b = document.createElement('div'); b.id = 'duelBanner'; b.className = 'duel-banner'; b.setAttribute('role', 'status');
+      document.body.appendChild(b);
+    }
+    b.textContent = t; b.hidden = !t;
+  }
+  function duelSend(o){ if(D && D.ws && D.ws.readyState === 1){ try{ D.ws.send(JSON.stringify(o)); }catch(e){} } }
+
+  /* --- entry screens --- */
+  function duelMenu(){
+    duelLeave(true);
+    var name = chSanitizeName(load('ns.chname') || load('ns.name') || '');
+    el.over.innerHTML =
+      '<div class="endscreen duel-panel">' +
+        '<span class="label">Live &middot; 1 v 1</span>' +
+        '<div class="bigscore" style="font-size:clamp(2rem,9vw,3.2rem)">Play a friend</div>' +
+        '<p class="ex" style="text-align:center;margin:10px auto 0;max-width:46ch">You get a link. Send it to a friend, and when they open it you both play the same seven words at the same time. First to unscramble a word wins the round. First to 4 rounds wins.</p>' +
+        '<div class="lb-post ch-send"><label>Your name<input id="duelName" maxlength="16" autocomplete="off" placeholder="Your name" value="' + chEsc(name) + '"></label>' +
+          '<button class="cta" id="duelCreate" type="button">Create match</button><span class="lb-note" id="duelNote"></span></div>' +
+        '<div class="endactions"><button class="ghost" id="menuBtn" type="button">Back to modes</button></div>' +
+      '</div>';
+    wireEnd('');
+    $('duelCreate').addEventListener('click', duelCreate);
+    show('over');
+  }
+  function duelCreate(){
+    var name = chSanitizeName($('duelName').value) || 'Player';
+    store('ns.chname', name);
+    var btn = $('duelCreate'), note = $('duelNote');
+    btn.disabled = true; btn.textContent = 'Creating…'; note.textContent = '';
+    fetch(DUEL_HTTP + '/create', { method:'POST' })
+      .then(function(r){ return r.ok ? r.json() : Promise.reject(r.status); })
+      .then(function(j){ if(!j || !DUEL_CODE_RE.test(j.code)) throw 0; duelConnect(j.code, name, true); })
+      .catch(function(){ btn.disabled = false; btn.textContent = 'Create match'; note.textContent = 'Could not reach the match server. Check your data and try again.'; });
+  }
+  function readDuelInvite(){
+    try{
+      var q = new URLSearchParams(location.search), c = q.get('room');
+      if(!c || !DUEL_CODE_RE.test(c)) return null;
+      return { code:c, host:chSanitizeName(q.get('n')) || 'A friend' };
+    }catch(e){ return null; }
+  }
+  function showDuelInvite(inv){
+    var card = $('duelInvite');
+    card.innerHTML =
+      '<span class="tag">Live &middot; 1 v 1 invite</span>' +
+      '<h3>' + chEsc(inv.host) + ' wants to play you</h3>' +
+      '<p>You both get the same seven words at the same time. First to unscramble a word wins the round; first to 4 rounds wins the match.</p>' +
+      '<label class="duel-join">Your name<input id="duelJoinName" maxlength="16" autocomplete="off" placeholder="Your name" value="' + chEsc(chSanitizeName(load('ns.chname') || load('ns.name') || '')) + '"></label>' +
+      '<button class="cta" id="duelJoin" type="button">Join the match</button>';
+    card.hidden = false;
+    $('duelJoin').addEventListener('click', function(){
+      if(!WORDS.length) return;
+      var name = chSanitizeName($('duelJoinName').value) || 'Player';
+      store('ns.chname', name);
+      card.hidden = true;
+      duelConnect(inv.code, name, false);
+    });
+  }
+
+  /* --- connection --- */
+  function duelConnect(code, name, host){
+    duelLeave(true);
+    S.mode = 'duel'; S.challenge = null;
+    D = { code:code, name:name, host:host, seat:-1, pid:duelPid(), ws:null, tries:0, phase:'lobby', names:['', ''], online:[false, false],
+          oppName:'Friend', words:null, entries:null, startSent:false, finished:false, closing:false, resume:false,
+          roundIdx:-1, lastN:-1, results:[], cdTimer:0, resultTimer:0 };
+    S.rw = 0; S.rl = 0; S.results = [];
+    duelRenderLobby();
+    duelOpen();
+  }
+  function duelOpen(){
+    var d = D; if(!d) return;
+    var ws;
+    try{ ws = new WebSocket(DUEL_WS + '/ws/' + d.code); }
+    catch(e){ duelFatal('Live matches are not available on this device.'); return; }
+    d.ws = ws; d.lastMsg = Date.now();
+    clearInterval(d.hb); d.hb = setInterval(function(){ duelBeat(d); }, 6000);
+    ws.onopen = function(){ if(D !== d) return; d.tries = 0; d.lastMsg = Date.now(); duelBanner(''); duelSend({ t:'hello', pid:d.pid, name:d.name }); };
+    ws.onmessage = function(ev){ if(D !== d) return; d.lastMsg = Date.now(); var m; try{ m = JSON.parse(ev.data); }catch(e){ return; } if(m && typeof m.t === 'string') duelOnMsg(m); };
+    ws.onclose = function(){ if(D !== d || d.closing || d.ws !== ws) return; clearInterval(d.hb); duelReconnect(); };
+    ws.onerror = function(){};
+  }
+  function duelBeat(d){
+    if(D !== d || d.closing || !d.ws || d.ws.readyState !== 1) return;
+    if(Date.now() - d.lastMsg > 15000){ duelDead(d); return; }     // silence despite our pings: the connection is dead
+    duelSend({ t:'ping' });
+  }
+  function duelDead(d){
+    clearInterval(d.hb);
+    try{ d.ws.onclose = null; d.ws.close(); }catch(e){}
+    d.ws = null;
+    duelReconnect();
+  }
+  function duelReconnect(){
+    var d = D; if(!d) return;
+    if(d.tries >= 6){ duelFatal('Lost the connection to the match. Check your data and try again.'); return; }
+    d.tries++; d.resume = true;
+    duelBanner('Connection lost. Reconnecting…');
+    setTimeout(function(){ if(D === d && !d.closing) duelOpen(); }, Math.min(4000, 700 * d.tries));
+  }
+  function duelLeave(silent){
+    var d = D; if(!d) return;
+    d.closing = true;
+    if(!silent && d.phase !== 'done' && d.ws && d.ws.readyState === 1){ try{ d.ws.send(JSON.stringify({ t:'leave' })); }catch(e){} }
+    try{ if(d.ws) d.ws.close(); }catch(e){}
+    clearTimeout(d.cdTimer); clearTimeout(d.resultTimer); clearInterval(d.hb);
+    duelBanner('');
+    D = null; stopTimer();
+    if(S.mode === 'duel') S.mode = null;
+  }
+  function duelFatal(msg){
+    var d = D;
+    if(d){ d.closing = true; clearTimeout(d.cdTimer); clearTimeout(d.resultTimer); clearInterval(d.hb); try{ if(d.ws) d.ws.close(); }catch(e){} }
+    D = null; stopTimer(); duelBanner('');
+    if(S.mode === 'duel') S.mode = null;
+    el.over.innerHTML =
+      '<div class="endscreen"><span class="label">Live &middot; 1 v 1</span>' +
+      '<p class="ex" style="text-align:center;margin:18px auto;max-width:44ch">' + chEsc(msg) + '</p>' +
+      '<div class="endactions"><button class="cta" id="duelAgain" type="button">Start a new match</button><button class="ghost" id="menuBtn" type="button">Back to modes</button></div></div>';
+    wireEnd('');
+    $('duelAgain').addEventListener('click', duelMenu);
+    show('over');
+  }
+
+  /* --- messages from the server --- */
+  function duelOnMsg(m){
+    var d = D;
+    if(m.t === 'welcome'){ d.seat = m.seat; d.host = (m.seat === 0); }
+    else if(m.t === 'state') duelOnState(m);
+    else if(m.t === 'peer'){
+      if(m.seat === d.seat) return;
+      d.online[m.seat] = !!m.online;
+      if(d.phase === 'playing' || d.phase === 'between') duelBanner(m.online ? '' : d.oppName + ' lost connection. Waiting a few seconds…');
+      if(d.phase === 'lobby') duelRenderLobby();
+      if(S.round && S.mode === 'duel' && S.screen === 'game') $('rivalState').textContent = m.online ? 'unscrambling…' : 'offline';
+    }
+    else if(m.t === 'round') duelOnRound(m);
+    else if(m.t === 'opp') duelOnOpp(m.n);
+    else if(m.t === 'retry'){
+      var ri = m.i, wait = Math.min(2000, Math.max(0, Number(m.afterMs) || 0));
+      setTimeout(function(){ if(D === d && d.roundIdx === ri && S.locked && d.phase === 'playing') duelSend({ t:'solved', i:ri }); }, wait);
+    }
+    else if(m.t === 'roundEnd') duelOnRoundEnd(m);
+    else if(m.t === 'matchEnd') duelOnMatchEnd(m);
+    else if(m.t === 'full') duelFatal('This match already has two players.');
+    else if(m.t === 'closed') duelFatal('The host left, so this match was closed.');
+    else if(m.t === 'error') duelFatal('Something went wrong joining the match.');
+  }
+  function duelOnState(m){
+    var d = D, prev = d.phase;
+    if(!Array.isArray(m.names) || !Array.isArray(m.online)) return;
+    d.seat = m.seat; d.names = m.names; d.online = m.online; d.phase = m.phase;
+    d.oppName = m.names[1 - m.seat] || 'Friend';
+    if(m.phase === 'lobby'){
+      if(prev !== 'lobby'){ d.finished = false; d.results = []; S.rw = 0; S.rl = 0; }
+      duelRenderLobby();
+      if(d.seat === 0 && d.online[0] && d.online[1] && !d.startSent){ d.startSent = true; setTimeout(duelStart, 1200); }
+    } else if(m.phase === 'playing' && (d.resume || d.roundIdx < 0)){
+      d.resume = false; duelBanner('');
+      duelOnRound({ i:m.round, startsIn:m.startsIn, roundMs:m.roundLeftMs || 30000, words:m.words, scores:m.scores, resumed:true });
+    } else if(m.phase === 'between' && (d.resume || d.roundIdx < 0)){
+      d.resume = false; duelBanner('');
+    } else if(m.phase === 'done' && !d.finished){
+      duelOnMatchEnd({ winner:m.scores[0] > m.scores[1] ? 0 : m.scores[1] > m.scores[0] ? 1 : -1, scores:m.scores, results:m.results, reason:'played' });
+    }
+  }
+  function duelPickWords(){
+    var b = buckets(), q = [];
+    function ok(x){ return /^[A-Z]{3,10}$/.test(x.w) && q.indexOf(x) === -1; }
+    function take(list, n){ for(var i = 0; i < list.length && n > 0; i++){ if(ok(list[i])){ q.push(list[i]); n--; } } }
+    take(b[1], 2); take(b[2], 3); take(b[3], 2);
+    WORDS.forEach(function(x){ if(q.length < 7 && ok(x)) q.push(x); });
+    return q.length === 7 ? q.map(function(x){ return x.w; }) : null;
+  }
+  function duelStart(){
+    var d = D;
+    if(!d || d.seat !== 0 || d.phase !== 'lobby' || !d.online[0] || !d.online[1]){ if(d) d.startSent = false; return; }
+    var words = duelPickWords();
+    if(!words){ duelFatal('The words have not finished loading. Reload the page and try again.'); return; }
+    duelSend({ t:'start', words:words });
+  }
+  function duelEntries(words){
+    if(!Array.isArray(words) || words.length !== 7) return null;
+    var by = {}; WORDS.forEach(function(x){ by[x.w] = x; });
+    var out = words.map(function(w){ return by[w]; });
+    return out.every(Boolean) ? out : null;
+  }
+  function duelOnRound(m){
+    var d = D;
+    d.phase = 'playing'; d.startSent = false; d.finished = false;
+    if(m.words) d.words = m.words;
+    if(m.words || !d.entries) d.entries = duelEntries(d.words);
+    if(!d.entries){
+      duelSend({ t:'leave' });
+      duelFatal('Your game is out of date for this match. Reload the page and try again.');
+      return;
+    }
+    if(m.scores){ S.rw = m.scores[d.seat]; S.rl = m.scores[1 - d.seat]; }
+    d.roundIdx = m.i; d.lastN = -1;
+    S.mode = 'duel'; S.cat = 'Duel'; S.queue = d.entries; S.qi = m.i; S.score = 0; S.combo = 0; S.endedRun = false; S.challenge = null;
+    if(m.i === 0 && !m.resumed) d.results = [];
+    duelCountdown(m.startsIn, m.roundMs, m.i);
+  }
+  function duelCountdown(startsIn, roundMs, i){
+    var d = D;
+    clearTimeout(d.cdTimer); stopTimer();
+    var goAt = Date.now() + startsIn, shown = -1;
+    function paint(){
+      if(D !== d || d.roundIdx !== i) return;
+      var left = goAt - Date.now();
+      if(left <= 0){ S.roundTime = Math.max(1, Math.ceil(roundMs / 1000)); startRound(); return; }
+      var n = Math.ceil(left / 1000);
+      if(n !== shown){
+        shown = n;
+        el.over.innerHTML =
+          '<div class="endscreen duel-panel"><span class="label">' + (i === 0 ? 'Match starts' : 'Next word') + ' &middot; ' + chEsc(d.names[0]) + ' vs ' + chEsc(d.names[1]) + '</span>' +
+          '<div class="duel-count" aria-live="assertive">' + n + '</div>' +
+          '<p class="lb-hint" style="text-align:center">Round ' + (i + 1) + ' of 7 &middot; You ' + S.rw + '&ndash;' + S.rl + ' ' + chEsc(d.oppName) + '</p></div>';
+        show('over');
+      }
+      d.cdTimer = setTimeout(paint, Math.min(200, left));
+    }
+    paint();
+  }
+  function duelRoundReady(){
+    var d = D, r = S.round;
+    $('rivalName').textContent = d.oppName;
+    $('rivalPips').innerHTML = new Array(r.word.length + 1).join('<i></i>');
+    $('rivalState').textContent = d.online[1 - d.seat] ? 'unscrambling…' : 'offline';
+    d.lastN = 0;
+    el.feedback.textContent = 'First to unscramble it wins the round.';
+    el.feedback.className = 'feedback';
+  }
+  function duelProgress(){
+    var d = D;
+    if(!d || S.mode !== 'duel' || !S.round || S.locked) return;
+    var n = S.round.answer.filter(function(x){ return x !== null && x !== undefined; }).length;
+    if(n !== d.lastN){ d.lastN = n; duelSend({ t:'progress', n:n }); }
+  }
+  function duelOnOpp(n){
+    if(!D || S.mode !== 'duel' || S.screen !== 'game') return;
+    var pips = $('rivalPips').children;
+    for(var i = 0; i < pips.length; i++) pips[i].className = i < n ? 'on' : '';
+  }
+  function duelSolved(){
+    var d = D; if(!d) return;
+    stopTimer(); S.locked = true;
+    duelSend({ t:'solved', i:d.roundIdx });
+    el.feedback.textContent = 'Locked in — checking who was first…';
+    el.feedback.className = 'feedback good';
+  }
+  function duelFail(reason){
+    var d = D;
+    if(!d || reason !== 'skip') return;            // the clock is the server's job; only a give-up is sent
+    stopTimer(); S.locked = true;
+    duelSend({ t:'giveup', i:d.roundIdx });
+    el.feedback.textContent = 'Giving this one to ' + d.oppName + '…';
+    el.feedback.className = 'feedback bad';
+  }
+  function duelOnRoundEnd(m){
+    var d = D;
+    if(!d || m.i !== d.roundIdx || !Array.isArray(m.scores)) return;
+    stopTimer(); S.locked = true;
+    S.rw = m.scores[d.seat]; S.rl = m.scores[1 - d.seat];
+    d.results.push({ w:m.word, winner:m.winner });
+    var r = S.round, iWon = m.winner === d.seat, oppWon = m.winner === 1 - d.seat, w = chEsc(String(m.word));
+    if(r && r.word === m.word){
+      if(!iWon){
+        var open = r.tiles.filter(function(t){ return !t.placed; });
+        for(var i = 0; i < r.answer.length; i++){
+          if(r.answer[i] === null){ var t = open.shift(); if(t){ r.answer[i] = t.id; t.placed = true; } }
+        }
+        render();
+      }
+      revealInExample(r, iWon);
+    }
+    var msg;
+    if(iWon){
+      Snd.solve(); el.board.classList.add('solved');
+      msg = m.why === 'giveup' ? d.oppName + ' gave up. Point to you — it was ' + m.word + '.' : 'You got it first. Point to you.';
+      $('rivalState').textContent = 'beaten';
+    } else if(oppWon){
+      Snd.wrong();
+      msg = m.why === 'giveup' ? 'You gave that one to ' + d.oppName + ' — it was ' + m.word + '.' : d.oppName + ' got it first — it was ' + m.word + '.';
+      if(m.why !== 'giveup'){ var pips = $('rivalPips').children; for(var k = 0; k < pips.length; k++) pips[k].className = 'on'; $('rivalState').textContent = 'got it'; }
+    } else {
+      Snd.wrong();
+      msg = 'Time up. Nobody got it — it was ' + m.word + '.';
+    }
+    el.feedback.textContent = msg;
+    el.feedback.className = 'feedback ' + (iWon ? 'good' : 'bad');
+    updateBar();
+  }
+  function duelOnMatchEnd(m){
+    var d = D; if(!d || d.finished) return;
+    d.finished = true; d.phase = 'done';
+    stopTimer(); clearTimeout(d.cdTimer); duelBanner('');
+    var wait = (S.screen === 'game' && m.reason === 'played') ? 2600 : 0;
+    d.resultTimer = setTimeout(function(){ if(D === d) duelShowResult(m); }, wait);
+  }
+
+  /* --- screens --- */
+  function duelLink(d){
+    return 'https://' + SHARE_URL + '/play?room=' + d.code + '&n=' + encodeURIComponent(d.name) + '&utm_source=duel&utm_medium=whatsapp';
+  }
+  function duelRenderLobby(){
+    var d = D; if(!d) return;
+    var both = d.online[0] && d.online[1];
+    var status = d.seat < 0 ? 'Connecting…'
+      : both ? (d.host ? d.oppName + ' joined. Starting…' : 'Connected to ' + d.oppName + '. Starting…')
+      : (d.host ? 'Waiting for your friend to open the link…' : 'Connecting…');
+    el.over.innerHTML =
+      '<div class="endscreen duel-panel"><span class="label">Live &middot; 1 v 1</span>' +
+        '<div class="duel-code" aria-label="Match code">' + chEsc(d.code) + '</div>' +
+        '<p class="ex" style="text-align:center;margin:8px auto 0" role="status">' + chEsc(status) + '</p>' +
+        (d.host ? '<div class="lb-post ch-send"><label>Invite link<input id="duelLink" readonly value="' + chEsc(duelLink(d)) + '"></label>' +
+            '<div class="endactions" style="margin-top:6px"><button class="cta wa-btn" id="duelWa" type="button">Invite on WhatsApp</button><button class="ghost" id="duelCopy" type="button">Copy link</button></div></div>' : '') +
+        '<div class="endactions"><button class="ghost" id="menuBtn" type="button">Cancel</button></div>' +
+      '</div>';
+    wireEnd('');
+    var wa = $('duelWa'), cp = $('duelCopy');
+    if(wa) wa.addEventListener('click', function(){
+      var msg = d.name + ' wants to play you live on Naija Scramble ' + FLAG + ' — same words, same time, first to 4 wins. Tap to join: ' + duelLink(d);
+      if(navigator.share){ navigator.share({ text:msg }).catch(function(e){ if(!e || e.name !== 'AbortError') openWhatsApp(msg); }); }
+      else openWhatsApp(msg);
+    });
+    if(cp) cp.addEventListener('click', function(){
+      var link = duelLink(d), inp = $('duelLink');
+      function fallback(){ if(inp){ inp.select(); inp.setSelectionRange(0, 999); } cp.textContent = 'Selected — copy now'; }
+      if(navigator.clipboard && navigator.clipboard.writeText) navigator.clipboard.writeText(link).then(function(){ cp.textContent = 'Copied'; }, fallback);
+      else fallback();
+    });
+    show('over');
+  }
+  function duelShowResult(m){
+    var d = D; if(!d) return;
+    var me = d.seat, opp = 1 - me, sc = m.scores || [0, 0];
+    var won = m.winner === me, draw = m.winner === -1, left = m.reason === 'forfeit' || m.reason === 'left';
+    var head = left ? (won ? d.oppName + ' left the match. You win.' : 'Match over')
+             : draw ? 'A draw with ' + d.oppName : won ? 'You beat ' + d.oppName : d.oppName + ' took this one';
+    var res = (m.results && m.results.length ? m.results : d.results) || [];
+    var grid = res.map(function(x){ return '<i class="' + (x.winner === me ? 'got' : '') + '"></i>'; }).join('');
+    var rows = res.map(function(x){
+      return '<li><span>' + chEsc(x.w) + '</span><span class="' + (x.winner === me ? 'pts' : 'miss') + '">' +
+             (x.winner === me ? 'You' : x.winner === opp ? chEsc(d.oppName) : 'nobody') + '</span></li>';
+    }).join('');
+    var share = 'Naija Scramble ' + FLAG + ' live 1v1 vs ' + d.oppName + '\n' +
+                (draw ? 'Draw ' : left ? (won ? 'Won (opponent left) ' : 'Lost ') : won ? 'Won ' : 'Lost ') + sc[me] + '–' + sc[opp] + '\n' +
+                gridText(res.map(function(x){ return { got: x.winner === me }; })) + '\nhttps://' + SHARE_URL;
+    el.over.innerHTML =
+      '<div class="endscreen">' +
+        '<span class="label">' + chEsc(head) + '</span>' +
+        '<div class="bigscore">' + sc[me] + '–' + sc[opp] + '<small>live 1 v 1 &middot; first to 4</small></div>' +
+        '<div class="result-grid" aria-hidden="true">' + grid + '</div>' +
+        '<ul class="scorelist">' + rows + '</ul>' +
+        '<pre class="share-card" id="shareText">' + chEsc(share) + '</pre>' +
+        '<p class="lb-hint">Friendly match &mdash; live matches don&rsquo;t count towards the leaderboard or the weekly prize.</p>' +
+        '<div class="endactions">' +
+          '<button class="cta wa-btn" id="waBtn" type="button">Share on WhatsApp 💬</button>' +
+          (d.online[opp] && !left ? '<button class="cta" id="duelRematch" type="button">Rematch</button>' : '') +
+          '<button class="ghost" id="copyBtn" type="button">Copy result</button>' +
+          '<button class="ghost" id="menuBtn" type="button">Back to modes</button>' +
+        '</div>' +
+      '</div>';
+    wireEnd(share);
+    var rm = $('duelRematch');
+    if(rm) rm.addEventListener('click', function(){ rm.disabled = true; rm.textContent = 'Waiting for ' + d.oppName + '…'; duelSend({ t:'rematch' }); });
+    show('over');
+  }
+
   /* ---------- Word Coach ---------- */
   var COACH_URL = 'https://word-coach.betterdays-goalhub.workers.dev/';
   var HINT_LABEL = 'Pidgin hint −' + REVEAL_COST;
@@ -1644,6 +2068,7 @@
       el.catpick.hidden = true;
       el.stageselect.hidden = true;
       $('rivalpick').hidden = true;
+      duelLeave();
       S.combo = 0;
       show('menu');
     });
@@ -1671,6 +2096,8 @@
   renderAchShelf();
   var pendingChallenge = readChallenge();
   if(pendingChallenge) showChallengeCard(pendingChallenge);
+  var pendingDuel = pendingChallenge ? null : readDuelInvite();
+  if(pendingDuel) showDuelInvite(pendingDuel);
 
   loadWords().then(function(list){
     if(list && list.length) WORDS = list;
