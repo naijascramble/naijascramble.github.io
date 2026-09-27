@@ -959,7 +959,7 @@
   }
   function buildMarathon(){
     var b = buckets();
-    S.queue = b[1].slice(0, 4).concat(b[2].slice(0, 6)).concat(b[3]);
+    S.queue = b[1].slice(0, 2).concat(b[2].slice(0, 5)).concat(b[3]);   // tougher opening: fewer free easy words up front
     if(S.queue.length < 6) S.queue = WORDS.slice();
   }
   function extendMarathon(){
